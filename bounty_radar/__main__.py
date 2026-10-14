@@ -21,6 +21,7 @@ QUERIES = [
     'label:bounty state:open is:issue',
     'label:"Bounty" state:open is:issue',
     'label:"💰 Rewarded" state:open is:issue',
+    '"algora.io" in:comments state:open is:issue',  # Algora-Bot verlinkt seine Seite im Kommentar
 ]
 
 AMOUNT_RE = re.compile(r"(?:\$|USD\s?|US\$)\s?(\d{1,3}(?:[,.]\d{3})+|\d+)(?:\s?[kK]\b)?|(\d{1,3}(?:[,.]\d{3})+|\d+)\s?(?:\$|USD)")
@@ -48,12 +49,13 @@ def _get(url, token):
         return json.load(resp)
 
 
-def search(token, days, pages=2):
+def search(token, days, pages=3):
+    """Neu ausgeschriebene Bounties zuerst: Bei alten streiten sich meist schon Dutzende."""
     since = (dt.date.today() - dt.timedelta(days=days)).isoformat()
     seen = {}
     for q in QUERIES:
         for page in range(1, pages + 1):
-            params = urllib.parse.urlencode({"q": f"{q} updated:>={since}", "sort": "updated",
+            params = urllib.parse.urlencode({"q": f"{q} created:>={since}", "sort": "created",
                                              "order": "desc", "per_page": 50, "page": page})
             try:
                 data = _get(f"{API}/search/issues?{params}", token)
@@ -68,20 +70,26 @@ def search(token, days, pages=2):
     return list(seen.values())
 
 
+def rate(entry):
+    """Betrag geteilt durch Konkurrenz, frische Bounties doppelt gewichtet."""
+    competition = 1 + entry["comments"] + (5 if entry["taken"] else 0)
+    freshness = 2.0 if entry["age_days"] <= 7 else 1.0 if entry["age_days"] <= 30 else 0.5
+    entry["score"] = round(entry["amount"] / competition * freshness, 1)
+    return entry
+
+
 def score(item):
-    """Betrag geteilt durch Konkurrenz. Hohe Werte zuerst bearbeiten."""
     labels = " ".join(label["name"] for label in item.get("labels", []))
-    amount = parse_amount(f"{item['title']} {labels} {item.get('body') or ''}")
-    taken = bool(item.get("assignee"))
-    competition = 1 + item.get("comments", 0) + (5 if taken else 0)
-    repo = item["repository_url"].split("/repos/")[1]
-    return {
-        "url": item["html_url"], "title": item["title"].strip(), "repo": repo,
-        "amount": amount, "comments": item.get("comments", 0), "taken": taken,
+    created = dt.date.fromisoformat(item.get("created_at", item["updated_at"])[:10])
+    return rate({
+        "url": item["html_url"], "title": item["title"].strip(),
+        "repo": item["repository_url"].split("/repos/")[1],
+        "amount": parse_amount(f"{item['title']} {labels} {item.get('body') or ''}"),
+        "comments": item.get("comments", 0), "taken": bool(item.get("assignee")),
+        "created": created.isoformat(), "age_days": (dt.date.today() - created).days,
         "updated": item["updated_at"][:10], "labels": labels,
-        "score": round(amount / competition, 1),
         "body": (item.get("body") or "")[:4000],
-    }
+    })
 
 
 def algora_amount(entry, token):
@@ -149,18 +157,18 @@ def report(entries, min_amount, languages):
         f"# 🎯 Bounty-Radar ({today})",
         "",
         f"Bezahlte, offene Programmieraufgaben ab {min_amount} $"
-        + (f" in {', '.join(languages)}" if languages else "") + ", sortiert nach *Betrag ÷ Konkurrenz*.",
+        + (f" in {', '.join(languages)}" if languages else "") + ", sortiert nach *Betrag ÷ Konkurrenz* (frische Bounties doppelt gewichtet).",
         "Nur etablierte Projekte (≥ 100 Sterne, ≥ 6 Monate alt); Köder-Repos mit Fantasiebeträgen sind ausgefiltert.",
         "",
-        "| # | Betrag | Konkurrenz | Aufgabe | Projekt | ⭐ |",
-        "|---|---:|---|---|---|---:|",
+        "| # | Betrag | Alter | Konkurrenz | Aufgabe | Projekt | ⭐ |",
+        "|---|---:|---:|---|---|---|---:|",
     ]
     for i, e in enumerate(entries, 1):
         comp = "🔴 vergeben?" if e["taken"] else ("🟢 frei" if e["comments"] <= 3 else f"🟡 {e['comments']} Kommentare")
         title = e["title"].replace("|", "/")[:80]
-        lines.append(f"| {i} | **{e['amount']} $** | {comp} | [{title}]({e['url']}) | `{e['repo']}` | {e.get('stars', '')} |")
+        lines.append(f"| {i} | **{e['amount']} $** | {e['age_days']} T. | {comp} | [{title}]({e['url']}) | `{e['repo']}` | {e.get('stars', '')} |")
     if not entries:
-        lines.append("| – | – | – | Diesmal nichts Passendes gefunden. | – | – |")
+        lines.append("| – | – | – | – | Diesmal nichts Passendes gefunden. | – | – |")
     lines += [
         "",
         "## So holst du dir eine Bounty",
@@ -178,7 +186,7 @@ def main():
     ap.add_argument("--sprachen", default=os.environ.get("BOUNTY_SPRACHEN", ""),
                     help="Kommagetrennt, z. B. python,typescript (leer = alle)")
     ap.add_argument("--min-betrag", type=int, default=int(os.environ.get("BOUNTY_MIN_BETRAG", "50")))
-    ap.add_argument("--tage", type=int, default=14, help="Nur Issues, die in den letzten N Tagen aktiv waren")
+    ap.add_argument("--tage", type=int, default=30, help="Nur Bounties, die in den letzten N Tagen ausgeschrieben wurden")
     ap.add_argument("--top", type=int, default=25)
     ap.add_argument("--ausgabe", default="BOUNTIES.md")
     ap.add_argument("--json", default="", help="Zusätzlich Details aller Treffer als JSON speichern")
@@ -189,7 +197,7 @@ def main():
     entries = [score(i) for i in search(token, args.tage)]
     for e in [e for e in entries if e["amount"] == 0 and "bounty" in e["labels"].lower()][:80]:
         e["amount"] = algora_amount(e, token)
-        e["score"] = round(e["amount"] / (1 + e["comments"] + (5 if e["taken"] else 0)), 1)
+        rate(e)
     entries = [e for e in entries if e["amount"] >= args.min_betrag]
     entries.sort(key=lambda e: e["score"], reverse=True)
     cache, chosen, per_repo = {}, [], {}

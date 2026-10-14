@@ -4,7 +4,8 @@ from bounty_radar.__main__ import parse_amount, report, score
 def _item(**kw):
     item = {"html_url": "https://github.com/a/b/issues/1", "title": "Fix crash",
             "repository_url": "https://api.github.com/repos/a/b", "labels": [],
-            "body": "", "comments": 0, "assignee": None, "updated_at": "2026-10-10T00:00:00Z"}
+            "body": "", "comments": 0, "assignee": None, "updated_at": "2026-10-10T00:00:00Z",
+            "created_at": "2026-10-01T00:00:00Z"}
     item.update(kw)
     return item
 
@@ -65,3 +66,11 @@ def test_details(monkeypatch):
     assert d["recent_attempts"] == 1
     assert d["open_prs_mentioning_issue"] == ["https://github.com/a/b/pull/7"]
     assert d["repo_language"] == "Go" and len(d["last_comments"]) == 2
+
+
+def test_frische_bounties_zuerst():
+    import datetime as dt
+    heute = dt.date.today().isoformat() + "T00:00:00Z"
+    frisch = score(_item(labels=[{"name": "$300"}], created_at=heute))
+    alt = score(_item(labels=[{"name": "$300"}], created_at="2020-01-01T00:00:00Z"))
+    assert frisch["age_days"] == 0 and frisch["score"] == 4 * alt["score"]
