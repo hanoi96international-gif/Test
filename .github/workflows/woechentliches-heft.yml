@@ -1,0 +1,63 @@
+name: Wöchentliches Rätselheft
+
+on:
+  schedule:
+    - cron: "17 5 * * 1" # jeden Montag früh (UTC)
+  workflow_dispatch:
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt pytest
+      - run: python -m pytest -q tests
+
+  heft:
+    needs: test
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: sudo apt-get install -y poppler-utils
+
+      - name: Hefte erzeugen (A4 für Etsy/Gumroad, Letter für Amazon KDP)
+        run: |
+          WOCHE=$(date -u +%G-W%V)
+          echo "WOCHE=$WOCHE" >> "$GITHUB_ENV"
+          python -m raetselfabrik --woche "$WOCHE" --format a4
+          python -m raetselfabrik --woche "$WOCHE" --format letter
+
+      - name: Vorschaubilder für die Produktseite
+        run: |
+          for pdf in dist/*-a4.pdf; do
+            base="${pdf%.pdf}"
+            pdftoppm -png -r 110 -f 1 -l 1 -singlefile "$pdf" "$base-cover"
+            pdftoppm -png -r 80 -f 3 -l 3 -singlefile "$pdf" "$base-vorschau-sudoku"
+            pdftoppm -png -r 80 -f 15 -l 15 -singlefile "$pdf" "$base-vorschau-wortsuche"
+            pdftoppm -png -r 80 -f 27 -l 27 -singlefile "$pdf" "$base-vorschau-labyrinth"
+          done
+
+      - name: Als GitHub-Release veröffentlichen
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="ausgabe-${WOCHE}"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" dist/* --clobber
+          else
+            gh release create "$TAG" dist/* \
+              --title "Rätselheft ${WOCHE}" \
+              --notes "Neues Rätselheft ist fertig. PDF, Vorschaubilder und Verkaufstext hochladen und verkaufen."
+          fi
