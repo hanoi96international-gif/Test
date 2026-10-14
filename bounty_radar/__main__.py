@@ -83,6 +83,17 @@ def score(item):
     }
 
 
+def algora_amount(entry, token):
+    """Algora schreibt den Betrag nicht ins Issue, sondern in einen Bot-Kommentar."""
+    api_url = entry["url"].replace("https://github.com/", f"{API}/repos/") + "/comments?per_page=30"
+    try:
+        comments = _get(api_url, token)
+    except Exception:
+        return 0
+    return max((parse_amount(c.get("body", "")) for c in comments
+                if "algora" in c.get("user", {}).get("login", "").lower()), default=0)
+
+
 def repo_info(repo, token, cache):
     if repo not in cache:
         try:
@@ -149,6 +160,9 @@ def main():
     token = os.environ.get("GITHUB_TOKEN", "")
     languages = {s.strip().lower() for s in args.sprachen.split(",") if s.strip()}
     entries = [score(i) for i in search(token, args.tage)]
+    for e in [e for e in entries if e["amount"] == 0 and "bounty" in e["labels"].lower()][:80]:
+        e["amount"] = algora_amount(e, token)
+        e["score"] = round(e["amount"] / (1 + e["comments"] + (5 if e["taken"] else 0)), 1)
     entries = [e for e in entries if e["amount"] >= args.min_betrag]
     entries.sort(key=lambda e: e["score"], reverse=True)
     cache, chosen, per_repo = {}, [], {}

@@ -42,3 +42,12 @@ def test_koeder_repos_werden_gefiltert():
     assert not trustworthy({"amount": 300}, {"stargazers_count": 500, "created_at": "2026-10-01T00:00:00Z"})
     assert not trustworthy({"amount": 300}, {**gut, "fork": True})
     assert not trustworthy({"amount": 300}, {})
+
+
+def test_algora_betrag_aus_bot_kommentar(monkeypatch):
+    import bounty_radar.__main__ as radar
+    monkeypatch.setattr(radar, "_get", lambda url, token: [
+        {"user": {"login": "someone"}, "body": "I'd do it for $9999"},
+        {"user": {"login": "algora-pbc[bot]"}, "body": "## 💎 $250 bounty • Acme"},
+    ])
+    assert radar.algora_amount(score(_item()), "") == 250
