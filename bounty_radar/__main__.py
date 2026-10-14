@@ -195,10 +195,12 @@ def main():
     token = os.environ.get("GITHUB_TOKEN", "")
     languages = {s.strip().lower() for s in args.sprachen.split(",") if s.strip()}
     entries = [score(i) for i in search(token, args.tage)]
-    for e in [e for e in entries if e["amount"] == 0 and "bounty" in e["labels"].lower()][:80]:
+    print(f"Rohtreffer: {len(entries)}")
+    for e in [e for e in entries if e["amount"] == 0][:150]:
         e["amount"] = algora_amount(e, token)
         rate(e)
     entries = [e for e in entries if e["amount"] >= args.min_betrag]
+    print(f"Mit Betrag >= {args.min_betrag} $: {len(entries)}")
     entries.sort(key=lambda e: e["score"], reverse=True)
     cache, chosen, per_repo = {}, [], {}
     for e in entries:
@@ -208,6 +210,7 @@ def main():
             continue
         info = repo_info(e["repo"], token, cache)
         if not trustworthy(e, info):
+            print(f"  aussortiert (Repo nicht vertrauenswürdig): {e['amount']} $ {e['url']}")
             continue
         if languages and (info.get("language") or "").lower() not in languages:
             continue
