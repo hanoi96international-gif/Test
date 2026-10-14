@@ -199,6 +199,8 @@ def main():
     for e in [e for e in entries if e["amount"] == 0][:150]:
         e["amount"] = algora_amount(e, token)
         rate(e)
+    for e in [e for e in entries if e["amount"] == 0][:40]:
+        print(f"  ohne Betrag: [{e['labels'][:40]}] {e['url']}")
     entries = [e for e in entries if e["amount"] >= args.min_betrag]
     print(f"Mit Betrag >= {args.min_betrag} $: {len(entries)}")
     entries.sort(key=lambda e: e["score"], reverse=True)
