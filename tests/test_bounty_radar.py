@@ -51,3 +51,17 @@ def test_algora_betrag_aus_bot_kommentar(monkeypatch):
         {"user": {"login": "algora-pbc[bot]"}, "body": "## 💎 $250 bounty • Acme"},
     ])
     assert radar.algora_amount(score(_item()), "") == 250
+
+
+def test_details(monkeypatch):
+    import bounty_radar.__main__ as radar
+    def fake_get(url, token):
+        if "search/issues" in url:
+            return {"items": [{"html_url": "https://github.com/a/b/pull/7"}]}
+        return [{"user": {"login": "x"}, "created_at": "2999-01-01T00:00:00Z", "body": "/attempt #1"},
+                {"user": {"login": "y"}, "created_at": "2000-01-01T00:00:00Z", "body": "/attempt #1"}]
+    monkeypatch.setattr(radar, "_get", fake_get)
+    d = radar.details(score(_item()), {"pushed_at": "2026-10-01T00:00:00Z", "language": "Go"}, "")
+    assert d["recent_attempts"] == 1
+    assert d["open_prs_mentioning_issue"] == ["https://github.com/a/b/pull/7"]
+    assert d["repo_language"] == "Go" and len(d["last_comments"]) == 2

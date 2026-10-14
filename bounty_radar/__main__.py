@@ -80,6 +80,7 @@ def score(item):
         "amount": amount, "comments": item.get("comments", 0), "taken": taken,
         "updated": item["updated_at"][:10], "labels": labels,
         "score": round(amount / competition, 1),
+        "body": (item.get("body") or "")[:4000],
     }
 
 
@@ -92,6 +93,31 @@ def algora_amount(entry, token):
         return 0
     return max((parse_amount(c.get("body", "")) for c in comments
                 if "algora" in c.get("user", {}).get("login", "").lower()), default=0)
+
+
+def details(entry, info, token):
+    """Sammelt, was zur Beurteilung nötig ist: letzte Kommentare, Versuche, offene PRs, Aktivität."""
+    api_issue = entry["url"].replace("https://github.com/", f"{API}/repos/")
+    try:
+        comments = _get(f"{api_issue}/comments?per_page=100", token)[-30:]
+    except Exception:
+        comments = []
+    cutoff = (dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=14)).isoformat()
+    number = entry["url"].rsplit("/", 1)[1]
+    try:
+        q = urllib.parse.quote(f'repo:{entry["repo"]} is:pr is:open {number} in:body')
+        open_prs = [pr["html_url"] for pr in _get(f"{API}/search/issues?q={q}&per_page=10", token).get("items", [])]
+    except Exception:
+        open_prs = []
+    return {
+        "repo_pushed_at": info.get("pushed_at", ""),
+        "repo_language": info.get("language") or "",
+        "recent_attempts": sum(1 for c in comments if c.get("created_at", "") >= cutoff
+                               and "/attempt" in (c.get("body") or "")),
+        "open_prs_mentioning_issue": open_prs,
+        "last_comments": [{"user": c.get("user", {}).get("login", ""), "at": c.get("created_at", ""),
+                           "body": (c.get("body") or "")[:600]} for c in comments],
+    }
 
 
 def repo_info(repo, token, cache):
@@ -155,6 +181,7 @@ def main():
     ap.add_argument("--tage", type=int, default=14, help="Nur Issues, die in den letzten N Tagen aktiv waren")
     ap.add_argument("--top", type=int, default=25)
     ap.add_argument("--ausgabe", default="BOUNTIES.md")
+    ap.add_argument("--json", default="", help="Zusätzlich Details aller Treffer als JSON speichern")
     args = ap.parse_args()
 
     token = os.environ.get("GITHUB_TOKEN", "")
@@ -182,6 +209,11 @@ def main():
 
     with open(args.ausgabe, "w", encoding="utf-8") as fh:
         fh.write(report(chosen, args.min_betrag, sorted(languages)))
+    if args.json:
+        for e in chosen:
+            e.update(details(e, cache.get(e["repo"], {}), token))
+        with open(args.json, "w", encoding="utf-8") as fh:
+            json.dump({"datum": dt.date.today().isoformat(), "bounties": chosen}, fh, ensure_ascii=False, indent=1)
     print(f"{len(chosen)} Bounties -> {args.ausgabe}")
 
 

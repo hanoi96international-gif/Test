@@ -7,6 +7,7 @@ on:
 
 permissions:
   issues: write
+  contents: write
 
 jobs:
   radar:
@@ -23,7 +24,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           BOUNTY_SPRACHEN: ${{ vars.BOUNTY_SPRACHEN }}
           BOUNTY_MIN_BETRAG: ${{ vars.BOUNTY_MIN_BETRAG || '50' }}
-        run: python -m bounty_radar --ausgabe BOUNTIES.md
+        run: python -m bounty_radar --ausgabe BOUNTIES.md --json bounties.json
 
       # Ein festes Issue wird täglich aktualisiert, GitHub benachrichtigt dich per App/Mail
       - name: Radar-Issue aktualisieren
@@ -38,3 +39,14 @@ jobs:
             gh issue edit "$NR" --body-file BOUNTIES.md
             gh issue comment "$NR" --body "Neuer Bericht vom $(date -u +%F) ist oben im Issue."
           fi
+
+      # Details (Kommentare, Versuche, offene PRs) für den Bounty-Jäger auf eigenem Branch ablegen
+      - name: Radar-Daten speichern
+        run: |
+          mkdir /tmp/daten && cp BOUNTIES.md bounties.json /tmp/daten/
+          cd /tmp/daten
+          git init -q -b radar-daten
+          git config user.name "bounty-radar"
+          git config user.email "bounty-radar@users.noreply.github.com"
+          git add . && git commit -q -m "Radar-Daten $(date -u +%F)"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" radar-daten
