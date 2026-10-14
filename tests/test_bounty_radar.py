@@ -29,3 +29,16 @@ def test_bericht():
     text = report([score(_item(title="Fix | crash", body="$200"))], 50, ["python"])
     assert "**200 $**" in text and "Fix / crash" in text
     assert "Diesmal nichts" in report([], 50, [])
+
+
+def test_koeder_repos_werden_gefiltert():
+    from bounty_radar.__main__ import trustworthy
+    alt = "2020-01-01T00:00:00Z"
+    gut = {"stargazers_count": 500, "created_at": alt}
+    assert trustworthy({"amount": 300}, gut)
+    assert not trustworthy({"amount": 9000}, gut)  # Fantasiebetrag bei kleinem Projekt
+    assert trustworthy({"amount": 9000}, {"stargazers_count": 20000, "created_at": alt})
+    assert not trustworthy({"amount": 300}, {"stargazers_count": 3, "created_at": alt})
+    assert not trustworthy({"amount": 300}, {"stargazers_count": 500, "created_at": "2026-10-01T00:00:00Z"})
+    assert not trustworthy({"amount": 300}, {**gut, "fork": True})
+    assert not trustworthy({"amount": 300}, {})
