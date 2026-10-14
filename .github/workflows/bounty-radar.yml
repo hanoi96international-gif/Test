@@ -1,0 +1,40 @@
+name: Bounty-Radar
+
+on:
+  schedule:
+    - cron: "43 6 * * *" # täglich morgens (UTC)
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  radar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Filter unter Settings → Secrets and variables → Actions → Variables anpassbar
+      - name: Bounties suchen
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          BOUNTY_SPRACHEN: ${{ vars.BOUNTY_SPRACHEN }}
+          BOUNTY_MIN_BETRAG: ${{ vars.BOUNTY_MIN_BETRAG || '50' }}
+        run: python -m bounty_radar --ausgabe BOUNTIES.md
+
+      # Ein festes Issue wird täglich aktualisiert, GitHub benachrichtigt dich per App/Mail
+      - name: Radar-Issue aktualisieren
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create bounty-radar --color d9480f --description "Täglicher Bounty-Bericht" 2>/dev/null || true
+          NR=$(gh issue list --label bounty-radar --state open --json number --jq '.[0].number')
+          if [ -z "$NR" ]; then
+            gh issue create --title "🎯 Bounty-Radar" --label bounty-radar --body-file BOUNTIES.md
+          else
+            gh issue edit "$NR" --body-file BOUNTIES.md
+            gh issue comment "$NR" --body "Neuer Bericht vom $(date -u +%F) ist oben im Issue."
+          fi
