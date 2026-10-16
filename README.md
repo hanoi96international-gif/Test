@@ -49,7 +49,7 @@ Die Rätsel werden selbst generiert, es gibt also keine Urheberrechtsprobleme.
 
 Viele Open-Source-Projekte und Firmen **bezahlen für behobene Fehler**: über Algora, IssueHunt,
 Opire oder eigene „Bounty“-Labels, oft 50–5.000 $ pro Issue. Der Radar durchsucht GitHub
-**jeden Morgen automatisch** nach solchen offenen Aufgaben. Er bewertet sie nach
+**jede Nacht automatisch** nach solchen offenen Aufgaben. Er bewertet sie nach
 *Betrag ÷ Konkurrenz* und schreibt die besten 25 in ein Issue „🎯 Bounty-Radar“ in diesem Repo.
 GitHub schickt dir dazu eine Benachrichtigung aufs Handy.
 

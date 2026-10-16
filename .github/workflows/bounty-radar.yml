@@ -2,7 +2,7 @@ name: Bounty-Radar
 
 on:
   schedule:
-    - cron: "43 6 * * *" # täglich morgens (UTC)
+    - cron: "17 0 * * *" # täglich nachts (UTC), GitHub startet Zeitpläne oft Stunden verspätet
   workflow_dispatch:
 
 permissions:
