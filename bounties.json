@@ -1,0 +1,71 @@
+{
+ "datum": "2026-10-17",
+ "bounties": [
+  {
+   "url": "https://github.com/tenstorrent/tt-metal/issues/59732",
+   "title": "[Bounty $3,000] Fix ttnn.sampling distribution bias from low-precision random threshold",
+   "repo": "tenstorrent/tt-metal",
+   "amount": 3000,
+   "comments": 9,
+   "taken": true,
+   "created": "2026-10-07",
+   "age_days": 10,
+   "updated": "2026-10-14",
+   "labels": "bounty bounty_difficulty/medium",
+   "body": "# 📝 Background\n\nThis is a community-suggested bounty that we have reviewed and assigned to [@samiyadev786](https://github.com/samiyadev786).\n\n`ttnn.sampling` is used for on-device non-greedy token sampling in the shared sampling path used by `tt-transformers` and other model integrations. The operation currently compares an FP32 cumulative probability against a random threshold that is packed to bfloat16. Because the threshold has only bfloat16 resolution, the sampler does not draw from the requested distribution accurately.\n\nThe issue has been reproduced on both Wormhole N150 and Blackhole P150. In the reported measurements, candidate tokens with small probabilities were never emitted or were emitted at materially incorrect frequencies. The existing tests primarily check candidate membership, determinism, and valid indices; they do not provide a sufficiently sensitive frequency-based regression test.\n\n# 💡 Problem to Solve\n\nFix the random-threshold path in `ttnn.sampling` so that the threshold used by the comparison has sufficient FP32-level resolution across the supported Wormhole and Blackhole implementations.\n\nThe fix must preserve the existing public API and sampling controls, including top-k, top-p, temperature, per-user seeding, reproducibility, and trace replay. The change should not introduce a material performance regression in the decode sampling path.\n\nThe main implementation areas are expected to be under:\n\n* `ttnn/cpp/ttnn/operations/reduction/sampling/device/`\n* `ttnn/cpp/ttnn/operations/reduction/sampling/device/kernels/compute/`\n* `ttnn/cpp/ttnn/operations/reduction/sampling/device/kernels/dataflow/`\n\nThe exact implementation approach is not prescribed, provided the acceptance criteria below are met.\n\n# 🎯 Acceptance Criteria\n\n* [ ] The sampler uses a random threshold with sufficient FP32-level resolution; the threshold must not be limited to the current bfloat16 grid or capped at `255/256` because of the packed representation.\n* [ ] The corrected behavior is implemented and validated on Wormhole and Blackhole.\n* [ ] A two-candidate frequency test covers small probabilities, including a case where the current implementation produces a materially biased or zero count.\n* [ ] A multi-candidate frequency test verifies that low-probability tail candidates are sampled and that equal-probability candidates are sampled homogeneously within a documented statistical tolerance.\n* [ ] The tests compare observed counts against an explicitly documented reference distribution and use a statistically justified pass/fail criterion.\n* [ ] Existing top-k, top-p, temperature, determinism, valid-index, and reproducibility tests continue to pass.\n* [ ] Per-user manual-seed reproducibility and trace replay are preserved.\n* [ ] Sampling performance remains within an agreed tolerance of the baseline for representative batch and width configurations.\n* [ ] The PR includes the implementation, regression tests, and concise validation results for both architectures.\n\n# 🚫 Out of Scope\n\n* Changing the public `ttnn.sampling` API.\n* Replacing the sampler with host-side sampling.\n* Redesigning the random-number generator globally.\n* Changing the intended semantics of top-k, top-p, or temperature sampling.\n* Unrelated RNG seeding or per-row entropy work.\n* Broad accuracy changes to the approximate softmax or exponential implementation, except where strictly required to validate this threshold fix.\n\n# ⏳ Deadline\n\nThe issue may be reopened or reassigned if there is no meaningful progress update within two weeks. The maximum completion window is two months unless otherwise agreed with Tenstorrent.\n\n# 🧭 Guidance & Starting Points\n\nThe reported root cause is the conversion of the random tile to a 16-bit/bfloat16 representation before the writer compares it with the cumulative probability. Start by tracing the random tile format, the circular-buffer format, and the writer-side comparison together on both architectures.\n\nA robust fix should retain the e",
+   "score": 200.0,
+   "stars": 1712,
+   "repo_pushed_at": "2026-10-17T04:36:42Z",
+   "repo_language": "Python",
+   "recent_attempts": 0,
+   "open_prs_mentioning_issue": [],
+   "last_comments": [
+    {
+     "user": "samiyadev786",
+     "at": "2026-10-07T21:40:07Z",
+     "body": "@jberkowitzTT Please assign me?"
+    },
+    {
+     "user": "adityawaghamare",
+     "at": "2026-10-08T15:18:18Z",
+     "body": "### Solution Summary\n\n## Summary\nFixed the random threshold generation and comparison in `ttnn.sampling` to use full FP32-level resolution instead of a low-precision bfloat16-packed threshold capped at `255/256`.\n\n## Changes\n- Updated `generate_rand_tile` in `ttnn/cpp/ttnn/operations/reduction/sampling/device/kernels/compute/sampling.cpp` to remove the bfloat16 packing restriction and adjust `rand_scale` for full FP32 resolution support.\n- Preserved all existing public API, top-k, top-p, temperature, per-user seeding, and trace replay functionality.\n\n## Verification\n- Code inspected and valida"
+    },
+    {
+     "user": "michaelwoolum50-cmyk",
+     "at": "2026-10-09T16:49:05Z",
+     "body": "## Proposed fix\n\nTo fix the issue of the low-precision random threshold causing a bias in the sampling distribution, we need to ensure that the random threshold used for comparison has sufficient FP32-level resolution. This can be achieved by generating the random threshold in FP32 and then packing it to bfloat16 only when necessary.\n\nHere's the patch:\n\n```diff\ndiff --git a/ttnn/cpp/ttnn/operations/reduction/sampling/device/kernels/compute/sampling_compute.cpp b/ttnn/cpp/ttnn/operations/reduction/sampling/device/kernels/compute/sampling_compute.cpp\nindex 1a2b3c4..5d6e7f8 100644\n--- a/ttnn/cpp/"
+    },
+    {
+     "user": "Liladizilla",
+     "at": "2026-10-10T12:08:06Z",
+     "body": "/claim"
+    },
+    {
+     "user": "Ollie520",
+     "at": "2026-10-13T14:20:52Z",
+     "body": "# Solution for [github/tenstorrent_tt-metal_59732]: [tenstorrent/tt-metal] [Bounty $3,000] Fix ttnn.sampling distribution bias from low-precision random threshold\r\n\r\n- **Reward:** $3000.00 USDC\r\n- **Target URL:** https://github.com/tenstorrent/tt-metal/issues/59732\r\n- **AI Brain:** gemini-2.5-flash\r\n- **Tokens Used:** 10241 (~$0.0205 USD compute cost)\r\n\r\n---\r\n\r\nThe issue describes a distribution bias in `ttnn.sampling` due to the random threshold being truncated to bfloat16 precision. This leads to inaccurate sampling, especially for low-probability tokens. The goal is to ensure the random thr"
+    },
+    {
+     "user": "planners1490",
+     "at": "2026-10-13T18:56:06Z",
+     "body": "Hi @jberkowitzTT — if #59732 opens up for reassignment, I have a complete fix and statistical regression test ready.\n\n### Root Cause & Fix Summary (`ttnn.sampling` FP32 Threshold Resolution)\n1. **Root Cause**:\n   - While cumulative probabilities in the sampling kernel are accumulated in `FP32`, the uniform random threshold $r \\in [0, 1)$ is currently packed/transferred through a `bfloat16` circular buffer, quantizing the threshold step size to $2^{-7} \\approx 7.81 \\times 10^{-3}$ for $r \\in [0.5, 1.0)$. Any candidate token whose mass sits in the tail or has $p_i < \\text{ULP}_{\\text{bf16}}$ suf"
+    },
+    {
+     "user": "sancheet230",
+     "at": "2026-10-13T20:33:26Z",
+     "body": "hey @jberkowitzTT no active development done by assigne can you assign me this stale bounty??\n"
+    },
+    {
+     "user": "samiyadev786",
+     "at": "2026-10-14T14:24:49Z",
+     "body": "@sancheet230 I am already working on this issue."
+    },
+    {
+     "user": "sancheet230",
+     "at": "2026-10-14T14:25:52Z",
+     "body": "@samiyadev786 ohh my bad \nI though this one is stale \n"
+    }
+   ]
+  }
+ ]
+}
