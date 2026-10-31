@@ -1,0 +1,46 @@
+{
+ "datum": "2026-10-31",
+ "bounties": [
+  {
+   "url": "https://github.com/tenstorrent/tt-metal/issues/62571",
+   "title": "[Bounty $750] Improve Qwen3-TTS Code Predictor Accuracy",
+   "repo": "tenstorrent/tt-metal",
+   "amount": 750,
+   "comments": 4,
+   "taken": true,
+   "created": "2026-10-26",
+   "age_days": 5,
+   "updated": "2026-10-30",
+   "labels": "bounty bounty_difficulty/easy",
+   "body": "📝 Background\n\nThe Qwen3-TTS code predictor produces logits for 15 codebook heads during decoding. Improving accuracy while preserving inference throughput benefits end-to-end Qwen3-TTS quality without changing model weights.\n\n🎯 What Success Looks Like\n- The Qwen3-TTS end-to-end test passes for the 0.6B and 1.7B models on Wormhole N150 and Blackhole P100a.\n- Top-1 and top-5 accuracy meet or exceed the applicable lower bounds in models/demos/audio/qwen3_tts/tests/e2e/model_targets.yaml for each tested configuration.\n- The following PCC tests pass for both model sizes on the tested hardware: test_decode_pcc, test_pipeline, test_kv_cache_guard, and test_code_predictor_pcc.\n- Submit a results table showing top-1, top-5, and frames/second for each tested card/model pair, comparing the baseline and proposed change. Identify any untested configurations; do not claim support for them.\n\n💡 Problem to Solve\n\nInvestigate the code predictor's output precision and accuracy. Implement a change that improves or maintains end-to-end accuracy while avoiding a meaningful frame-rate regression. The implementation should not modify model weights.\n\n\n🧭 Guidance & Starting Points\n- Start with models/demos/audio/qwen3_tts/tt/ttnn_qwen3_code_predictor_decode.py, particularly the codebook-head linear operation.\n- Run models/demos/audio/qwen3_tts/tests/e2e/test_e2e.py and the code predictor PCC tests.\n- Compare results against models/demos/audio/qwen3_tts/tests/e2e/model_targets.yaml.\n\n\nThis bounty is subject to the [Tenstorrent Bounty Program Terms & Conditions](https://docs.tenstorrent.com/bounty_terms.html).",
+   "score": 150.0,
+   "stars": 1732,
+   "repo_pushed_at": "2026-10-31T05:55:29Z",
+   "repo_language": "Python",
+   "recent_attempts": 0,
+   "open_prs_mentioning_issue": [],
+   "last_comments": [
+    {
+     "user": "jberkowitzTT",
+     "at": "2026-10-26T20:24:06Z",
+     "body": "## 📝 Background\n\nThis is a community-suggested bounty that we have reviewed & assigned to @bvdyvncqr5-commits\n\n\n## 💡 Problem to Solve\n\n> Improve Qwen3-TTS Code Predictor Accuracy\n\n\nNote: This bounty is beholden to the [Tenstorrent Bounty Program Terms & Conditions](https://docs.tenstorrent.com/bounty_terms.html) & local tax requirements may apply"
+    },
+    {
+     "user": "bvdyvncqr5-commits",
+     "at": "2026-10-26T20:25:11Z",
+     "body": "I'd like to take this one. Thanks, Jeremy!"
+    },
+    {
+     "user": "calproencrip",
+     "at": "2026-10-26T20:55:45Z",
+     "body": "**Proposed Solution**: Investigate the Qwen3-TTS code predictor's output precision. Implement a change that improves or maintains end-to-end accuracy by adjusting the softmax normalization in the codebook-head linear operation. Specifically, modify the `softmax` function in `qwen3_tts/tt/ttnn_qwen3_code_predictor_decode.py` to include a temperature parameter. This adjustment should improve the accuracy while preserving inference throughput. PR will address this specific change.\n\n```diff\ndiff --git a/qwen3_tts/tt/ttnn_qwen3_code_predictor_decode.py b/qwen3_tts/tt/ttnn_qwen3_code_predictor_decod"
+    },
+    {
+     "user": "Dungsky",
+     "at": "2026-10-30T15:22:06Z",
+     "body": "Hello @tenstorrent 👋\n\nI have submitted a Pull Request addressing this issue:\n\n🚀 **Pull Request Opened:** [Review Pull Request #63512 on GitHub](https://github.com/tenstorrent/tt-metal/pull/63512)\n\n**Technical Summary:**\nVerified patch resolving \"[Bounty $750] Improve Qwen3-TTS Code Predictor Accuracy\". Validated syntax, type safety, and edge cases.\n\nLooking forward to your review and feedback on the PR!"
+    }
+   ]
+  }
+ ]
+}
