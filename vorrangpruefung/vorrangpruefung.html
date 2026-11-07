@@ -739,6 +739,8 @@ kdzHint:"С 01.07.2026: в льготный период (12 месяцев с �
 hzG:"Предел соразмерных расходов на отопление (необязательно)",hzGHint:"По индексу отопления или Jobcenter. Оставьте пустым = фактические расходы. В льготный период отопление не защищено.",heatRg:"Признанное отопление (предел {g})"}
 };
 for(const l in Z) Object.assign(I[l], Z[l]);
+const KA={de:"Kinder eingetragen: Der Kinderzuschlag wird automatisch mitgeprüft.",en:"Children entered: child supplement is checked automatically as well.",tr:"Çocuk girildi: çocuk ek ödeneği de otomatik olarak kontrol edilir.",ar:"تم إدخال أطفال: تُفحص إعانة الأطفال الإضافية تلقائيًا أيضًا.",uk:"Дітей додано: доплата на дитину перевіряється автоматично.",ru:"Дети указаны: детская надбавка проверяется автоматически."};
+for(const l in KA) I[l].kizAuto=KA[l];
 let L = "de";
 try{ const s = localStorage.getItem("vp-wob-lang"); if(s && I[s]) L = s; }catch(e){}
 function t(k, v){
@@ -843,6 +845,8 @@ function person(a){
   const age = Math.floor(am/12);
   return {age, rag, edge, isEF: !rag && a.ef==="ja" && age>=15};
 }
+/* Kinderzuschlag wird immer geprüft, wenn Kinder unter 25 eingetragen sind – auch im Modus „Nur Wohngeld“ */
+function famEff(H){ return H.mode==="fam" || H.kids.some(k=>k.age>=0 && k.age<25); }
 function rbKind(age){ if(age>=18) return P.rb.u25; if(age>=14) return P.rb.k14; if(age>=6) return P.rb.k6; return P.rb.k0; }
 function wwRate(age){ const r=P.mb.ww; if(age>=18) return r[0]; if(age>=14) return r[1]; if(age>=6) return r[2]; return r[3]; }
 function byN(arr, plus, n){ const i = Math.min(n,arr.length)-1; return arr[i] + Math.max(0,n-arr.length)*plus; }
@@ -872,7 +876,8 @@ function grund(H){
   /* Mehrbedarfe */
   const mbList = [];
   let mbPct = 0;
-  if(H.typ==="ae"){ const m=kids.filter(k=>k.age<18), u7=m.filter(k=>k.age<7).length, u16=m.filter(k=>k.age<16).length;
+  const aeEff = H.typ==="ae" || (H.typ==="solo" && kids.length>0);
+  if(aeEff){ const m=kids.filter(k=>k.age<18), u7=m.filter(k=>k.age<7).length, u16=m.filter(k=>k.age<16).length;
     mbPct = m.length ? Math.max((u7>=1||u16>=2)?36:0, Math.min(60,12*m.length)) : 0; }
   const mbAE = r2(P.rb.single*mbPct/100); if(mbAE>0) mbList.push([t("mbAE",{p:mbPct}), mbAE]);
   ads.forEach((a,i)=>{
@@ -903,7 +908,7 @@ function grund(H){
   });
   const eII = inc.reduce((s,x)=>s+x.eII,0), eXII = inc.reduce((s,x)=>s+x.eXII,0);
   const need = rbEltern + mbAdults + kdu + kids.reduce((s,k,i)=>s+rbKind(k.age)+wwKids[i],0);
-  return {nAd, ads, pers, kids, n, regime, sys, mixed, kid15, rbA, mbList, mbPct, mbAdults, wwKids, rbEltern, grenze, grenzeTab, mieteCap, mieteAnerk, heatAnerk, kdu, kopf, inc, eII, eXII, elternEink: sys==="XII"?eXII:eII, need, ae:H.typ==="ae"};
+  return {nAd, ads, pers, kids, n, regime, sys, mixed, kid15, rbA, mbList, mbPct, mbAdults, wwKids, rbEltern, grenze, grenzeTab, mieteCap, mieteAnerk, heatAnerk, kdu, kopf, inc, eII, eXII, elternEink: sys==="XII"?eXII:eII, need, ae:aeEff};
 }
 function sgb(G, x){
   const wgShare = (x.wg||0)/G.n; let kgSurplus=0, childGap=0;
@@ -944,7 +949,7 @@ function wohngeld(G,H,VL){
 }
 function kinderzuschlag(G,H,kv,VL){
   const r = {kiz:0, perChild:G.kids.map(()=>0), reason:"", st:null};
-  if(H.mode!=="fam"){ r.reason=t("noKizMode"); return r; }
+  if(!famEff(H)){ r.reason=t("noKizMode"); return r; }
   if(!G.kids.length){ r.reason=t("rNoKids"); return r; }
   if(G.regime==="asyl"){ r.reason=t("rg_asyl"); return r; }
   if(H.verm > VL.kiz){ r.reason=t("kizVerm",{x:eur(VL.kiz)}); return r; }
@@ -984,7 +989,7 @@ function berechne(H){
   const G=grund(H); SYS=G.sys;
   const VL=vermLimits(G,H), W=wohngeld(G,H,VL), KV=kvCalc(G,H), K=kinderzuschlag(G,H,KV.total,VL);
   const s0=sgb(G,{}), s0kv=sgb(G,{kv:KV.total});
-  const idx = H.mode==="fam" ? [0,1,2,3] : [0,1];
+  const idx = famEff(H) ? [0,1,2,3] : [0,1];
   const xs=[null,{wg:W.wg},{kiz:K.perChild},{wg:W.wg,kiz:K.perChild}];
   const has=[true,W.wg>0,K.kiz>0,(W.wg>0||K.kiz>0)];
   const V = xs.map((x,i)=>{
@@ -995,7 +1000,7 @@ function berechne(H){
   });
   const sgbAvail = (G.regime==="II"||G.regime==="XII3"||G.regime==="XII4") && H.verm<=VL.sgb;
   const basis = G.ads.reduce((s,a)=>s+a.jn+a.rn+a.so,0)+G.kids.reduce((s,k)=>s+k.uh,0)+G.kids.length*P.kindergeld;
-  const top = H.mode==="fam" ? 3 : 1;
+  const top = famEff(H) ? 3 : 1;
   return {G,W,K,KV,VL,s0,s0kv,V,idx,top,sgbAvail,need:G.need,basis};
 }
 
@@ -1145,17 +1150,17 @@ function update(){
     cls="warn"; law="";
     if(G.regime==="none"){ h=t("vEuH"); tx=t("vEuT"); }
     else { h=t("vVermH"); tx=t("vVermT",{a:eur(S.verm),b:eur(VL.sgb),c:eur(VL.wg)}); }
-    tx += " "+I[L].wg+": "+eur(W.wg)+(S.mode==="fam" ? " · "+I[L].kiz+": "+eur(K.kiz) : "");
+    tx += " "+I[L].wg+": "+eur(W.wg)+(famEff(S) ? " · "+I[L].kiz+": "+eur(K.kiz) : "");
   }
-  else if(s0.gap===0){ cls="warn"; h=t("vNoneH"); tx=S.mode==="fam" ? t("vNoneT",{a:eur(W.wg),b:eur(K.kiz)}) : I[L].wg+": "+eur(W.wg); }
-  else if(S.mode==="fam" && ok(1)&&ok(2)){cls="ok";h=t("vEachH");tx=t("vEachT");best=3;}
-  else if(ok(1)){cls="ok";h=t("vWgH");tx=t("vWgT")+(S.mode==="fam"&&K.kiz>0?" "+t("alsoKiz"):"");best=1;}
+  else if(s0.gap===0){ cls="warn"; h=t("vNoneH"); tx=famEff(S) ? t("vNoneT",{a:eur(W.wg),b:eur(K.kiz)}) : I[L].wg+": "+eur(W.wg); }
+  else if(famEff(S) && ok(1)&&ok(2)){cls="ok";h=t("vEachH");tx=t("vEachT");best=3;}
+  else if(ok(1)){cls="ok";h=t("vWgH");tx=t("vWgT")+(famEff(S)&&K.kiz>0?" "+t("alsoKiz"):"");best=1;}
   else if(ok(2)){cls="ok";h=t("vKizH");tx=t("vKizT")+(W.wg>0?" "+t("alsoWg"):"");best=2;}
   else if(ok(3)){cls="ok";h=t("vBothH");tx=t("vBothT");best=3;}
   else {
     const z=idx.filter(i=>i>0 && V[i].st==="zus").sort((a,b)=>V[a].zus-V[b].zus)[0];
     if(z){cls="ok";h=t("vZusH",{v:t("v"+z)});tx=t("vZusT",{a:eur(KV.total),b:eur(V[z].zus)});best=z;}
-    else {cls="bad";h=t("vSgbH");tx=S.mode==="fam" ? t("vSgbT",{a:eur(V[3].gap)}) : t("vSgbWgT",{a:eur(V[1].gap)});}
+    else {cls="bad";h=t("vSgbH");tx=famEff(S) ? t("vSgbT",{a:eur(V[3].gap)}) : t("vSgbWgT",{a:eur(V[1].gap)});}
   }
   if(best>0 && G.sys==="II" && !S.stabil){ cls="warn"; tx=t("vNotStableT",{v:t("v"+best)}); h=t("vNotStableH"); }
   $("verdict").innerHTML='<div class="verdict '+cls+'">'+ICON[cls]+'<div><b>'+esc(h)+'</b><p>'+esc(tx)+'</p>'+(law?'<p class="law">'+esc(law)+'</p>':'')+'</div></div>';
@@ -1168,15 +1173,15 @@ function update(){
   if(S.son.stat) chips.push(['w',t("warnStat")]);
   if(G.pers.some(p=>p.edge)) chips.push(['w',t("warnRag")]);
   if(W.vermEx) chips.push(['w',t("vWgVerm",{c:eur(VL.wg)})]);
-  if(S.mode==="wg" && G.kids.length) chips.push(['w',t("noKizMode")]);
+  if(S.mode==="wg" && G.kids.length) chips.push(['sys',t("kizAuto")]);
   $("chips").innerHTML = chips.map(([c,x])=>'<p class="chip '+c+'">'+esc(x)+'</p>').join("");
 
   $("kpis").innerHTML=
     '<div class="kpi"><span>'+esc(t("kGap"))+'</span><b>'+eur(s0.gap)+'</b></div>'+
     '<div class="kpi kv"><span>'+esc(t("kKv"))+'</span><b>'+eur(KV.total)+'</b></div>'+
     '<div class="kpi wg"><span>'+esc(I[L].wg)+'</span><b>'+eur(W.wg)+'</b></div>'+
-    (S.mode==="fam" ? '<div class="kpi kz"><span>'+esc(I[L].kiz)+'</span><b>'+eur(K.kiz)+'</b></div>' : '<div class="kpi"><span>'+esc(t("colNeed"))+'</span><b>'+eur(R.need)+'</b></div>');
-  $("legend").innerHTML='<span><i class="seg-own"></i>'+esc(t("legOwn"))+'</span><span><i class="seg-ben"></i>'+esc(S.mode==="fam"?t("legBen"):I[L].wg)+'</span><span><i class="seg-zus"></i>'+esc(t("legZus"))+'</span><span><i class="seg-gap"></i>'+esc(t("legGap"))+'</span>';
+    (famEff(S) ? '<div class="kpi kz"><span>'+esc(I[L].kiz)+'</span><b>'+eur(K.kiz)+'</b></div>' : '<div class="kpi"><span>'+esc(t("colNeed"))+'</span><b>'+eur(R.need)+'</b></div>');
+  $("legend").innerHTML='<span><i class="seg-own"></i>'+esc(t("legOwn"))+'</span><span><i class="seg-ben"></i>'+esc(famEff(S)?t("legBen"):I[L].wg)+'</span><span><i class="seg-zus"></i>'+esc(t("legZus"))+'</span><span><i class="seg-gap"></i>'+esc(t("legGap"))+'</span>';
 
   const scale=Math.max(R.need+KV.total,1), w=x=>(100*Math.max(0,x)/scale).toFixed(2)+"%";
   $("vrows").innerHTML=idx.map(i=>{
@@ -1198,12 +1203,12 @@ function update(){
       '<span class="amt">'+esc(amt)+'</span></div>';
   }).join("");
 
-  const ben = W.wg + (S.mode==="fam" ? K.kiz : 0);
+  const ben = W.wg + (famEff(S) ? K.kiz : 0);
   const sgbB=R.basis+s0.gap, vorB=R.basis+ben-KV.total-P.sv.gez+V[top].zus, diff=vorB-sgbB;
   const sub=t("bVorSub",{kv:eur(KV.total),gez:eur(P.sv.gez)})+(V[top].zus>0?" · "+t("bVorZus",{z:eur(V[top].zus)}):"");
   $("budget").innerHTML='<h3>'+esc(t("budgetH"))+'</h3>'+
     '<div class="brow"><span>'+esc(t("bSgb"))+'</span><b>'+eur(sgbB)+'</b></div>'+
-    '<div class="brow"><span>'+esc(t(S.mode==="fam"?"bVor":"bVorWg"))+'<small>'+esc(sub)+'</small></span><b>'+eur(vorB)+'</b></div>'+
+    '<div class="brow"><span>'+esc(t(famEff(S)?"bVor":"bVorWg"))+'<small>'+esc(sub)+'</small></span><b>'+eur(vorB)+'</b></div>'+
     '<div class="brow diff"><span>'+esc(t("bDiff"))+'</span><b class="'+(diff>=0?'pos':'neg')+'">'+(diff>=0?'+':'')+eur(diff)+'</b></div>';
   renderWeg(R);
 }
@@ -1237,7 +1242,7 @@ function renderWeg(R){
   h+=tbl([t("colM"),t("colEur")],[[t("hbR",{a:eur(W.hb),b:eur(W.kl)}),W.cap],[t("capR"),W.mRent],[t("hkeR"),W.hke],[t("hkkR"),W.hkk]],["M",W.M]);
   h+=tbl([t("colY"),t("colGross"),t("colWk"),t("colAfter")],W.rows,[t("yR",{p:pct(W.pa)}),"","",W.Y]);
   h+='<div class="formula">1,15 · ('+W.M.toFixed(2)+' − ('+W.a+' + '+W.b+'·'+W.M.toFixed(2)+' + '+W.c+'·'+W.Y.toFixed(2)+') · '+W.Y.toFixed(2)+') = '+W.raw.toFixed(2)+' → <b>'+eur(W.wg)+'</b>'+(W.unterMin?' ('+esc(t("rBelow"))+')':'')+(W.vermEx?' – '+esc(t("vWgVerm",{c:eur(VL.wg)})):'')+'</div>';
-  if(S.mode==="fam"){
+  if(famEff(S)){
     h+='<h3>'+esc(t("rw3"))+'</h3>';
     if(!K.st) h+='<p class="hint">'+esc(K.reason)+'</p>';
     else { const s=K.st;
@@ -1249,9 +1254,9 @@ function renderWeg(R){
   h+='<h3>'+esc(t("rw5"))+'</h3>';
   h+=tbl([t("colItem"),t("colEur")],KV.pers.map((p,i)=>[t("kvP",{n:i+1,s:stName(p.st,p)}),p.beitrag]).concat([[t("gezRow"),P.sv.gez]]));
   h+='<p class="hint">'+esc(t("kvCalc",{a:eur(P.sv.mindest),p:pct(KV.rate)}))+'</p>';
-  const ben = W.wg+(S.mode==="fam"?K.kiz:0);
+  const ben = W.wg+(famEff(S)?K.kiz:0);
   const sgbB=R.basis+s0.gap, vorB=R.basis+ben-KV.total-P.sv.gez+V[top].zus;
-  const br=[[t("bBasis"),R.basis,R.basis],[t("bSgbL"),s0.gap,""],[t(S.mode==="fam"?"bBen":"bBenWg"),"",ben],[t("bKv"),"",-KV.total],[t("bGez"),"",-P.sv.gez]];
+  const br=[[t("bBasis"),R.basis,R.basis],[t("bSgbL"),s0.gap,""],[t(famEff(S)?"bBen":"bBenWg"),"",ben],[t("bKv"),"",-KV.total],[t("bGez"),"",-P.sv.gez]];
   if(V[top].zus>0) br.push([t("bZus"),"",V[top].zus]);
   h+=tbl([t("colItem"),t("v0"),t("v"+top)],br,[t("bTot"),sgbB,vorB]);
   $("weg").innerHTML=h;
