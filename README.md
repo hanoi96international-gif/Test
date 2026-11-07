@@ -67,3 +67,50 @@ Lokal: `python -m bounty_radar --sprachen python --min-betrag 100` (ohne Token l
 
 **Ehrlich:** Beliebte Bounties sind schnell vergeben, und manche Projekte nehmen nur Fixes von
 Leuten an, die ihren Code gut kennen. Der Radar spart dir die Suche, die eigentliche Arbeit ist der Fix.
+
+---
+
+# 🏛️ Leistungsabgleich Jobcenter ↔ Wohngeldstelle
+
+Ein Prototyp für eine **direkte Schnittstelle zwischen Jobcenter (SGB II) und Wohngeldstelle**.
+Mit der Familienkasse gibt es den digitalen Erstattungsweg schon, hier fehlt er bisher.
+Folge: In Eilfällen wartet man Tage oder Wochen auf Rückmeldung der anderen Behörde.
+
+**Was die Schnittstelle kann**
+
+- **Abgleich in beide Richtungen:** Das Jobcenter sieht, ob für die Person Wohngeld *beantragt* ist
+  oder *gerade läuft* (Zeitraum, Betrag, Aktenzeichen, Ansprechperson). Umgekehrt sieht die
+  Wohngeldstelle laufende oder beantragte Bürgergeld-Fälle.
+- **Entscheidungshinweise für Eilfälle**, z. B. „Wohngeld läuft, bei Bürgergeld-Bewilligung
+  entfällt es (§ 7 WoGG), Erstattung nach § 104 SGB X anmelden“.
+- **Erstattungsansprüche digital:** anmelden (auch erst dem Grunde nach, § 111 SGB X), später
+  beziffern. Die Gegenseite erkennt an, erkennt teilweise an oder lehnt mit Begründung ab.
+  Danach wird der Anspruch als erledigt markiert.
+
+**Datenschutz ist eingebaut, nicht nachgerüstet**
+
+- Im Register stehen **keine Namen**, nur ein Pseudonym (HMAC aus Name + Geburtsdatum). Den
+  Schlüssel haben nur die Behörden. „Müller“ und „Mueller“ ergeben dasselbe Pseudonym.
+- **Zweckbindung:** Abfragen geht nur über ein eigenes, gemeldetes Aktenzeichen.
+  Gezieltes Herumsuchen ist damit ausgeschlossen.
+- **Protokoll** jeder Meldung und Abfrage, auch abgelehnter, abrufbar über `GET /protokoll`.
+
+**Ausprobieren**
+
+```bash
+python -m leistungsabgleich demo          # Eilfall Schritt für Schritt
+python -m leistungsabgleich schluessel    # API-Schlüssel erzeugen → behoerden.json
+python -m leistungsabgleich serve --db abgleich.db --behoerden behoerden.json
+```
+
+Alle Endpunkte stehen oben in `leistungsabgleich/__main__.py`. Beispiel Abgleich:
+`GET /faelle/BG-12345/abgleich` mit `Authorization: Bearer <Schlüssel des Jobcenters>`.
+
+**Ehrlich: Was vor einem echten Einsatz fehlt.** Das ist ein Prototyp zum Zeigen und Diskutieren.
+Für den Echtbetrieb braucht es:
+- eine **Rechtsgrundlage** für den Abgleich ohne Einzelanfrage (§ 69 SGB X, ggf. landesrechtliche
+  Regelung oder Vereinbarung zwischen Träger und Kommune) sowie eine Datenschutz-Folgenabschätzung
+  nach Art. 35 DSGVO,
+- Betrieb im Behördennetz mit TLS und Anbindung an die Fachverfahren (z. B. ALLEGRO bei den
+  Jobcentern, die Wohngeld-Software der Kommune), statt die Daten von Hand zu melden,
+- langfristig ein XÖV-konformes Nachrichtenformat und Abstimmung mit BA, Land und IT-Dienstleister.
