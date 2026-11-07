@@ -258,6 +258,18 @@ footer{font-size:.8rem;color:var(--muted)}
           <button type="button" class="add" id="addKid"><span aria-hidden="true">＋</span><span data-i18n="addKid"></span></button>
         </div>
 
+        <details class="more" id="mehr">
+          <summary data-i18n="mehrH"></summary>
+          <div class="checks">
+            <div class="pair">
+              <label class="f"><span data-i18n="umgCnt"></span><input class="sel" type="number" inputmode="numeric" min="0" max="6" id="umgCnt"></label>
+              <label class="f"><span data-i18n="umgAge"></span><input class="sel" type="number" inputmode="numeric" min="0" max="24" id="umgAge"></label>
+            </div>
+            <label class="f"><span data-i18n="umgNights"></span><input class="sel" type="number" inputmode="numeric" min="0" max="365" id="umgNights"></label>
+            <label class="f"><span data-i18n="ext25"></span><input class="sel" type="number" inputmode="numeric" min="0" max="6" id="ext25"></label>
+          </div>
+        </details>
+
         <details class="more" id="sonder">
           <summary data-i18n="sonderH"></summary>
           <div class="checks">
@@ -304,6 +316,7 @@ footer{font-size:.8rem;color:var(--muted)}
           <p class="warnchip" id="mogWarn" data-i18n="mogWarn"></p>
           <div><button type="button" class="btn ghost" id="mogReset" data-i18n="mogReset"></button></div>
         </div>
+        <label class="toggle" id="unbornRow"><input type="checkbox" id="unborn"><span data-i18n="unborn"></span></label>
         <div class="person kz">
           <h4 data-i18n="kzTitle"></h4>
           <details class="more" open>
@@ -861,6 +874,63 @@ kzEnd:"Льготный период длится до {m} включитель�
 kz2023:"Льготный период существует только с 01.01.2023. Для пособия до этого он начинается не раньше января 2023.",kzRestart:"Новый льготный период будет возможен только после 3 лет без пособия с конца этого пособия.",kzSet:"Выбор ниже установлен автоматически."}
 };
 for(const l in KZ) Object.assign(I[l], KZ[l]);
+const KI = {
+de:{mehrH:"Weitere Kinder und Personen in der Wohnung",umgCnt:"Kinder im Umgang (leben zeitweise hier, Kindergeld bekommt der andere Elternteil)",umgAge:"Alter des Umgangskindes",umgNights:"Übernachtungen hier pro Jahr (je Kind, ungefähr)",ext25:"Weitere Personen in der Wohnung, die nicht zu dieser Gemeinschaft gehören (z. B. Kinder ab 25)",unborn:"Ungeborenes Kind bei der Mietobergrenze mitzählen (falls die Richtlinie das vorsieht)",
+umgInfo:"Umgangskinder: Mietobergrenze für {n} Personen angesetzt (zusätzlicher Wohnraum bei regelmäßigem Umgang ab {x} Übernachtungen im Jahr). Regelbedarf anteilig für etwa {d} Tage im Monat (temporäre Bedarfsgemeinschaft).",
+umgShort:"Umgangskinder: Für weniger als {x} Übernachtungen im Jahr wird kein zusätzlicher Wohnraum angesetzt. Regelbedarf anteilig für etwa {d} Tage im Monat.",
+umgWg:"Wohngeld: Das Umgangskind zählt als Haushaltsmitglied (wechselnder Aufenthalt, ab {x} Übernachtungen im Jahr).",
+extInfo:"Weitere Personen in der Wohnung: Mietobergrenze nach {n} Personen. Die Bedarfsgemeinschaft trägt nur ihren Kopfanteil ({p}). Beim Wohngeld zählt ebenfalls nur der Anteil.",
+unbornInfo:"Ungeborenes Kind bei der Mietobergrenze mitgezählt.",
+kwgInfo:"Kinderwohngeld: Kind {n} ist mit Unterhalt bzw. Unterhaltsvorschuss, Kindergeld und Kinderwohngeld ({a}) nicht hilfebedürftig und gehört nicht mehr zur Bedarfsgemeinschaft. Das Kinderwohngeld ist vorrangig zu beantragen (§ 12a SGB II). Überschüssiges Kindergeld wird den Eltern angerechnet.",
+kwgAmt:"inkl. Kinderwohngeld {a}",umgR:"Regelbedarf Umgangskinder (anteilig, etwa {d} Tage)",shareR:"− Anteil anderer Personen an den Wohnkosten (eigener Anteil: {p})",kwgRow:"+ Kinderwohngeld",
+kidsKz:"Haushalte mit Kindern: Bei unabweisbaren Kosten sind in der Karenzzeit Ausnahmen vom 150-%-Deckel möglich. Bitte Einzelfall prüfen."},
+en:{mehrH:"Other children and people in the flat",umgCnt:"Children on contact visits (live here part-time, the other parent gets child benefit)",umgAge:"Age of the visiting child",umgNights:"Nights here per year (per child, approx.)",ext25:"Other people in the flat who do not belong to this household (e.g. children aged 25+)",unborn:"Count the unborn child for the rent limit (if the guideline provides for it)",
+umgInfo:"Visiting children: rent limit for {n} persons applied (extra living space for regular contact from {x} nights a year). Standard need pro rata for about {d} days a month (temporary benefit community).",
+umgShort:"Visiting children: below {x} nights a year no extra living space is applied. Standard need pro rata for about {d} days a month.",
+umgWg:"Housing benefit: the visiting child counts as a household member (alternating residence, from {x} nights a year).",
+extInfo:"Other people in the flat: rent limit for {n} persons. The benefit community only bears its per-head share ({p}). Housing benefit also uses only that share.",
+unbornInfo:"Unborn child counted for the rent limit.",
+kwgInfo:"Child housing benefit: child {n} is not in need with maintenance or advance maintenance, child benefit and child housing benefit ({a}) and no longer belongs to the benefit community. Child housing benefit must be applied for first (§ 12a SGB II). Surplus child benefit counts towards the parents.",
+kwgAmt:"incl. child housing benefit {a}",umgR:"Standard need visiting children (pro rata, about {d} days)",shareR:"− share of other people in housing costs (own share: {p})",kwgRow:"+ child housing benefit",
+kidsKz:"Households with children: for unavoidable costs, exceptions from the 150 % cap are possible during the waiting period. Please check the individual case."},
+tr:{mehrH:"Dairedeki diğer çocuklar ve kişiler",umgCnt:"Görüşme kapsamındaki çocuklar (zaman zaman burada yaşar, çocuk parasını diğer ebeveyn alır)",umgAge:"Görüşme çocuğunun yaşı",umgNights:"Yılda burada geçirilen gece sayısı (çocuk başına, yaklaşık)",ext25:"Bu haneye ait olmayan diğer kişiler (ör. 25 yaş üstü çocuklar)",unborn:"Doğmamış çocuğu kira üst sınırında say (yönerge öngörüyorsa)",
+umgInfo:"Görüşme çocukları: {n} kişilik kira üst sınırı uygulandı (yılda {x} geceden itibaren düzenli görüşmede ek yaşam alanı). Standart ihtiyaç ayda yaklaşık {d} gün için orantılı (geçici ihtiyaç topluluğu).",
+umgShort:"Görüşme çocukları: yılda {x} gecenin altında ek yaşam alanı uygulanmaz. Standart ihtiyaç ayda yaklaşık {d} gün için orantılı.",
+umgWg:"Konut yardımı: görüşme çocuğu hane üyesi sayılır (dönüşümlü kalış, yılda {x} geceden itibaren).",
+extInfo:"Dairedeki diğer kişiler: {n} kişilik kira üst sınırı. İhtiyaç topluluğu yalnızca kişi başı payını taşır ({p}). Konut yardımında da yalnızca bu pay sayılır.",
+unbornInfo:"Doğmamış çocuk kira üst sınırında sayıldı.",
+kwgInfo:"Çocuk konut yardımı: {n}. çocuk nafaka/nafaka avansı, çocuk parası ve çocuk konut yardımı ({a}) ile muhtaç değildir ve artık ihtiyaç topluluğuna ait değildir. Çocuk konut yardımı öncelikle başvurulmalıdır (§ 12a SGB II). Fazla çocuk parası ebeveynlere sayılır.",
+kwgAmt:"çocuk konut yardımı {a} dahil",umgR:"Görüşme çocukları standart ihtiyacı (orantılı, yaklaşık {d} gün)",shareR:"− diğer kişilerin konut giderlerindeki payı (kendi payı: {p})",kwgRow:"+ çocuk konut yardımı",
+kidsKz:"Çocuklu haneler: kaçınılmaz giderlerde bekleme süresinde %150 sınırından istisnalar mümkündür. Lütfen durumu ayrıca inceleyin."},
+ar:{mehrH:"أطفال وأشخاص آخرون في الشقة",umgCnt:"أطفال في إطار حق الزيارة (يعيشون هنا أحيانًا، وإعانة الطفل يأخذها الوالد الآخر)",umgAge:"عمر طفل الزيارة",umgNights:"عدد الليالي هنا سنويًا (لكل طفل، تقريبًا)",ext25:"أشخاص آخرون في الشقة لا ينتمون إلى هذه الأسرة (مثل الأبناء من 25 سنة)",unborn:"احتساب الطفل الذي لم يولد بعد في الحد الأعلى للإيجار (إن نصت اللائحة على ذلك)",
+umgInfo:"أطفال الزيارة: طُبق الحد الأعلى للإيجار لـ {n} أفراد (مساحة سكن إضافية عند الزيارة المنتظمة من {x} ليلة سنويًا). الحاجة الأساسية بشكل نسبي لحوالي {d} يومًا شهريًا (مجتمع احتياج مؤقت).",
+umgShort:"أطفال الزيارة: أقل من {x} ليلة سنويًا لا تُطبق مساحة سكن إضافية. الحاجة الأساسية بشكل نسبي لحوالي {d} يومًا شهريًا.",
+umgWg:"بدل السكن: يُحتسب طفل الزيارة فردًا من الأسرة (إقامة متناوبة، من {x} ليلة سنويًا).",
+extInfo:"أشخاص آخرون في الشقة: الحد الأعلى للإيجار لـ {n} أفراد. يتحمل مجتمع الاحتياج حصته للفرد فقط ({p}). وفي بدل السكن تُحتسب هذه الحصة فقط أيضًا.",
+unbornInfo:"احتُسب الطفل الذي لم يولد بعد في الحد الأعلى للإيجار.",
+kwgInfo:"بدل السكن للطفل: الطفل {n} ليس بحاجة بفضل النفقة/سلفة النفقة وإعانة الطفل وبدل السكن للطفل ({a})، ولم يعد ينتمي إلى مجتمع الاحتياج. يجب طلب بدل السكن للطفل أولًا (§ 12a SGB II). فائض إعانة الطفل يُحتسب للوالدين.",
+kwgAmt:"بما في ذلك بدل سكن الطفل {a}",umgR:"الحاجة الأساسية لأطفال الزيارة (نسبيًا، حوالي {d} يومًا)",shareR:"− حصة الأشخاص الآخرين من تكاليف السكن (الحصة الخاصة: {p})",kwgRow:"+ بدل سكن الطفل",
+kidsKz:"الأسر التي لديها أطفال: في حالة التكاليف التي لا مفر منها تكون الاستثناءات من حد 150 % ممكنة خلال فترة السماح. يرجى فحص الحالة الفردية."},
+uk:{mehrH:"Інші діти та особи в квартирі",umgCnt:"Діти за правом спілкування (живуть тут частково, Kindergeld отримує інший батько)",umgAge:"Вік дитини",umgNights:"Ночей тут на рік (на дитину, приблизно)",ext25:"Інші особи в квартирі, які не належать до цього домогосподарства (напр. діти від 25 років)",unborn:"Враховувати ненароджену дитину для межі оренди (якщо директива це передбачає)",
+umgInfo:"Діти за правом спілкування: застосовано межу оренди для {n} осіб (додаткова площа при регулярному спілкуванні від {x} ночей на рік). Базова потреба пропорційно приблизно за {d} днів на місяць (тимчасова спільнота потреби).",
+umgShort:"Діти за правом спілкування: менше {x} ночей на рік – додаткова площа не застосовується. Базова потреба пропорційно приблизно за {d} днів на місяць.",
+umgWg:"Житлова допомога: дитина вважається членом домогосподарства (почергове проживання, від {x} ночей на рік).",
+extInfo:"Інші особи в квартирі: межа оренди для {n} осіб. Спільнота потреби несе лише свою частку на особу ({p}). Для житлової допомоги також враховується лише ця частка.",
+unbornInfo:"Ненароджену дитину враховано для межі оренди.",
+kwgInfo:"Житлова допомога для дитини: дитина {n} завдяки аліментам/авансу аліментів, Kindergeld і житловій допомозі для дитини ({a}) не потребує допомоги і більше не належить до спільноти потреби. Житлову допомогу для дитини слід подати в першу чергу (§ 12a SGB II). Надлишок Kindergeld зараховується батькам.",
+kwgAmt:"включно з житловою допомогою для дитини {a}",umgR:"Базова потреба дітей за правом спілкування (пропорційно, близько {d} днів)",shareR:"− частка інших осіб у витратах на житло (власна частка: {p})",kwgRow:"+ житлова допомога для дитини",
+kidsKz:"Домогосподарства з дітьми: при неминучих витратах у пільговий період можливі винятки з межі 150 %. Перевірте окремий випадок."},
+ru:{mehrH:"Другие дети и лица в квартире",umgCnt:"Дети по праву общения (живут здесь частично, Kindergeld получает другой родитель)",umgAge:"Возраст ребёнка",umgNights:"Ночей здесь в год (на ребёнка, примерно)",ext25:"Другие лица в квартире, не относящиеся к этому домохозяйству (напр. дети от 25 лет)",unborn:"Учитывать нерождённого ребёнка для предела аренды (если директива это предусматривает)",
+umgInfo:"Дети по праву общения: применён предел аренды для {n} человек (дополнительная площадь при регулярном общении от {x} ночей в год). Базовая потребность пропорционально примерно за {d} дней в месяц (временное сообщество нуждающихся).",
+umgShort:"Дети по праву общения: менее {x} ночей в год – дополнительная площадь не применяется. Базовая потребность пропорционально примерно за {d} дней в месяц.",
+umgWg:"Жилищное пособие: ребёнок считается членом домохозяйства (попеременное проживание, от {x} ночей в год).",
+extInfo:"Другие лица в квартире: предел аренды для {n} человек. Сообщество нуждающихся несёт только свою долю на человека ({p}). В жилищном пособии также учитывается только эта доля.",
+unbornInfo:"Нерождённый ребёнок учтён для предела аренды.",
+kwgInfo:"Жилищное пособие для ребёнка: ребёнок {n} благодаря алиментам/авансу алиментов, Kindergeld и жилищному пособию для ребёнка ({a}) не нуждается и больше не входит в сообщество нуждающихся. Жилищное пособие для ребёнка нужно оформить в первую очередь (§ 12a SGB II). Избыток Kindergeld засчитывается родителям.",
+kwgAmt:"включая жилищное пособие для ребёнка {a}",umgR:"Базовая потребность детей по праву общения (пропорционально, около {d} дней)",shareR:"− доля других лиц в расходах на жильё (собственная доля: {p})",kwgRow:"+ жилищное пособие для ребёнка",
+kidsKz:"Домохозяйства с детьми: при неизбежных расходах в льготный период возможны исключения из предела 150 %. Проверьте отдельный случай."}
+};
+for(const l in KI) Object.assign(I[l], KI[l]);
 let L = "de";
 try{ const s = localStorage.getItem("vp-wob-lang"); if(s && I[s]) L = s; }catch(e){}
 function t(k, v){
@@ -873,7 +943,7 @@ function t(k, v){
 }
 /* Texte, die je nach Zuständigkeit SGB II oder SGB XII nennen */
 let SYS = "II";
-const FIX = new Set(["sub","v0","kGap","bSgb","bSgbL","vNoneH","vSgbH","vSgbT","vSgbWgT","vZusH","vZusT","vWgT","vKizT","rw1","rw4h","rw5","gezHint","kvHint","kKv","kvLabel","bZus"]);
+const FIX = new Set(["kwgInfo","sub","v0","kGap","bSgb","bSgbL","vNoneH","vSgbH","vSgbT","vSgbWgT","vZusH","vZusT","vWgT","vKizT","rw1","rw4h","rw5","gezHint","kvHint","kKv","kvLabel","bZus"]);
 const loc = ()=>LANGS.find(x=>x[0]===L)[2];
 const eur = v => new Intl.NumberFormat(loc(),{style:"currency",currency:"EUR"}).format(Math.round(v*100)/100);
 const pct = v => new Intl.NumberFormat(loc(),{style:"percent",maximumFractionDigits:2}).format(v);
@@ -898,6 +968,7 @@ const DEFAULTS = {
   grz:{base:100, q:0.3, capPct:50},
   xii:{erwQ:0.3, erwCapPct:50},
   wgx:{renteWk:102, rentePa:0.1, sb:1800},
+  kids:{umgMin:50, umgPlus:1, wgUmgMin:122, unbornPlus:1},
   verm:{iiK:40000, iiKPlus:15000, ii:15000, xiiAd:10000, xiiKid:500, wg:60000, wgPlus:30000, kiz:40000, kizPlus:15000}
 };
 const clone = o => JSON.parse(JSON.stringify(o));
@@ -918,6 +989,8 @@ const GROUPS = [
     ["fb.grund","Grundfreibetrag €"],["fb.q1","Quote 100 € bis Stufe 1"],["fb.g1","Stufe 1 bis € brutto"],["fb.q2","Quote bis Stufe 2"],["fb.g2","Stufe 2 bis € brutto"],["fb.q3","Quote bis Obergrenze"],["fb.g3o","Obergrenze ohne Kind € brutto"],["fb.g3m","Obergrenze mit Kind € brutto"],["fb.pausch","Versicherungspauschale (ohne Erwerb) €"]]},
   {t:"SGB XII und Grundrente", src:"§ 82 Abs. 3 SGB XII; Grundrentenfreibetrag § 11b Abs. 2b SGB II, § 82a SGB XII, § 17a WoGG", warn:"Grundrentenfreibetrag vereinfacht auf die gesamte Rente angewandt.", items:[
     ["xii.erwQ","SGB XII: Absetzbetrag Erwerb (Anteil vom Brutto)"],["xii.erwCapPct","SGB XII: Höchstbetrag % RBS 1"],["grz.base","Grundrente: Sockelfreibetrag €"],["grz.q","Grundrente: Anteil darüber"],["grz.capPct","Grundrente: Höchstbetrag % RBS 1"]]},
+  {t:"Kinder bei den Unterkunftskosten", src:"BSG zum Umgangsrecht (zusätzlicher Wohnraum, temporäre Bedarfsgemeinschaft); § 5 WoGG (Haushaltsmitglieder); Kopfteilprinzip; Mischhaushalt im WoGG.", warn:"Annahmen – bitte mit der KdU-Richtlinie Wolfsburg abgleichen.", items:[
+    ["kids.umgMin","Umgang: zusätzlicher Wohnraum ab Übernachtungen/Jahr"],["kids.umgPlus","Umgang: zusätzliche Personen bei der Mietobergrenze"],["kids.wgUmgMin","Wohngeld: Umgangskind Haushaltsmitglied ab Übernachtungen/Jahr"],["kids.unbornPlus","Ungeborenes Kind: zusätzliche Personen"]]},
   {t:"Vermögensgrenzen", src:"§ 12 SGB II; § 90 SGB XII i. V. m. VO; WoGVwV 21.37; § 6a Abs. 3 BKGG", warn:"Vereinfacht: Vermögen des ganzen Haushalts gegen die Summe der Freibeträge.", items:[
     ["verm.iiK","SGB II Karenzzeit: 1. Person €"],["verm.iiKPlus","SGB II Karenzzeit: je weitere Person €"],["verm.ii","SGB II nach Karenzzeit: je Person €"],["verm.xiiAd","SGB XII: je erwachsene Person €"],["verm.xiiKid","SGB XII: je Kind €"],["verm.wg","Wohngeld: 1. Person €"],["verm.wgPlus","Wohngeld: je weitere Person €"],["verm.kiz","Kinderzuschlag: 1. Person €"],["verm.kizPlus","Kinderzuschlag: je weitere Person €"]]},
   {t:"Mietobergrenzen Wolfsburg (Grundmiete inkl. Betriebskosten)", src:"Jobcenter Wolfsburg, jobcenter-wolfsburg.de, abgerufen am 07.11.2026. Wohnfläche: 50/60/75/85/95 m², danach +10 m² je Person.", warn:"4 Personen: Auf der Website steht „825,35,70 €“ (Tippfehler). Eingetragen ist 825,35 € – bitte beim Jobcenter bestätigen.",
@@ -940,10 +1013,10 @@ const GROUPS = [
 const AD0 = {gj:1990, ef:"ja", schw:false, merkG:false, sb:false, kv:"auto", jb:0, jn:0, rb:0, rn:0, grz:false, so:0};
 const SON0 = {azubi:false, eu:false, asyl:false, stat:false};
 const EX = {
-  fam:{mode:"fam", typ:"paar", verh:false, ad:[Object.assign({},AD0,{gj:1988,jb:1700,jn:1330}),Object.assign({},AD0,{gj:1990})], kids:[{age:4,uh:0},{age:9,uh:0}], son:clone(SON0), pa:"0.3", stabil:true, mi:780, hz:110, ww:false, kdz:"normal", hzG:null, kzStart:"", kzPrev:"", kzGap:0, kzUsed:null, mog:null, verm:2000, step:1},
-  wg:{mode:"wg", typ:"solo", verh:false, ad:[Object.assign({},AD0,{gj:1957,ef:"ar",rb:1250,rn:1096,grz:true}),Object.assign({},AD0)], kids:[], son:clone(SON0), pa:"0.3", stabil:true, mi:520, hz:70, ww:false, kdz:"normal", hzG:null, kzStart:"", kzPrev:"", kzGap:0, kzUsed:null, mog:null, verm:5000, step:1}
+  fam:{mode:"fam", typ:"paar", verh:false, ad:[Object.assign({},AD0,{gj:1988,jb:1700,jn:1330}),Object.assign({},AD0,{gj:1990})], kids:[{age:4,uh:0},{age:9,uh:0}], son:clone(SON0), pa:"0.3", stabil:true, mi:780, hz:110, ww:false, kdz:"normal", hzG:null, kzStart:"", kzPrev:"", kzGap:0, kzUsed:null, umgCnt:0, umgAge:8, umgNights:0, ext25:0, unborn:false, mog:null, verm:2000, step:1},
+  wg:{mode:"wg", typ:"solo", verh:false, ad:[Object.assign({},AD0,{gj:1957,ef:"ar",rb:1250,rn:1096,grz:true}),Object.assign({},AD0)], kids:[], son:clone(SON0), pa:"0.3", stabil:true, mi:520, hz:70, ww:false, kdz:"normal", hzG:null, kzStart:"", kzPrev:"", kzGap:0, kzUsed:null, umgCnt:0, umgAge:8, umgNights:0, ext25:0, unborn:false, mog:null, verm:5000, step:1}
 };
-const emptyFor = mode => ({mode, typ: mode==="fam"?"paar":"solo", verh:false, ad:[Object.assign({},AD0,{gj:0}),Object.assign({},AD0,{gj:0})], kids:[], son:clone(SON0), pa:"0.3", stabil:true, mi:0, hz:0, ww:false, kdz:"normal", hzG:null, kzStart:"", kzPrev:"", kzGap:0, kzUsed:null, mog:null, verm:0, step:1});
+const emptyFor = mode => ({mode, typ: mode==="fam"?"paar":"solo", verh:false, ad:[Object.assign({},AD0,{gj:0}),Object.assign({},AD0,{gj:0})], kids:[], son:clone(SON0), pa:"0.3", stabil:true, mi:0, hz:0, ww:false, kdz:"normal", hzG:null, kzStart:"", kzPrev:"", kzGap:0, kzUsed:null, umgCnt:0, umgAge:8, umgNights:0, ext25:0, unborn:false, mog:null, verm:0, step:1});
 let S = clone(EX.fam);
 try{ const s = localStorage.getItem("vp-wob-input4"); if(s){ const o=JSON.parse(s); S = Object.assign(clone(EX[o.mode==="wg"?"wg":"fam"]), o); } }catch(e){}
 const save = ()=>{ try{ localStorage.setItem("vp-wob-input4", JSON.stringify(S)); }catch(e){} };
@@ -983,6 +1056,15 @@ function grzFrei(rente){ if(rente<=0) return 0; return Math.min(rente, P.rb.sing
 function grund(H){
   const nAd = H.typ==="paar" ? 2 : 1, ads = H.ad.slice(0,nAd), pers = ads.map(person);
   const kids = H.kids.filter(k=>k.age>=0 && k.age<25), n = nAd+kids.length, mitKind = kids.length>0;
+  /* Kinder bei den Unterkunftskosten: Umgangskinder, weitere Personen (Kopfteil), ungeborenes Kind */
+  const ext = Math.max(0,Math.floor(H.ext25||0));
+  const umgCnt = Math.max(0,Math.floor(H.umgCnt||0)), umgN = Math.max(0,H.umgNights||0);
+  const umgOn = umgCnt>0 && umgN>=P.kids.umgMin;
+  const umgDays = umgCnt>0 ? Math.min(30, umgN/12) : 0;
+  const umgNeed = umgCnt>0 ? r2(umgCnt*rbKind(H.umgAge||0)*umgDays/30) : 0;
+  const unbornOn = !!H.unborn && ads.some(a=>a.schw);
+  const nKdU = n + ext + (umgOn?P.kids.umgPlus:0) + (unbornOn?P.kids.unbornPlus:0);
+  const shareBG = n/(n+ext);
   /* Zuständigkeit: SGB II, wenn mindestens ein Erwachsener erwerbsfähig ist (§§ 7, 8 SGB II) */
   let regime;
   if(H.son.asyl) regime = "asyl";
@@ -1010,14 +1092,14 @@ function grund(H){
   if(wwSum>0) mbList.push([t("mbWW"), r2(wwSum)]);
   const mbAdults = mbList.reduce((s,x)=>s+x[1],0) - (wwSum - wwAd);
   const rbEltern = rbA*nAd;
-  const grenzeTab = byN(P.kdu.p,P.kdu.plus,n), grenze = (H.mog!=null && H.mog>0) ? H.mog : grenzeTab;
+  const grenzeTab = byN(P.kdu.p,P.kdu.plus,nKdU), grenze = (H.mog!=null && H.mog>0) ? H.mog : grenzeTab;
   /* Unterkunft: Karenzzeit seit 01.07.2026 höchstens 150 % der Grenze (§ 22 Abs. 1 SGB II); SGB XII ohne Deckel.
      Heizkosten sind in der Karenzzeit nicht geschützt; während laufender Kostensenkung tatsächliche Kosten (max. 6 Monate). */
   const kar = H.kdz==="karenz", senk = H.kdz==="senk";
   const mieteCap = senk ? Infinity : kar ? (sys==="II" ? grenze*P.kdu.karenz : Infinity) : grenze;
   const mieteAnerk = Math.min(H.mi, mieteCap);
   const heatAnerk = (H.hzG>0 && !senk) ? Math.min(H.hz, H.hzG) : H.hz;
-  const kdu = mieteAnerk + heatAnerk, kopf = kdu/n;
+  const kduTotal = mieteAnerk + heatAnerk, kdu = kduTotal*shareBG, kopf = kdu/n;
   /* Einkommen je Erwachsenem, nach SGB II und nach SGB XII bereinigt */
   const inc = ads.map(a=>{
     const fbII = freibetrag(a.jb,mitKind), jobII = Math.max(0,a.jn-fbII);
@@ -1027,17 +1109,17 @@ function grund(H){
     return {fbII, jobII, fbXII, jobXII, gf, rente, pausch, eII:Math.max(0,jobII+rente+a.so-pausch), eXII:Math.max(0,jobXII+rente+a.so)};
   });
   const eII = inc.reduce((s,x)=>s+x.eII,0), eXII = inc.reduce((s,x)=>s+x.eXII,0);
-  const need = rbEltern + mbAdults + kdu + kids.reduce((s,k,i)=>s+rbKind(k.age)+wwKids[i],0);
-  return {nAd, ads, pers, kids, n, regime, sys, mixed, kid15, rbA, mbList, mbPct, mbAdults, wwKids, rbEltern, grenze, grenzeTab, mieteCap, mieteAnerk, heatAnerk, kdu, kopf, inc, eII, eXII, elternEink: sys==="XII"?eXII:eII, need, ae:aeEff};
+  const need = rbEltern + mbAdults + umgNeed + kdu + kids.reduce((s,k,i)=>s+rbKind(k.age)+wwKids[i],0);
+  return {nAd, ads, pers, kids, n, regime, sys, mixed, kid15, rbA, mbList, mbPct, mbAdults, wwKids, rbEltern, grenze, grenzeTab, mieteCap, mieteAnerk, heatAnerk, kduTotal, kdu, kopf, ext, umgCnt, umgOn, umgDays, umgNeed, unbornOn, nKdU, shareBG, inc, eII, eXII, elternEink: sys==="XII"?eXII:eII, need, ae:aeEff};
 }
 function sgb(G, x){
   const wgShare = (x.wg||0)/G.n; let kgSurplus=0, childGap=0;
   G.kids.forEach((k,i)=>{
-    const need = rbKind(k.age)+G.kopf+G.wwKids[i], own = k.uh+(x.kiz?x.kiz[i]:0)+wgShare;
+    const need = rbKind(k.age)+G.kopf+G.wwKids[i], own = k.uh+(x.kiz?x.kiz[i]:0)+(x.kwg?x.kwg[i]:0)+wgShare;
     if(own>=need){ kgSurplus+=P.kindergeld; }
     else { const rem=need-own, used=Math.min(P.kindergeld,rem); kgSurplus+=P.kindergeld-used; childGap+=rem-used; }
   });
-  const pGap = (G.rbEltern+G.mbAdults+G.kopf*G.nAd+(x.kv||0)) - (G.elternEink+kgSurplus+wgShare*G.nAd);
+  const pGap = (G.rbEltern+G.mbAdults+G.umgNeed+G.kopf*G.nAd+(x.kv||0)) - (G.elternEink+kgSurplus+wgShare*G.nAd);
   return {gap: Math.max(0, r2(pGap+childGap))};
 }
 function vermLimits(G,H){
@@ -1046,8 +1128,10 @@ function vermLimits(G,H){
   return {sgb:sgbL, wg:v.wg+v.wgPlus*(n-1), kiz:v.kiz+v.kizPlus*(n-1)};
 }
 function wohngeld(G,H,VL){
-  const n=G.n, hb=byN(P.wg.hb,P.wg.hbPlus,n), kl=byN(P.wg.klima,P.wg.klimaPlus,n), hke=byN(P.wg.hke,P.wg.hkePlus,n), hkk=byN(P.wg.hkk,P.wg.hkkPlus,n);
-  const cap=hb+kl, mRent=Math.min(H.mi,cap), M=mRent+hke+hkk, pa=num(H.pa);
+  const umgWg = (G.umgCnt>0 && (H.umgNights||0)>=P.kids.wgUmgMin) ? G.umgCnt : 0;
+  const n=G.n+umgWg, nT=n+G.ext;   /* Höchstbetrag nach allen Haushaltsmitgliedern, Miete anteilig (Mischhaushalt) */
+  const hb=byN(P.wg.hb,P.wg.hbPlus,nT), kl=byN(P.wg.klima,P.wg.klimaPlus,nT), hke=byN(P.wg.hke,P.wg.hkePlus,nT), hkk=byN(P.wg.hkk,P.wg.hkkPlus,nT);
+  const cap=hb+kl, mRent=Math.min(H.mi,cap), share=n/nT, M=(mRent+hke+hkk)*share, pa=num(H.pa);
   let jahr=0, frei=0; const rows=[];
   G.ads.forEach((a,i)=>{
     if(a.jb>0){ const j=a.jb*12, wk=Math.min(j,P.wg.wk), v=(j-wk)*(1-pa); jahr+=v; rows.push([t("earnY",{n:i+1}),j,wk,v]); }
@@ -1065,7 +1149,7 @@ function wohngeld(G,H,VL){
   const unterMin = wg>0 && wg<P.wg.min; if(wg<P.wg.min) wg=0;
   const vermEx = H.verm > VL.wg, asyl = G.regime==="asyl";
   if(vermEx || asyl) wg = 0;
-  return {wg,raw,M,mRent,cap,hb,kl,hke,hkk,Y,rows,a,b,c,pa,unterMin,vermEx,asyl};
+  return {wg,raw,M,mRent,cap,hb,kl,hke,hkk,Y,rows,a,b,c,pa,unterMin,vermEx,asyl,n,nT,share,umgWg};
 }
 function kinderzuschlag(G,H,kv,VL){
   const r = {kiz:0, perChild:G.kids.map(()=>0), reason:"", st:null};
@@ -1083,6 +1167,26 @@ function kinderzuschlag(G,H,kv,VL){
   r.kiz = total; if(!total) r.reason = t("rExcess");
   r.st = {brutto,minE,anteil,bedarf,eink:einkK,kv:kv||0,excess,baseSum,minderung};
   return r;
+}
+/* Kinderwohngeld: Kinder, deren Bedarf durch Unterhalt/UVG, Kindergeld und Wohngeld gedeckt ist, scheiden aus der
+   Bedarfsgemeinschaft aus. Wohngeld für diesen Teilhaushalt: Höchstbetrag nach allen Haushaltsmitgliedern, Miete nach Kopfanteil,
+   Einkommen = Unterhalt/UVG der Kinder (Kindergeld zählt nicht). */
+function kinderWG(G,H,VL){
+  const res={total:0, per:G.kids.map(()=>0), set:[]};
+  if(G.regime==="asyl" || G.regime==="none" || H.verm>VL.wg) return res;
+  const nT=G.n+G.ext, hb=byN(P.wg.hb,P.wg.hbPlus,nT), kl=byN(P.wg.klima,P.wg.klimaPlus,nT), hke=byN(P.wg.hke,P.wg.hkePlus,nT), hkk=byN(P.wg.hkk,P.wg.hkkPlus,nT);
+  const mAll=Math.min(H.mi,hb+kl)+hke+hkk;
+  let set=G.kids.map((k,i)=>i).filter(i=>G.kids[i].uh>0);
+  for(let it=0; it<6 && set.length; it++){
+    const k=set.length, M=mAll*k/nT, Y=set.reduce((s,i)=>s+G.kids[i].uh,0);
+    const idx=Math.min(k,12)-1, a=P.wg.a[idx], b=P.wg.b[idx], c=P.wg.c[idx];
+    let wg=Math.round(Math.max(0,Math.min(1.15*(M-(a+b*M+c*Y)*Y),M))); if(wg<P.wg.min) wg=0;
+    const per=wg/k;
+    const keep=set.filter(i=>{ const kd=G.kids[i]; return kd.uh+P.kindergeld+per >= rbKind(kd.age)+G.kopf+G.wwKids[i]; });
+    if(keep.length===set.length){ if(wg>0){ res.total=wg; set.forEach(i=>res.per[i]=per); res.set=set.slice(); } return res; }
+    set=keep;
+  }
+  return res;
 }
 /* Kranken-/Pflegeversicherung außerhalb der Grundsicherung */
 function kvCalc(G,H){
@@ -1148,7 +1252,8 @@ function kzAutoSet(){
 function berechne(H){
   const G=grund(H); SYS=G.sys;
   const VL=vermLimits(G,H), W=wohngeld(G,H,VL), KV=kvCalc(G,H), K=kinderzuschlag(G,H,KV.total,VL);
-  const s0=sgb(G,{}), s0kv=sgb(G,{kv:KV.total});
+  const KW=kinderWG(G,H,VL);
+  const s0=sgb(G,{kwg:KW.per}), s0kv=sgb(G,{kv:KV.total});
   const idx = famEff(H) ? [0,1,2,3] : [0,1];
   const xs=[null,{wg:W.wg},{kiz:K.perChild},{wg:W.wg,kiz:K.perChild}];
   const has=[true,W.wg>0,K.kiz>0,(W.wg>0||K.kiz>0)];
@@ -1161,7 +1266,7 @@ function berechne(H){
   const sgbAvail = (G.regime==="II"||G.regime==="XII3"||G.regime==="XII4") && H.verm<=VL.sgb;
   const basis = G.ads.reduce((s,a)=>s+a.jn+a.rn+a.so,0)+G.kids.reduce((s,k)=>s+k.uh,0)+G.kids.length*P.kindergeld;
   const top = famEff(H) ? 3 : 1;
-  return {G,W,K,KV,VL,s0,s0kv,V,idx,top,sgbAvail,need:G.need,basis};
+  return {G,W,K,KV,KW,VL,s0,s0kv,V,idx,top,sgbAvail,need:G.need,basis};
 }
 
 /* ================= Oberfläche ================= */
@@ -1250,6 +1355,8 @@ function renderIncomes(){
 function fillForm(){
   ["mi","hz","verm"].forEach(id=>{ $(id).value = S[id]||""; });
   $("pa").value=S.pa; $("kdz").value=S.kdz||"normal"; $("hzG").value=S.hzG||"";
+  ["umgCnt","umgAge","umgNights","ext25"].forEach(id=>{ $(id).value = S[id]||""; }); $("unborn").checked=!!S.unborn;
+  if(S.umgCnt>0 || S.ext25>0) $("mehr").open = true;
   $("kzStart").value=S.kzStart||""; $("kzPrev").value=S.kzPrev||""; $("kzGap").value=S.kzGap||""; $("kzUsed").value=S.kzUsed==null?"":S.kzUsed; $("verh").checked=!!S.verh; $("ww").checked=!!S.ww; $("stabil").checked=S.stabil!==false;
   Object.keys(SON0).forEach(k=>{ $("s_"+k).checked=!!S.son[k]; });
   if(Object.keys(SON0).some(k=>S.son[k])) $("sonder").open = true;
@@ -1259,6 +1366,8 @@ function bind(){
   ["mi","hz","verm"].forEach(id=>$(id).addEventListener("input",()=>{ S[id]=Math.max(0,num($(id).value)); update(); }));
   $("pa").addEventListener("change",()=>{ S.pa=$("pa").value; update(); });
   $("kdz").addEventListener("change",()=>{ S.kdz=$("kdz").value; update(); });
+  ["umgCnt","umgAge","umgNights","ext25"].forEach(id=>$(id).addEventListener("input",()=>{ S[id]=Math.max(0,Math.floor(num($(id).value))); update(); }));
+  $("unborn").addEventListener("change",()=>{ S.unborn=$("unborn").checked; update(); });
   $("kzStart").addEventListener("input",()=>{ S.kzStart=$("kzStart").value; kzAutoSet(); update(); });
   $("kzPrev").addEventListener("input",()=>{ S.kzPrev=$("kzPrev").value; kzAutoSet(); update(); });
   $("kzGap").addEventListener("input",()=>{ S.kzGap=Math.max(0,Math.floor(num($("kzGap").value))); kzAutoSet(); update(); });
@@ -1295,7 +1404,8 @@ function update(){
   document.querySelectorAll("[data-typ]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.typ===S.typ)));
   $("typSolo").hidden = S.mode==="fam";
   $("verhRow").hidden = S.typ!=="paar";
-  const R=berechne(S), {G,W,K,KV,VL,s0,s0kv,V,idx,top}=R;
+  const R=berechne(S), {G,W,K,KV,KW,VL,s0,s0kv,V,idx,top}=R;
+  $("unbornRow").hidden = !S.ad.slice(0,nAdOf()).some(a=>a.schw);
   /* Personen-Infos */
   G.pers.forEach((p,i)=>{
     const el=$("age"+i); if(el) el.innerHTML = p.age==null ? "" : '<b>'+esc(t("ageL",{a:p.age}))+'</b> · '+esc(p.rag?t("ragYes"):t("ragNo"));
@@ -1335,6 +1445,12 @@ function update(){
   const chips=[['sys',t("regimeL",{r:t("rg_"+G.regime)})]];
   if(G.mixed) chips.push(['w',t("warnMixed")]);
   if(G.kid15) chips.push(['w',t("warnKid15")]);
+  if(G.umgCnt>0) chips.push(['w', G.umgOn ? t("umgInfo",{n:G.nKdU,x:P.kids.umgMin,d:Math.round(G.umgDays)}) : t("umgShort",{x:P.kids.umgMin,d:Math.round(G.umgDays)})]);
+  if(W.umgWg>0) chips.push(['w',t("umgWg",{x:P.kids.wgUmgMin})]);
+  if(G.ext>0) chips.push(['w',t("extInfo",{n:G.nKdU,p:pct(G.shareBG)})]);
+  if(G.unbornOn) chips.push(['w',t("unbornInfo")]);
+  KW.set.forEach(i=>chips.push(['sys',t("kwgInfo",{n:i+1,a:eur(KW.per[i])})]));
+  if(S.kdz==="karenz" && G.kids.length && isFinite(G.mieteCap) && S.mi>G.mieteCap) chips.push(['w',t("kidsKz")]);
   if(S.son.azubi) chips.push(['w',t("warnAzubi")]);
   if(S.son.stat) chips.push(['w',t("warnStat")]);
   if(G.pers.some(p=>p.edge)) chips.push(['w',t("warnRag")]);
@@ -1358,6 +1474,7 @@ function update(){
     if(i===0) pill = v.gap>0?'<span class="pill bad">'+esc(t("pNeedy"))+'</span>':'<span class="pill ok">'+esc(t("pNot"))+'</span>';
     else pill = {ok:'<span class="pill ok">'+esc(t("pOk"))+'</span>',zus:'<span class="pill zus">'+esc(t("pZus"))+'</span>',gap:'<span class="pill bad">'+esc(t("pGap"))+'</span>',na:'<span class="pill na">'+esc(t("pNa"))+'</span>'}[v.st];
     const parts=[];
+    if(i===0 && KW.total>0) parts.push(t("kwgAmt",{a:eur(KW.total)}));
     if(i===1) parts.push(W.wg>0?eur(W.wg):(W.vermEx?t("vWgVerm",{c:eur(VL.wg)}):W.unterMin?t("rBelow"):t("rNoWg")));
     if(i===2) parts.push(K.kiz>0?eur(K.kiz):K.reason);
     if(i===3) parts.push(eur(W.wg+K.kiz));
@@ -1370,7 +1487,7 @@ function update(){
   }).join("");
 
   const ben = W.wg + (famEff(S) ? K.kiz : 0);
-  const sgbB=R.basis+s0.gap, vorB=R.basis+ben-KV.total-P.sv.gez+V[top].zus, diff=vorB-sgbB;
+  const sgbB=R.basis+s0.gap+KW.total, vorB=R.basis+ben-KV.total-P.sv.gez+V[top].zus, diff=vorB-sgbB;
   const sub=t("bVorSub",{kv:eur(KV.total),gez:eur(P.sv.gez)})+(V[top].zus>0?" · "+t("bVorZus",{z:eur(V[top].zus)}):"");
   $("budget").innerHTML='<h3>'+esc(t("budgetH"))+'</h3>'+
     '<div class="brow"><span>'+esc(t("bSgb"))+'</span><b>'+eur(sgbB)+'</b></div>'+
@@ -1385,13 +1502,15 @@ function tbl(head, rows, sum){
     (sum?'<tr class="sum">'+sum.map((c,i)=>cell(c,i,"td")).join("")+'</tr>':"")+'</tbody></table></div>';
 }
 function renderWeg(R){
-  const {G,W,K,KV,VL,s0,V,top}=R; let h="";
+  const {G,W,K,KV,KW,VL,s0,V,top}=R; let h="";
   h+='<h3>'+esc(t("rw0"))+'</h3>';
   h+='<p class="hint">'+esc(t("regimeL",{r:t("rg_"+G.regime)}))+'<br>'+esc(t("vermR",{a:eur(S.verm),b:eur(VL.sgb),c:eur(VL.wg)}))+'</p>';
   h+='<h3>'+esc(t("rw1"))+'</h3>';
   const r1=[[t("rbP"),G.rbEltern]].concat(G.mbList.map(x=>[x[0],x[1]]));
   r1.push([t("rentR",{g:isFinite(G.mieteCap)?eur(G.mieteCap):t(S.kdz==="senk"?"kdzS":"kdzK")}),G.mieteAnerk],[S.hzG>0&&S.kdz!=="senk"?t("heatRg",{g:eur(S.hzG)}):t("heatR"),G.heatAnerk]);
+  if(G.ext>0) r1.push([t("shareR",{p:pct(G.shareBG)}),-(G.kduTotal-G.kdu)]);
   G.kids.forEach((k,i)=>r1.push([t("rbC",{n:i+1,a:k.age}),rbKind(k.age)]));
+  if(G.umgNeed>0) r1.push([t("umgR",{d:Math.round(G.umgDays)}),G.umgNeed]);
   h+=tbl([t("colNeed"),t("colEur")],r1,[t("totNeed"),R.need]);
   const r2r=[];
   G.ads.forEach((a,i)=>{ const x=G.inc[i];
@@ -1402,10 +1521,11 @@ function renderWeg(R){
   });
   G.kids.forEach((k,i)=>{ if(k.uh>0) r2r.push([t("maintR",{n:i+1}),k.uh]); });
   if(G.kids.length) r2r.push([t("kgR",{n:G.kids.length,a:eur(P.kindergeld)}),G.kids.length*P.kindergeld]);
+  if(KW.total>0) r2r.push([t("kwgRow"),KW.total]);
   h+=tbl([t("colInc"),t("colEur")],r2r,[t("gapR"),s0.gap]);
   h+='<p class="hint">'+esc(t("kopf",{a:eur(G.kopf)}))+'</p>';
   h+='<h3>'+esc(t("rw2",{n:G.n}))+'</h3>';
-  h+=tbl([t("colM"),t("colEur")],[[t("hbR",{a:eur(W.hb),b:eur(W.kl)}),W.cap],[t("capR"),W.mRent],[t("hkeR"),W.hke],[t("hkkR"),W.hkk]],["M",W.M]);
+  h+=tbl([t("colM"),t("colEur")],[[t("hbR",{a:eur(W.hb),b:eur(W.kl)}),W.cap],[t("capR"),W.mRent],[t("hkeR"),W.hke],[t("hkkR"),W.hkk]].concat(W.share<1?[[t("shareR",{p:pct(W.share)}),-(W.mRent+W.hke+W.hkk)*(1-W.share)]]:[]),["M",W.M]);
   h+=tbl([t("colY"),t("colGross"),t("colWk"),t("colAfter")],W.rows,[t("yR",{p:pct(W.pa)}),"","",W.Y]);
   h+='<div class="formula">1,15 · ('+W.M.toFixed(2)+' − ('+W.a+' + '+W.b+'·'+W.M.toFixed(2)+' + '+W.c+'·'+W.Y.toFixed(2)+') · '+W.Y.toFixed(2)+') = '+W.raw.toFixed(2)+' → <b>'+eur(W.wg)+'</b>'+(W.unterMin?' ('+esc(t("rBelow"))+')':'')+(W.vermEx?' – '+esc(t("vWgVerm",{c:eur(VL.wg)})):'')+'</div>';
   if(famEff(S)){
@@ -1421,8 +1541,8 @@ function renderWeg(R){
   h+=tbl([t("colItem"),t("colEur")],KV.pers.map((p,i)=>[t("kvP",{n:i+1,s:stName(p.st,p)}),p.beitrag]).concat([[t("gezRow"),P.sv.gez]]));
   h+='<p class="hint">'+esc(t("kvCalc",{a:eur(P.sv.mindest),p:pct(KV.rate)}))+'</p>';
   const ben = W.wg+(famEff(S)?K.kiz:0);
-  const sgbB=R.basis+s0.gap, vorB=R.basis+ben-KV.total-P.sv.gez+V[top].zus;
-  const br=[[t("bBasis"),R.basis,R.basis],[t("bSgbL"),s0.gap,""],[t(famEff(S)?"bBen":"bBenWg"),"",ben],[t("bKv"),"",-KV.total],[t("bGez"),"",-P.sv.gez]];
+  const sgbB=R.basis+s0.gap+KW.total, vorB=R.basis+ben-KV.total-P.sv.gez+V[top].zus;
+  const br=[[t("bBasis"),R.basis,R.basis],[t("bSgbL"),s0.gap,""]].concat(KW.total>0?[[t("kwgRow"),KW.total,""]]:[],[[t(famEff(S)?"bBen":"bBenWg"),"",ben],[t("bKv"),"",-KV.total],[t("bGez"),"",-P.sv.gez]]);
   if(V[top].zus>0) br.push([t("bZus"),"",V[top].zus]);
   h+=tbl([t("colItem"),t("v0"),t("v"+top)],br,[t("bTot"),sgbB,vorB]);
   $("weg").innerHTML=h;
