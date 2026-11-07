@@ -1,0 +1,3007 @@
+[
+{
+"id": "Z01",
+"S": {
+"mode": "fam",
+"typ": "ae",
+"verh": false,
+"ad": [
+{
+"gj": 1985,
+"ef": "ja",
+"jb": 0,
+"jn": 0,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 250,
+"ssw": 0,
+"merkG": true,
+"sb": true,
+"kv": "frei",
+"avB": 0,
+"avN": 0
+},
+{
+"gj": 1950,
+"ef": "zeit",
+"jb": 0,
+"jn": 0,
+"rb": 1300,
+"rn": 1144,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 0
+}
+],
+"kids": [
+{
+"age": 1,
+"uh": 0,
+"et": "azubi",
+"eb": 1200,
+"en": 960
+}
+],
+"mi": 1100,
+"hz": 140,
+"hzG": 100,
+"ww": true,
+"kdz": "normal",
+"mpb": false,
+"verm": 0,
+"umgCnt": 2,
+"umgAge": 4,
+"umgNights": 40,
+"umgArt": "wechsel",
+"ext25": 1,
+"pa": "0.1"
+}
+},
+{
+"id": "Z02",
+"S": {
+"mode": "wg",
+"typ": "solo",
+"verh": true,
+"ad": [
+{
+"gj": 1995,
+"ef": "ja",
+"jb": 0,
+"jn": 0,
+"rb": 0,
+"rn": 0,
+"grz": true,
+"so": 0,
+"sg": 1100,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 1200,
+"avN": 0
+},
+{
+"gj": 1958,
+"ef": "dau",
+"jb": 3000,
+"jn": 2280,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 0,
+"sg": 1100,
+"sgSt": 90,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "frei",
+"avB": 0,
+"avN": 0
+}
+],
+"kids": [],
+"mi": 700,
+"hz": 90,
+"hzG": 100,
+"ww": false,
+"kdz": "normal",
+"mpb": false,
+"verm": 18000,
+"umgCnt": 2,
+"umgAge": 16,
+"umgNights": 150,
+"umgArt": "wechsel",
+"ext25": 1,
+"pa": "0.1"
+}
+},
+{
+"id": "Z03",
+"S": {
+"mode": "fam",
+"typ": "paar",
+"verh": true,
+"ad": [
+{
+"gj": 1950,
+"ef": "ja",
+"jb": 3000,
+"jn": 2280,
+"rb": 950,
+"rn": 836,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "frei",
+"avB": 0,
+"avN": 0
+},
+{
+"gj": 1958,
+"ef": "ja",
+"jb": 0,
+"jn": 0,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 90,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 0
+}
+],
+"kids": [
+{
+"age": 5,
+"uh": 0,
+"et": "none",
+"eb": 0,
+"en": 0
+},
+{
+"age": 6,
+"uh": 220,
+"et": "azubi",
+"eb": 450,
+"en": 360
+},
+{
+"age": 23,
+"uh": 0,
+"et": "none",
+"eb": 0,
+"en": 0
+}
+],
+"mi": 1500,
+"hz": 140,
+"hzG": 100,
+"ww": false,
+"kdz": "normal",
+"mpb": false,
+"verm": 90000,
+"umgCnt": 1,
+"umgAge": 11,
+"umgNights": 150,
+"umgArt": "wechsel",
+"ext25": 0,
+"pa": "0"
+}
+},
+{
+"id": "Z04",
+"S": {
+"mode": "fam",
+"typ": "paar",
+"verh": false,
+"ad": [
+{
+"gj": 1985,
+"ef": "ja",
+"jb": 0,
+"jn": 0,
+"rb": 0,
+"rn": 0,
+"grz": true,
+"so": 0,
+"sg": 1100,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 13,
+"merkG": true,
+"sb": false,
+"kv": "frei",
+"avB": 0,
+"avN": 0
+},
+{
+"gj": 1961,
+"ef": "dau",
+"jb": 450,
+"jn": 342,
+"rb": 1300,
+"rn": 1144,
+"grz": true,
+"so": 600,
+"sg": 0,
+"sgSt": 0,
+"uhP": 250,
+"ssw": 0,
+"merkG": true,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 930
+}
+],
+"kids": [],
+"mi": 1500,
+"hz": 50,
+"hzG": 100,
+"ww": true,
+"kdz": "karenz",
+"mpb": true,
+"verm": 90000,
+"umgCnt": 0,
+"umgAge": 16,
+"umgNights": 90,
+"umgArt": "temp",
+"ext25": 0,
+"pa": "0.1"
+}
+},
+{
+"id": "Z05",
+"S": {
+"mode": "fam",
+"typ": "paar",
+"verh": false,
+"ad": [
+{
+"gj": 1995,
+"ef": "ja",
+"jb": 3000,
+"jn": 2280,
+"rb": 950,
+"rn": 836,
+"grz": true,
+"so": 600,
+"sg": 0,
+"sgSt": 90,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 930
+},
+{
+"gj": 1961,
+"ef": "ja",
+"jb": 3000,
+"jn": 2280,
+"rb": 0,
+"rn": 0,
+"grz": true,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 1200,
+"avN": 0
+}
+],
+"kids": [
+{
+"age": 17,
+"uh": 220,
+"et": "none",
+"eb": 0,
+"en": 0
+},
+{
+"age": 19,
+"uh": 0,
+"et": "job",
+"eb": 450,
+"en": 360
+}
+],
+"mi": 1500,
+"hz": 50,
+"hzG": 100,
+"ww": true,
+"kdz": "senk",
+"mpb": false,
+"verm": 3000,
+"umgCnt": 1,
+"umgAge": 4,
+"umgNights": 150,
+"umgArt": "wechsel",
+"ext25": 0,
+"pa": "0"
+}
+},
+{
+"id": "Z06",
+"S": {
+"mode": "fam",
+"typ": "paar",
+"verh": false,
+"ad": [
+{
+"gj": 1950,
+"ef": "ja",
+"jb": 0,
+"jn": 0,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 600,
+"sg": 0,
+"sgSt": 90,
+"uhP": 250,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 0
+},
+{
+"gj": 1972,
+"ef": "ja",
+"jb": 1500,
+"jn": 1140,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 930
+}
+],
+"kids": [],
+"mi": 560,
+"hz": 50,
+"hzG": 100,
+"ww": false,
+"kdz": "senk",
+"mpb": false,
+"verm": 90000,
+"umgCnt": 1,
+"umgAge": 16,
+"umgNights": 40,
+"umgArt": "temp",
+"ext25": 0,
+"pa": "0"
+}
+},
+{
+"id": "Z07",
+"S": {
+"mode": "fam",
+"typ": "paar",
+"verh": false,
+"ad": [
+{
+"gj": 1950,
+"ef": "ja",
+"jb": 0,
+"jn": 0,
+"rb": 1300,
+"rn": 1144,
+"grz": true,
+"so": 0,
+"sg": 0,
+"sgSt": 90,
+"uhP": 250,
+"ssw": 13,
+"merkG": true,
+"sb": false,
+"kv": "auto",
+"avB": 1200,
+"avN": 0
+},
+{
+"gj": 1985,
+"ef": "zeit",
+"jb": 1500,
+"jn": 1140,
+"rb": 1300,
+"rn": 1144,
+"grz": true,
+"so": 0,
+"sg": 0,
+"sgSt": 90,
+"uhP": 250,
+"ssw": 13,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 930
+}
+],
+"kids": [
+{
+"age": 24,
+"uh": 0,
+"et": "none",
+"eb": 0,
+"en": 0
+},
+{
+"age": 4,
+"uh": 420,
+"et": "none",
+"eb": 0,
+"en": 0
+},
+{
+"age": 3,
+"uh": 0,
+"et": "ferien",
+"eb": 1200,
+"en": 960
+},
+{
+"age": 21,
+"uh": 420,
+"et": "none",
+"eb": 0,
+"en": 0
+}
+],
+"mi": 560,
+"hz": 90,
+"hzG": null,
+"ww": false,
+"kdz": "karenz",
+"mpb": true,
+"verm": 3000,
+"umgCnt": 1,
+"umgAge": 4,
+"umgNights": 40,
+"umgArt": "wechsel",
+"ext25": 0,
+"pa": "0.2"
+}
+},
+{
+"id": "Z08",
+"S": {
+"mode": "fam",
+"typ": "ae",
+"verh": true,
+"ad": [
+{
+"gj": 1972,
+"ef": "ja",
+"jb": 0,
+"jn": 0,
+"rb": 950,
+"rn": 836,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 90,
+"uhP": 250,
+"ssw": 13,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 0
+},
+{
+"gj": 1950,
+"ef": "ja",
+"jb": 2200,
+"jn": 1672,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 600,
+"sg": 0,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 13,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 0
+}
+],
+"kids": [
+{
+"age": 4,
+"uh": 420,
+"et": "none",
+"eb": 0,
+"en": 0
+}
+],
+"mi": 420,
+"hz": 50,
+"hzG": null,
+"ww": false,
+"kdz": "normal",
+"mpb": false,
+"verm": 3000,
+"umgCnt": 1,
+"umgAge": 16,
+"umgNights": 90,
+"umgArt": "wechsel",
+"ext25": 0,
+"pa": "0"
+}
+},
+{
+"id": "Z09",
+"S": {
+"mode": "wg",
+"typ": "ae",
+"verh": true,
+"ad": [
+{
+"gj": 1972,
+"ef": "ja",
+"jb": 2200,
+"jn": 1672,
+"rb": 0,
+"rn": 0,
+"grz": true,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 13,
+"merkG": false,
+"sb": true,
+"kv": "auto",
+"avB": 1200,
+"avN": 0
+},
+{
+"gj": 1972,
+"ef": "ja",
+"jb": 450,
+"jn": 342,
+"rb": 1300,
+"rn": 1144,
+"grz": false,
+"so": 0,
+"sg": 1100,
+"sgSt": 90,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 0
+}
+],
+"kids": [],
+"mi": 1500,
+"hz": 90,
+"hzG": 100,
+"ww": false,
+"kdz": "karenz",
+"mpb": false,
+"verm": 3000,
+"umgCnt": 0,
+"umgAge": 11,
+"umgNights": 0,
+"umgArt": "wechsel",
+"ext25": 0,
+"pa": "0.3"
+}
+},
+{
+"id": "Z10",
+"S": {
+"mode": "fam",
+"typ": "paar",
+"verh": false,
+"ad": [
+{
+"gj": 1958,
+"ef": "ar",
+"jb": 0,
+"jn": 0,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 0,
+"merkG": true,
+"sb": false,
+"kv": "auto",
+"avB": 1200,
+"avN": 0
+},
+{
+"gj": 1995,
+"ef": "dau",
+"jb": 0,
+"jn": 0,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 0,
+"sg": 1100,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "frei",
+"avB": 0,
+"avN": 0
+}
+],
+"kids": [
+{
+"age": 16,
+"uh": 420,
+"et": "ferien",
+"eb": 450,
+"en": 360
+},
+{
+"age": 14,
+"uh": 0,
+"et": "none",
+"eb": 0,
+"en": 0
+},
+{
+"age": 13,
+"uh": 420,
+"et": "job",
+"eb": 1200,
+"en": 960
+},
+{
+"age": 16,
+"uh": 220,
+"et": "ferien",
+"eb": 900,
+"en": 720
+}
+],
+"mi": 700,
+"hz": 90,
+"hzG": 100,
+"ww": false,
+"kdz": "normal",
+"mpb": false,
+"verm": 18000,
+"umgCnt": 0,
+"umgAge": 11,
+"umgNights": 40,
+"umgArt": "temp",
+"ext25": 0,
+"pa": "0"
+}
+},
+{
+"id": "Z11",
+"S": {
+"mode": "fam",
+"typ": "paar",
+"verh": true,
+"ad": [
+{
+"gj": 1972,
+"ef": "ja",
+"jb": 1500,
+"jn": 1140,
+"rb": 0,
+"rn": 0,
+"grz": true,
+"so": 0,
+"sg": 0,
+"sgSt": 90,
+"uhP": 0,
+"ssw": 13,
+"merkG": false,
+"sb": false,
+"kv": "frei",
+"avB": 0,
+"avN": 0
+},
+{
+"gj": 1995,
+"ef": "ja",
+"jb": 2200,
+"jn": 1672,
+"rb": 1300,
+"rn": 1144,
+"grz": true,
+"so": 600,
+"sg": 1100,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 13,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 0
+}
+],
+"kids": [
+{
+"age": 16,
+"uh": 0,
+"et": "none",
+"eb": 0,
+"en": 0
+},
+{
+"age": 16,
+"uh": 0,
+"et": "none",
+"eb": 0,
+"en": 0
+},
+{
+"age": 8,
+"uh": 0,
+"et": "none",
+"eb": 0,
+"en": 0
+}
+],
+"mi": 420,
+"hz": 50,
+"hzG": 100,
+"ww": false,
+"kdz": "normal",
+"mpb": false,
+"verm": 45000,
+"umgCnt": 2,
+"umgAge": 4,
+"umgNights": 0,
+"umgArt": "temp",
+"ext25": 1,
+"pa": "0.1"
+}
+},
+{
+"id": "Z12",
+"S": {
+"mode": "fam",
+"typ": "paar",
+"verh": true,
+"ad": [
+{
+"gj": 1958,
+"ef": "ar",
+"jb": 3000,
+"jn": 2280,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 600,
+"sg": 0,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 0
+},
+{
+"gj": 1961,
+"ef": "ja",
+"jb": 1500,
+"jn": 1140,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 0,
+"sg": 1100,
+"sgSt": 90,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 930
+}
+],
+"kids": [
+{
+"age": 23,
+"uh": 0,
+"et": "none",
+"eb": 0,
+"en": 0
+},
+{
+"age": 2,
+"uh": 420,
+"et": "job",
+"eb": 1200,
+"en": 960
+},
+{
+"age": 2,
+"uh": 220,
+"et": "none",
+"eb": 0,
+"en": 0
+}
+],
+"mi": 700,
+"hz": 140,
+"hzG": 100,
+"ww": false,
+"kdz": "senk",
+"mpb": false,
+"verm": 0,
+"umgCnt": 2,
+"umgAge": 4,
+"umgNights": 90,
+"umgArt": "temp",
+"ext25": 1,
+"pa": "0.3"
+}
+},
+{
+"id": "Z13",
+"S": {
+"mode": "fam",
+"typ": "ae",
+"verh": true,
+"ad": [
+{
+"gj": 1961,
+"ef": "ja",
+"jb": 1500,
+"jn": 1140,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 90,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "frei",
+"avB": 0,
+"avN": 0
+},
+{
+"gj": 1995,
+"ef": "dau",
+"jb": 0,
+"jn": 0,
+"rb": 950,
+"rn": 836,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 250,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 930
+}
+],
+"kids": [
+{
+"age": 16,
+"uh": 420,
+"et": "none",
+"eb": 0,
+"en": 0
+},
+{
+"age": 12,
+"uh": 0,
+"et": "none",
+"eb": 0,
+"en": 0
+},
+{
+"age": 2,
+"uh": 0,
+"et": "none",
+"eb": 0,
+"en": 0
+}
+],
+"mi": 420,
+"hz": 50,
+"hzG": 100,
+"ww": true,
+"kdz": "karenz",
+"mpb": false,
+"verm": 0,
+"umgCnt": 1,
+"umgAge": 11,
+"umgNights": 0,
+"umgArt": "wechsel",
+"ext25": 1,
+"pa": "0.1"
+}
+},
+{
+"id": "Z14",
+"S": {
+"mode": "fam",
+"typ": "paar",
+"verh": false,
+"ad": [
+{
+"gj": 2004,
+"ef": "ja",
+"jb": 450,
+"jn": 342,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 600,
+"sg": 0,
+"sgSt": 90,
+"uhP": 250,
+"ssw": 13,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 1200,
+"avN": 930
+},
+{
+"gj": 1995,
+"ef": "ja",
+"jb": 1500,
+"jn": 1140,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 250,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 1200,
+"avN": 0
+}
+],
+"kids": [
+{
+"age": 1,
+"uh": 220,
+"et": "none",
+"eb": 0,
+"en": 0
+},
+{
+"age": 7,
+"uh": 220,
+"et": "job",
+"eb": 450,
+"en": 360
+}
+],
+"mi": 700,
+"hz": 90,
+"hzG": 100,
+"ww": false,
+"kdz": "normal",
+"mpb": false,
+"verm": 3000,
+"umgCnt": 0,
+"umgAge": 4,
+"umgNights": 150,
+"umgArt": "temp",
+"ext25": 1,
+"pa": "0.1"
+}
+},
+{
+"id": "Z15",
+"S": {
+"mode": "fam",
+"typ": "paar",
+"verh": true,
+"ad": [
+{
+"gj": 1985,
+"ef": "ja",
+"jb": 0,
+"jn": 0,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 90,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "frei",
+"avB": 0,
+"avN": 930
+},
+{
+"gj": 2004,
+"ef": "ja",
+"jb": 450,
+"jn": 342,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 90,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "frei",
+"avB": 1200,
+"avN": 930
+}
+],
+"kids": [],
+"mi": 700,
+"hz": 50,
+"hzG": null,
+"ww": true,
+"kdz": "senk",
+"mpb": false,
+"verm": 45000,
+"umgCnt": 0,
+"umgAge": 4,
+"umgNights": 150,
+"umgArt": "wechsel",
+"ext25": 1,
+"pa": "0.2"
+}
+},
+{
+"id": "Z16",
+"S": {
+"mode": "fam",
+"typ": "paar",
+"verh": false,
+"ad": [
+{
+"gj": 1950,
+"ef": "zeit",
+"jb": 2200,
+"jn": 1672,
+"rb": 950,
+"rn": 836,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "frei",
+"avB": 0,
+"avN": 0
+},
+{
+"gj": 1985,
+"ef": "zeit",
+"jb": 0,
+"jn": 0,
+"rb": 0,
+"rn": 0,
+"grz": true,
+"so": 0,
+"sg": 0,
+"sgSt": 90,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 0
+}
+],
+"kids": [
+{
+"age": 4,
+"uh": 0,
+"et": "none",
+"eb": 0,
+"en": 0
+}
+],
+"mi": 850,
+"hz": 140,
+"hzG": null,
+"ww": false,
+"kdz": "normal",
+"mpb": false,
+"verm": 18000,
+"umgCnt": 0,
+"umgAge": 4,
+"umgNights": 40,
+"umgArt": "wechsel",
+"ext25": 1,
+"pa": "0.3"
+}
+},
+{
+"id": "Z17",
+"S": {
+"mode": "fam",
+"typ": "ae",
+"verh": false,
+"ad": [
+{
+"gj": 1995,
+"ef": "dau",
+"jb": 2200,
+"jn": 1672,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 600,
+"sg": 0,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 13,
+"merkG": true,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 0
+},
+{
+"gj": 1958,
+"ef": "ja",
+"jb": 0,
+"jn": 0,
+"rb": 950,
+"rn": 836,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 90,
+"uhP": 250,
+"ssw": 13,
+"merkG": false,
+"sb": false,
+"kv": "frei",
+"avB": 0,
+"avN": 0
+}
+],
+"kids": [
+{
+"age": 11,
+"uh": 0,
+"et": "job",
+"eb": 900,
+"en": 720
+}
+],
+"mi": 850,
+"hz": 50,
+"hzG": null,
+"ww": true,
+"kdz": "normal",
+"mpb": false,
+"verm": 0,
+"umgCnt": 0,
+"umgAge": 11,
+"umgNights": 150,
+"umgArt": "wechsel",
+"ext25": 0,
+"pa": "0.3"
+}
+},
+{
+"id": "Z18",
+"S": {
+"mode": "fam",
+"typ": "paar",
+"verh": false,
+"ad": [
+{
+"gj": 1958,
+"ef": "ja",
+"jb": 450,
+"jn": 342,
+"rb": 950,
+"rn": 836,
+"grz": true,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 250,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "frei",
+"avB": 0,
+"avN": 0
+},
+{
+"gj": 1950,
+"ef": "ja",
+"jb": 3000,
+"jn": 2280,
+"rb": 950,
+"rn": 836,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 90,
+"uhP": 250,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "frei",
+"avB": 0,
+"avN": 930
+}
+],
+"kids": [
+{
+"age": 5,
+"uh": 420,
+"et": "none",
+"eb": 0,
+"en": 0
+},
+{
+"age": 9,
+"uh": 420,
+"et": "none",
+"eb": 0,
+"en": 0
+}
+],
+"mi": 560,
+"hz": 140,
+"hzG": null,
+"ww": true,
+"kdz": "normal",
+"mpb": false,
+"verm": 0,
+"umgCnt": 0,
+"umgAge": 4,
+"umgNights": 0,
+"umgArt": "wechsel",
+"ext25": 0,
+"pa": "0.1"
+}
+},
+{
+"id": "Z19",
+"S": {
+"mode": "fam",
+"typ": "ae",
+"verh": false,
+"ad": [
+{
+"gj": 2004,
+"ef": "ja",
+"jb": 900,
+"jn": 684,
+"rb": 950,
+"rn": 836,
+"grz": false,
+"so": 600,
+"sg": 0,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 0
+},
+{
+"gj": 1972,
+"ef": "ja",
+"jb": 3000,
+"jn": 2280,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 0,
+"sg": 1100,
+"sgSt": 0,
+"uhP": 250,
+"ssw": 0,
+"merkG": false,
+"sb": true,
+"kv": "auto",
+"avB": 1200,
+"avN": 0
+}
+],
+"kids": [
+{
+"age": 8,
+"uh": 220,
+"et": "none",
+"eb": 0,
+"en": 0
+},
+{
+"age": 9,
+"uh": 0,
+"et": "none",
+"eb": 0,
+"en": 0
+},
+{
+"age": 20,
+"uh": 0,
+"et": "job",
+"eb": 1200,
+"en": 960
+},
+{
+"age": 7,
+"uh": 0,
+"et": "none",
+"eb": 0,
+"en": 0
+}
+],
+"mi": 560,
+"hz": 90,
+"hzG": null,
+"ww": false,
+"kdz": "karenz",
+"mpb": false,
+"verm": 3000,
+"umgCnt": 0,
+"umgAge": 11,
+"umgNights": 150,
+"umgArt": "wechsel",
+"ext25": 0,
+"pa": "0.2"
+}
+},
+{
+"id": "Z20",
+"S": {
+"mode": "fam",
+"typ": "paar",
+"verh": false,
+"ad": [
+{
+"gj": 1995,
+"ef": "ja",
+"jb": 450,
+"jn": 342,
+"rb": 0,
+"rn": 0,
+"grz": true,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 0
+},
+{
+"gj": 1958,
+"ef": "zeit",
+"jb": 900,
+"jn": 684,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "frei",
+"avB": 0,
+"avN": 0
+}
+],
+"kids": [
+{
+"age": 21,
+"uh": 0,
+"et": "azubi",
+"eb": 1200,
+"en": 960
+},
+{
+"age": 24,
+"uh": 0,
+"et": "job",
+"eb": 1200,
+"en": 960
+},
+{
+"age": 9,
+"uh": 220,
+"et": "none",
+"eb": 0,
+"en": 0
+}
+],
+"mi": 700,
+"hz": 50,
+"hzG": null,
+"ww": true,
+"kdz": "normal",
+"mpb": false,
+"verm": 18000,
+"umgCnt": 2,
+"umgAge": 4,
+"umgNights": 150,
+"umgArt": "wechsel",
+"ext25": 0,
+"pa": "0.3"
+}
+},
+{
+"id": "Z21",
+"S": {
+"mode": "fam",
+"typ": "ae",
+"verh": true,
+"ad": [
+{
+"gj": 1950,
+"ef": "zeit",
+"jb": 0,
+"jn": 0,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 250,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 930
+},
+{
+"gj": 1950,
+"ef": "dau",
+"jb": 1500,
+"jn": 1140,
+"rb": 950,
+"rn": 836,
+"grz": true,
+"so": 600,
+"sg": 1100,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 930
+}
+],
+"kids": [
+{
+"age": 11,
+"uh": 220,
+"et": "none",
+"eb": 0,
+"en": 0
+}
+],
+"mi": 420,
+"hz": 90,
+"hzG": 100,
+"ww": false,
+"kdz": "karenz",
+"mpb": false,
+"verm": 0,
+"umgCnt": 0,
+"umgAge": 16,
+"umgNights": 40,
+"umgArt": "wechsel",
+"ext25": 1,
+"pa": "0.2"
+}
+},
+{
+"id": "Z22",
+"S": {
+"mode": "fam",
+"typ": "paar",
+"verh": true,
+"ad": [
+{
+"gj": 1950,
+"ef": "zeit",
+"jb": 0,
+"jn": 0,
+"rb": 950,
+"rn": 836,
+"grz": false,
+"so": 0,
+"sg": 1100,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 930
+},
+{
+"gj": 1961,
+"ef": "ja",
+"jb": 900,
+"jn": 684,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 13,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 930
+}
+],
+"kids": [
+{
+"age": 13,
+"uh": 0,
+"et": "none",
+"eb": 0,
+"en": 0
+},
+{
+"age": 12,
+"uh": 220,
+"et": "none",
+"eb": 0,
+"en": 0
+},
+{
+"age": 4,
+"uh": 0,
+"et": "azubi",
+"eb": 450,
+"en": 360
+}
+],
+"mi": 1100,
+"hz": 50,
+"hzG": null,
+"ww": true,
+"kdz": "normal",
+"mpb": true,
+"verm": 90000,
+"umgCnt": 0,
+"umgAge": 11,
+"umgNights": 90,
+"umgArt": "temp",
+"ext25": 0,
+"pa": "0.2"
+}
+},
+{
+"id": "Z23",
+"S": {
+"mode": "fam",
+"typ": "paar",
+"verh": false,
+"ad": [
+{
+"gj": 1972,
+"ef": "zeit",
+"jb": 450,
+"jn": 342,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "frei",
+"avB": 0,
+"avN": 0
+},
+{
+"gj": 1972,
+"ef": "dau",
+"jb": 0,
+"jn": 0,
+"rb": 1300,
+"rn": 1144,
+"grz": true,
+"so": 600,
+"sg": 0,
+"sgSt": 0,
+"uhP": 250,
+"ssw": 0,
+"merkG": true,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 930
+}
+],
+"kids": [],
+"mi": 1100,
+"hz": 140,
+"hzG": 100,
+"ww": true,
+"kdz": "normal",
+"mpb": true,
+"verm": 18000,
+"umgCnt": 2,
+"umgAge": 4,
+"umgNights": 0,
+"umgArt": "wechsel",
+"ext25": 0,
+"pa": "0.3"
+}
+},
+{
+"id": "Z24",
+"S": {
+"mode": "fam",
+"typ": "paar",
+"verh": true,
+"ad": [
+{
+"gj": 2004,
+"ef": "dau",
+"jb": 1500,
+"jn": 1140,
+"rb": 0,
+"rn": 0,
+"grz": true,
+"so": 600,
+"sg": 0,
+"sgSt": 90,
+"uhP": 0,
+"ssw": 13,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 0
+},
+{
+"gj": 1995,
+"ef": "ja",
+"jb": 900,
+"jn": 684,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 600,
+"sg": 0,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 13,
+"merkG": true,
+"sb": false,
+"kv": "frei",
+"avB": 0,
+"avN": 0
+}
+],
+"kids": [
+{
+"age": 3,
+"uh": 0,
+"et": "job",
+"eb": 1200,
+"en": 960
+},
+{
+"age": 15,
+"uh": 220,
+"et": "none",
+"eb": 0,
+"en": 0
+},
+{
+"age": 21,
+"uh": 0,
+"et": "none",
+"eb": 0,
+"en": 0
+},
+{
+"age": 11,
+"uh": 220,
+"et": "none",
+"eb": 0,
+"en": 0
+}
+],
+"mi": 1100,
+"hz": 140,
+"hzG": null,
+"ww": false,
+"kdz": "karenz",
+"mpb": false,
+"verm": 18000,
+"umgCnt": 2,
+"umgAge": 4,
+"umgNights": 90,
+"umgArt": "wechsel",
+"ext25": 0,
+"pa": "0"
+}
+},
+{
+"id": "Z25",
+"S": {
+"mode": "fam",
+"typ": "paar",
+"verh": false,
+"ad": [
+{
+"gj": 1995,
+"ef": "zeit",
+"jb": 450,
+"jn": 342,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 90,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "frei",
+"avB": 1200,
+"avN": 0
+},
+{
+"gj": 1972,
+"ef": "ja",
+"jb": 0,
+"jn": 0,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 13,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 930
+}
+],
+"kids": [
+{
+"age": 1,
+"uh": 220,
+"et": "ferien",
+"eb": 1200,
+"en": 960
+}
+],
+"mi": 1100,
+"hz": 90,
+"hzG": 100,
+"ww": true,
+"kdz": "karenz",
+"mpb": false,
+"verm": 45000,
+"umgCnt": 0,
+"umgAge": 4,
+"umgNights": 0,
+"umgArt": "temp",
+"ext25": 0,
+"pa": "0"
+}
+},
+{
+"id": "Z26",
+"S": {
+"mode": "fam",
+"typ": "paar",
+"verh": false,
+"ad": [
+{
+"gj": 1972,
+"ef": "ja",
+"jb": 3000,
+"jn": 2280,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 0,
+"sg": 1100,
+"sgSt": 0,
+"uhP": 250,
+"ssw": 13,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 0
+},
+{
+"gj": 1985,
+"ef": "ja",
+"jb": 0,
+"jn": 0,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 930
+}
+],
+"kids": [],
+"mi": 560,
+"hz": 140,
+"hzG": 100,
+"ww": false,
+"kdz": "senk",
+"mpb": false,
+"verm": 3000,
+"umgCnt": 2,
+"umgAge": 11,
+"umgNights": 0,
+"umgArt": "wechsel",
+"ext25": 0,
+"pa": "0"
+}
+},
+{
+"id": "Z27",
+"S": {
+"mode": "fam",
+"typ": "paar",
+"verh": true,
+"ad": [
+{
+"gj": 1961,
+"ef": "ar",
+"jb": 0,
+"jn": 0,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 250,
+"ssw": 13,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 0
+},
+{
+"gj": 1958,
+"ef": "ar",
+"jb": 0,
+"jn": 0,
+"rb": 0,
+"rn": 0,
+"grz": true,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 250,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "frei",
+"avB": 1200,
+"avN": 0
+}
+],
+"kids": [
+{
+"age": 14,
+"uh": 0,
+"et": "azubi",
+"eb": 1200,
+"en": 960
+},
+{
+"age": 14,
+"uh": 0,
+"et": "job",
+"eb": 1200,
+"en": 960
+},
+{
+"age": 3,
+"uh": 220,
+"et": "none",
+"eb": 0,
+"en": 0
+}
+],
+"mi": 420,
+"hz": 90,
+"hzG": 100,
+"ww": false,
+"kdz": "karenz",
+"mpb": false,
+"verm": 45000,
+"umgCnt": 2,
+"umgAge": 16,
+"umgNights": 0,
+"umgArt": "temp",
+"ext25": 0,
+"pa": "0.3"
+}
+},
+{
+"id": "Z28",
+"S": {
+"mode": "fam",
+"typ": "paar",
+"verh": false,
+"ad": [
+{
+"gj": 1958,
+"ef": "ar",
+"jb": 0,
+"jn": 0,
+"rb": 0,
+"rn": 0,
+"grz": true,
+"so": 0,
+"sg": 0,
+"sgSt": 90,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": true,
+"kv": "auto",
+"avB": 0,
+"avN": 0
+},
+{
+"gj": 1950,
+"ef": "ja",
+"jb": 3000,
+"jn": 2280,
+"rb": 950,
+"rn": 836,
+"grz": true,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 0
+}
+],
+"kids": [],
+"mi": 700,
+"hz": 90,
+"hzG": null,
+"ww": true,
+"kdz": "karenz",
+"mpb": false,
+"verm": 0,
+"umgCnt": 0,
+"umgAge": 11,
+"umgNights": 150,
+"umgArt": "wechsel",
+"ext25": 0,
+"pa": "0"
+}
+},
+{
+"id": "Z29",
+"S": {
+"mode": "fam",
+"typ": "paar",
+"verh": true,
+"ad": [
+{
+"gj": 1958,
+"ef": "ja",
+"jb": 0,
+"jn": 0,
+"rb": 1300,
+"rn": 1144,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 250,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 1200,
+"avN": 0
+},
+{
+"gj": 1961,
+"ef": "zeit",
+"jb": 3000,
+"jn": 2280,
+"rb": 1300,
+"rn": 1144,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 90,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 1200,
+"avN": 0
+}
+],
+"kids": [
+{
+"age": 11,
+"uh": 420,
+"et": "ferien",
+"eb": 450,
+"en": 360
+},
+{
+"age": 17,
+"uh": 0,
+"et": "job",
+"eb": 450,
+"en": 360
+},
+{
+"age": 18,
+"uh": 220,
+"et": "job",
+"eb": 450,
+"en": 360
+}
+],
+"mi": 1500,
+"hz": 90,
+"hzG": null,
+"ww": true,
+"kdz": "senk",
+"mpb": false,
+"verm": 0,
+"umgCnt": 1,
+"umgAge": 16,
+"umgNights": 0,
+"umgArt": "wechsel",
+"ext25": 0,
+"pa": "0.1"
+}
+},
+{
+"id": "Z30",
+"S": {
+"mode": "fam",
+"typ": "ae",
+"verh": true,
+"ad": [
+{
+"gj": 1958,
+"ef": "dau",
+"jb": 450,
+"jn": 342,
+"rb": 1300,
+"rn": 1144,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 250,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "frei",
+"avB": 0,
+"avN": 0
+},
+{
+"gj": 2004,
+"ef": "ar",
+"jb": 450,
+"jn": 342,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 13,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 0
+}
+],
+"kids": [
+{
+"age": 5,
+"uh": 420,
+"et": "ferien",
+"eb": 1200,
+"en": 960
+},
+{
+"age": 14,
+"uh": 0,
+"et": "job",
+"eb": 450,
+"en": 360
+},
+{
+"age": 24,
+"uh": 0,
+"et": "ferien",
+"eb": 1200,
+"en": 960
+}
+],
+"mi": 1500,
+"hz": 50,
+"hzG": null,
+"ww": false,
+"kdz": "normal",
+"mpb": false,
+"verm": 3000,
+"umgCnt": 0,
+"umgAge": 11,
+"umgNights": 90,
+"umgArt": "wechsel",
+"ext25": 0,
+"pa": "0.2"
+}
+},
+{
+"id": "Z31",
+"S": {
+"mode": "wg",
+"typ": "paar",
+"verh": true,
+"ad": [
+{
+"gj": 1950,
+"ef": "ja",
+"jb": 900,
+"jn": 684,
+"rb": 950,
+"rn": 836,
+"grz": false,
+"so": 600,
+"sg": 0,
+"sgSt": 90,
+"uhP": 0,
+"ssw": 0,
+"merkG": true,
+"sb": false,
+"kv": "frei",
+"avB": 0,
+"avN": 0
+},
+{
+"gj": 1995,
+"ef": "zeit",
+"jb": 3000,
+"jn": 2280,
+"rb": 950,
+"rn": 836,
+"grz": false,
+"so": 600,
+"sg": 0,
+"sgSt": 90,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 0
+}
+],
+"kids": [],
+"mi": 850,
+"hz": 50,
+"hzG": null,
+"ww": false,
+"kdz": "normal",
+"mpb": false,
+"verm": 45000,
+"umgCnt": 1,
+"umgAge": 11,
+"umgNights": 0,
+"umgArt": "wechsel",
+"ext25": 0,
+"pa": "0.1"
+}
+},
+{
+"id": "Z32",
+"S": {
+"mode": "fam",
+"typ": "paar",
+"verh": false,
+"ad": [
+{
+"gj": 1985,
+"ef": "ja",
+"jb": 2200,
+"jn": 1672,
+"rb": 950,
+"rn": 836,
+"grz": false,
+"so": 0,
+"sg": 1100,
+"sgSt": 0,
+"uhP": 250,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "frei",
+"avB": 0,
+"avN": 0
+},
+{
+"gj": 1961,
+"ef": "ja",
+"jb": 2200,
+"jn": 1672,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 250,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 0
+}
+],
+"kids": [
+{
+"age": 1,
+"uh": 220,
+"et": "azubi",
+"eb": 450,
+"en": 360
+},
+{
+"age": 5,
+"uh": 0,
+"et": "ferien",
+"eb": 450,
+"en": 360
+},
+{
+"age": 3,
+"uh": 420,
+"et": "ferien",
+"eb": 900,
+"en": 720
+}
+],
+"mi": 700,
+"hz": 140,
+"hzG": null,
+"ww": false,
+"kdz": "normal",
+"mpb": false,
+"verm": 45000,
+"umgCnt": 1,
+"umgAge": 4,
+"umgNights": 40,
+"umgArt": "temp",
+"ext25": 0,
+"pa": "0.2"
+}
+},
+{
+"id": "Z33",
+"S": {
+"mode": "fam",
+"typ": "paar",
+"verh": false,
+"ad": [
+{
+"gj": 1995,
+"ef": "ar",
+"jb": 0,
+"jn": 0,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 600,
+"sg": 0,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 1200,
+"avN": 0
+},
+{
+"gj": 1972,
+"ef": "ja",
+"jb": 900,
+"jn": 684,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 0
+}
+],
+"kids": [],
+"mi": 700,
+"hz": 90,
+"hzG": null,
+"ww": true,
+"kdz": "karenz",
+"mpb": false,
+"verm": 3000,
+"umgCnt": 2,
+"umgAge": 11,
+"umgNights": 0,
+"umgArt": "temp",
+"ext25": 0,
+"pa": "0.3"
+}
+},
+{
+"id": "Z34",
+"S": {
+"mode": "fam",
+"typ": "ae",
+"verh": true,
+"ad": [
+{
+"gj": 1972,
+"ef": "zeit",
+"jb": 0,
+"jn": 0,
+"rb": 0,
+"rn": 0,
+"grz": true,
+"so": 0,
+"sg": 1100,
+"sgSt": 90,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 1200,
+"avN": 0
+},
+{
+"gj": 1961,
+"ef": "dau",
+"jb": 1500,
+"jn": 1140,
+"rb": 0,
+"rn": 0,
+"grz": true,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "frei",
+"avB": 0,
+"avN": 930
+}
+],
+"kids": [
+{
+"age": 18,
+"uh": 0,
+"et": "ferien",
+"eb": 450,
+"en": 360
+},
+{
+"age": 5,
+"uh": 420,
+"et": "none",
+"eb": 0,
+"en": 0
+}
+],
+"mi": 560,
+"hz": 140,
+"hzG": 100,
+"ww": false,
+"kdz": "normal",
+"mpb": false,
+"verm": 18000,
+"umgCnt": 1,
+"umgAge": 16,
+"umgNights": 150,
+"umgArt": "wechsel",
+"ext25": 1,
+"pa": "0.1"
+}
+},
+{
+"id": "Z35",
+"S": {
+"mode": "fam",
+"typ": "paar",
+"verh": true,
+"ad": [
+{
+"gj": 1950,
+"ef": "zeit",
+"jb": 450,
+"jn": 342,
+"rb": 0,
+"rn": 0,
+"grz": true,
+"so": 0,
+"sg": 0,
+"sgSt": 90,
+"uhP": 250,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 1200,
+"avN": 0
+},
+{
+"gj": 2004,
+"ef": "ar",
+"jb": 450,
+"jn": 342,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 600,
+"sg": 1100,
+"sgSt": 90,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 0
+}
+],
+"kids": [],
+"mi": 700,
+"hz": 90,
+"hzG": null,
+"ww": false,
+"kdz": "karenz",
+"mpb": false,
+"verm": 18000,
+"umgCnt": 0,
+"umgAge": 16,
+"umgNights": 150,
+"umgArt": "temp",
+"ext25": 0,
+"pa": "0.2"
+}
+},
+{
+"id": "Z36",
+"S": {
+"mode": "fam",
+"typ": "ae",
+"verh": false,
+"ad": [
+{
+"gj": 1961,
+"ef": "ja",
+"jb": 0,
+"jn": 0,
+"rb": 950,
+"rn": 836,
+"grz": true,
+"so": 0,
+"sg": 0,
+"sgSt": 90,
+"uhP": 0,
+"ssw": 13,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 0
+},
+{
+"gj": 1995,
+"ef": "ja",
+"jb": 0,
+"jn": 0,
+"rb": 950,
+"rn": 836,
+"grz": true,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 0
+}
+],
+"kids": [
+{
+"age": 18,
+"uh": 0,
+"et": "none",
+"eb": 0,
+"en": 0
+},
+{
+"age": 12,
+"uh": 420,
+"et": "none",
+"eb": 0,
+"en": 0
+}
+],
+"mi": 560,
+"hz": 90,
+"hzG": null,
+"ww": false,
+"kdz": "senk",
+"mpb": false,
+"verm": 90000,
+"umgCnt": 0,
+"umgAge": 11,
+"umgNights": 0,
+"umgArt": "temp",
+"ext25": 1,
+"pa": "0"
+}
+},
+{
+"id": "Z37",
+"S": {
+"mode": "fam",
+"typ": "paar",
+"verh": true,
+"ad": [
+{
+"gj": 1972,
+"ef": "ja",
+"jb": 0,
+"jn": 0,
+"rb": 0,
+"rn": 0,
+"grz": true,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 1200,
+"avN": 0
+},
+{
+"gj": 2004,
+"ef": "ar",
+"jb": 0,
+"jn": 0,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 250,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 0
+}
+],
+"kids": [
+{
+"age": 21,
+"uh": 0,
+"et": "ferien",
+"eb": 1200,
+"en": 960
+},
+{
+"age": 17,
+"uh": 0,
+"et": "azubi",
+"eb": 900,
+"en": 720
+},
+{
+"age": 20,
+"uh": 420,
+"et": "none",
+"eb": 0,
+"en": 0
+}
+],
+"mi": 420,
+"hz": 50,
+"hzG": 100,
+"ww": false,
+"kdz": "normal",
+"mpb": false,
+"verm": 18000,
+"umgCnt": 2,
+"umgAge": 4,
+"umgNights": 150,
+"umgArt": "temp",
+"ext25": 0,
+"pa": "0.1"
+}
+},
+{
+"id": "Z38",
+"S": {
+"mode": "fam",
+"typ": "paar",
+"verh": true,
+"ad": [
+{
+"gj": 1961,
+"ef": "ar",
+"jb": 3000,
+"jn": 2280,
+"rb": 0,
+"rn": 0,
+"grz": true,
+"so": 600,
+"sg": 0,
+"sgSt": 0,
+"uhP": 250,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 0
+},
+{
+"gj": 1961,
+"ef": "zeit",
+"jb": 1500,
+"jn": 1140,
+"rb": 1300,
+"rn": 1144,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 90,
+"uhP": 0,
+"ssw": 13,
+"merkG": false,
+"sb": false,
+"kv": "frei",
+"avB": 1200,
+"avN": 930
+}
+],
+"kids": [],
+"mi": 1100,
+"hz": 50,
+"hzG": null,
+"ww": false,
+"kdz": "normal",
+"mpb": false,
+"verm": 18000,
+"umgCnt": 1,
+"umgAge": 4,
+"umgNights": 0,
+"umgArt": "wechsel",
+"ext25": 0,
+"pa": "0.2"
+}
+},
+{
+"id": "Z39",
+"S": {
+"mode": "fam",
+"typ": "ae",
+"verh": false,
+"ad": [
+{
+"gj": 1961,
+"ef": "zeit",
+"jb": 900,
+"jn": 684,
+"rb": 0,
+"rn": 0,
+"grz": false,
+"so": 600,
+"sg": 0,
+"sgSt": 90,
+"uhP": 0,
+"ssw": 13,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 1200,
+"avN": 0
+},
+{
+"gj": 1961,
+"ef": "dau",
+"jb": 3000,
+"jn": 2280,
+"rb": 1300,
+"rn": 1144,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 930
+}
+],
+"kids": [
+{
+"age": 11,
+"uh": 0,
+"et": "job",
+"eb": 900,
+"en": 720
+},
+{
+"age": 15,
+"uh": 420,
+"et": "ferien",
+"eb": 1200,
+"en": 960
+},
+{
+"age": 24,
+"uh": 0,
+"et": "none",
+"eb": 0,
+"en": 0
+},
+{
+"age": 19,
+"uh": 0,
+"et": "none",
+"eb": 0,
+"en": 0
+}
+],
+"mi": 1100,
+"hz": 50,
+"hzG": null,
+"ww": true,
+"kdz": "senk",
+"mpb": false,
+"verm": 0,
+"umgCnt": 0,
+"umgAge": 16,
+"umgNights": 150,
+"umgArt": "temp",
+"ext25": 0,
+"pa": "0.1"
+}
+},
+{
+"id": "Z40",
+"S": {
+"mode": "fam",
+"typ": "paar",
+"verh": false,
+"ad": [
+{
+"gj": 1972,
+"ef": "zeit",
+"jb": 3000,
+"jn": 2280,
+"rb": 1300,
+"rn": 1144,
+"grz": false,
+"so": 0,
+"sg": 0,
+"sgSt": 0,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 0,
+"avN": 0
+},
+{
+"gj": 1958,
+"ef": "dau",
+"jb": 450,
+"jn": 342,
+"rb": 0,
+"rn": 0,
+"grz": true,
+"so": 0,
+"sg": 0,
+"sgSt": 90,
+"uhP": 0,
+"ssw": 0,
+"merkG": false,
+"sb": false,
+"kv": "auto",
+"avB": 1200,
+"avN": 0
+}
+],
+"kids": [
+{
+"age": 16,
+"uh": 0,
+"et": "none",
+"eb": 0,
+"en": 0
+},
+{
+"age": 1,
+"uh": 0,
+"et": "none",
+"eb": 0,
+"en": 0
+}
+],
+"mi": 1500,
+"hz": 50,
+"hzG": null,
+"ww": false,
+"kdz": "normal",
+"mpb": false,
+"verm": 90000,
+"umgCnt": 1,
+"umgAge": 4,
+"umgNights": 150,
+"umgArt": "temp",
+"ext25": 0,
+"pa": "0.2"
+}
+}
+]

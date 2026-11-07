@@ -1,0 +1,16 @@
+[
+ {"id":"T1 Familie Beispiel","S":{"mode":"fam","typ":"paar","verh":false,"ad":[{"gj":1988,"ef":"ja","jb":1700,"jn":1330},{"gj":1990,"ef":"ja"}],"kids":[{"age":4,"uh":0},{"age":9,"uh":0}],"mi":780,"hz":110,"verm":2000}},
+ {"id":"T2 Rentnerin XII","S":{"mode":"wg","typ":"solo","ad":[{"gj":1957,"ef":"ar","rb":1250,"rn":1096,"grz":true},{}],"kids":[],"mi":520,"hz":70,"verm":5000}},
+ {"id":"T3 AE Kinderwohngeld","S":{"mode":"fam","typ":"ae","ad":[{"gj":1990,"ef":"ja","jb":1500,"jn":1150},{}],"kids":[{"age":8,"uh":420}],"mi":650,"hz":90}},
+ {"id":"T4 Paar verh. ALG I Karenz","S":{"mode":"fam","typ":"paar","verh":true,"ad":[{"gj":1985,"ef":"ja","jb":1800,"jn":1360},{"gj":1987,"ef":"ja","so":900}],"kids":[{"age":3,"uh":0},{"age":12,"uh":0}],"mi":1300,"hz":120,"kdz":"karenz"}},
+ {"id":"T5 Single selbststaendig","S":{"mode":"wg","typ":"solo","ad":[{"gj":1985,"ef":"ja","sg":1200,"sgSt":0},{}],"kids":[],"mi":480,"hz":60}},
+ {"id":"T6 Familie Azubi-Kind","S":{"mode":"fam","typ":"paar","ad":[{"gj":1980,"ef":"ja","jb":2400,"jn":1750},{"gj":1982,"ef":"ja","jb":450,"jn":450}],"kids":[{"age":4},{"age":9},{"age":17,"et":"azubi","eb":900,"en":720}],"mi":900,"hz":140}},
+ {"id":"T7 Single Umgang temporaer","S":{"mode":"wg","typ":"solo","ad":[{"gj":1988,"ef":"ja","jb":1400,"jn":1080,"uhP":300},{}],"kids":[],"umgCnt":1,"umgAge":7,"umgNights":80,"umgArt":"temp","mi":560,"hz":70}},
+ {"id":"T8 gemischte BG","S":{"mode":"fam","typ":"paar","ad":[{"gj":1985,"ef":"ja","jb":1500,"jn":1150},{"gj":1970,"ef":"dau","jb":450,"jn":450,"rb":900,"rn":790}],"kids":[],"mi":600,"hz":90}},
+ {"id":"T9 sieben Personen","S":{"mode":"fam","typ":"paar","ad":[{"gj":1984,"ef":"ja","jb":600,"jn":480},{"gj":1986,"ef":"ja"}],"kids":[{"age":2},{"age":5},{"age":8},{"age":11},{"age":15}],"mi":1200,"hz":180}},
+ {"id":"T10 Wahlrecht 6a Abs 1a","S":{"mode":"fam","typ":"paar","verh":true,"ad":[{"gj":1988,"ef":"ja","jb":1300,"jn":988},{"gj":1990,"ef":"ja"}],"kids":[{"age":4},{"age":9}],"mi":780,"hz":110}},
+ {"id":"T11 Vermoegen","S":{"mode":"wg","typ":"solo","ad":[{"gj":1985,"ef":"ja","jb":1500,"jn":1120},{}],"kids":[],"mi":480,"hz":70,"verm":30000}},
+ {"id":"T12 SSW WW HeizG MPB Wechsel","S":{"mode":"fam","typ":"ae","ad":[{"gj":1995,"ef":"ja","ssw":14,"jb":1100,"jn":860,"avB":1000,"avN":800},{}],"kids":[{"age":6,"uh":200,"et":"ferien","eb":300,"en":300}],"umgCnt":1,"umgAge":10,"umgArt":"wechsel","mi":700,"hz":130,"hzG":100,"ww":true,"kdz":"karenz","mpb":true,"verm":12000}},
+ {"id":"T13 Karenzzeit hoch","S":{"mode":"fam","typ":"ae","ad":[{"gj":1992,"ef":"ja","jb":1900,"jn":1400},{}],"kids":[{"age":5,"uh":250},{"age":14,"uh":300}],"mi":950,"hz":120,"kdz":"karenz"}},
+ {"id":"T14 Kostensenkung XII3","S":{"mode":"wg","typ":"solo","ad":[{"gj":1975,"ef":"zeit","so":700},{}],"kids":[],"mi":650,"hz":90,"kdz":"senk"}}
+]

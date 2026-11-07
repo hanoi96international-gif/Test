@@ -1172,7 +1172,7 @@ function person(a){
   return {age, rag, edge, isEF: !rag && a.ef==="ja" && age>=15};
 }
 /* Kinderzuschlag wird immer geprüft, wenn Kinder unter 25 eingetragen sind – auch im Modus „Nur Wohngeld“ */
-function famEff(H){ return H.mode==="fam" || H.kids.some(k=>k.age>=0 && k.age<25); }
+function famEff(H){ return H.kids.some(k=>k.age>=0 && k.age<25); }
 function rbKind(age){ if(age>=18) return SYS==="XII" ? P.rb.single : P.rb.u25; if(age>=14) return P.rb.k14; if(age>=6) return P.rb.k6; return P.rb.k0; }
 function wwRate(age){ const r=P.mb.ww; if(age>=18) return r[0]; if(age>=14) return r[1]; if(age>=6) return r[2]; return r[3]; }
 function byN(arr, plus, n){ const i = Math.min(n,arr.length)-1; return arr[i] + Math.max(0,n-arr.length)*plus; }
