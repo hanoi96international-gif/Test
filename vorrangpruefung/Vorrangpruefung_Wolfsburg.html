@@ -356,6 +356,7 @@ footer{font-size:.8rem;color:var(--muted)}
             <label class="f" id="kzUsedL"><span data-i18n="kzUsed"></span><input class="sel" type="number" inputmode="numeric" min="0" max="12" id="kzUsed"></label>
           </div>
           <div class="kzres" id="kzRes" aria-live="polite"></div>
+          <label class="ck"><input type="checkbox" id="mpb"><span data-i18n="mpb"></span></label>
           <label class="f"><span data-i18n="kdzL"></span>
             <select class="sel" id="kdz">
               <option value="normal" data-i18n="kdzN"></option>
@@ -789,22 +790,22 @@ wgRente:"Пенсия лица {n}",wgGrz:"− льгота базовой пе�
 for(const l in Y) Object.assign(I[l], Y[l]);
 const Z = {
 de:{kdzL:"Stand der Prüfung der Unterkunftskosten",kdzN:"nur angemessene Kosten (Regelfall)",kdzK:"Karenzzeit: erstes Jahr im Leistungsbezug",kdzS:"nach Karenzzeit: Kostensenkung läuft (höchstens 6 Monate)",
-kdzHint:"Seit 01.07.2026: In der Karenzzeit (12 Monate ab Leistungsbeginn; volle Monate ohne Leistung verlängern sie) wird die Miete höchstens bis 150 % der Mietobergrenze übernommen, auch bei bereits laufender Karenzzeit. Heizkosten sind nicht geschützt und werden ab dem ersten Monat auf Angemessenheit geprüft (§ 22 Abs. 1 SGB II). Danach werden unangemessene Kosten nach Aufforderung zur Kostensenkung in der Regel höchstens 6 Monate übernommen. SGB XII (§ 35): Karenzzeit ohne 150-%-Deckel.",
+kdzHint:"Seit 01.07.2026: In der Karenzzeit (12 Monate ab Leistungsbeginn; volle Monate ohne Leistung verlängern sie) wird die Miete höchstens bis 150 % der Mietobergrenze übernommen, auch bei bereits laufender Karenzzeit. Heizkosten sind nicht geschützt und werden ab dem ersten Monat auf Angemessenheit geprüft (§ 22 Abs. 1 SGB II). Danach werden unangemessene Kosten nach Aufforderung zur Kostensenkung in der Regel höchstens 6 Monate übernommen. Gilt genauso im SGB XII (§ 35). Keine Karenzzeit, wenn die Miete die Mietpreisbremse überschreitet.",
 hzG:"Grenze für angemessene Heizkosten (optional)",hzGHint:"Laut Heizspiegel bzw. Jobcenter. Leer lassen = tatsächliche Heizkosten. In der Karenzzeit sind Heizkosten nicht geschützt.",heatRg:"Heizkosten anerkannt (Grenze {g})"},
 en:{kdzL:"Housing cost status",kdzN:"appropriate costs only (standard case)",kdzK:"waiting period: first year of benefits",kdzS:"after waiting period: cost reduction running (max. 6 months)",
-kdzHint:"Since 1 Jul 2026: during the waiting period (12 months from start of benefits, extended by full months without benefits) rent is covered up to at most 150 % of the rent limit, also for waiting periods already running. Heating costs are not protected and are checked from the first month (§ 22 (1) SGB II). Afterwards, inappropriate costs are usually covered for at most 6 months after a request to reduce them. SGB XII (§ 35): waiting period without the 150 % cap.",
+kdzHint:"Since 1 Jul 2026: during the waiting period (12 months from start of benefits, extended by full months without benefits) rent is covered up to at most 150 % of the rent limit, also for waiting periods already running. Heating costs are not protected and are checked from the first month (§ 22 (1) SGB II). Afterwards, inappropriate costs are usually covered for at most 6 months after a request to reduce them. The same applies under SGB XII (§ 35). No waiting period if the rent exceeds the rent brake.",
 hzG:"Limit for appropriate heating costs (optional)",hzGHint:"From the heating cost index or the Jobcenter. Leave empty = actual heating costs. Heating costs are not protected in the waiting period.",heatRg:"Heating recognised (limit {g})"},
 tr:{kdzL:"Konut giderleri durumu",kdzN:"yalnızca uygun giderler (normal durum)",kdzK:"bekleme süresi: yardımın ilk yılı",kdzS:"bekleme süresinden sonra: gider azaltma sürüyor (en fazla 6 ay)",
-kdzHint:"01.07.2026'dan beri: bekleme süresinde (yardım başlangıcından itibaren 12 ay; yardımsız tam aylar süreyi uzatır) kira en fazla kira üst sınırının %150'sine kadar karşılanır, devam eden bekleme sürelerinde de. Isınma giderleri korunmaz ve ilk aydan itibaren kontrol edilir (§ 22 Abs. 1 SGB II). Sonrasında uygun olmayan giderler, azaltma talebinden sonra genellikle en fazla 6 ay karşılanır. SGB XII (§ 35): %150 sınırı olmadan bekleme süresi.",
+kdzHint:"01.07.2026'dan beri: bekleme süresinde (yardım başlangıcından itibaren 12 ay; yardımsız tam aylar süreyi uzatır) kira en fazla kira üst sınırının %150'sine kadar karşılanır, devam eden bekleme sürelerinde de. Isınma giderleri korunmaz ve ilk aydan itibaren kontrol edilir (§ 22 Abs. 1 SGB II). Sonrasında uygun olmayan giderler, azaltma talebinden sonra genellikle en fazla 6 ay karşılanır. SGB XII'de de aynısı geçerlidir (§ 35). Kira, kira freni sınırını aşarsa bekleme süresi yoktur.",
 hzG:"Uygun ısınma gideri sınırı (isteğe bağlı)",hzGHint:"Isınma endeksi veya Jobcenter'a göre. Boş bırakın = gerçek ısınma giderleri. Bekleme süresinde ısınma giderleri korunmaz.",heatRg:"Kabul edilen ısınma (sınır {g})"},
 ar:{kdzL:"وضع تكاليف السكن",kdzN:"التكاليف المناسبة فقط (الحالة العادية)",kdzK:"فترة السماح: السنة الأولى من الإعانة",kdzS:"بعد فترة السماح: خفض التكاليف جارٍ (6 أشهر كحد أقصى)",
-kdzHint:"منذ 01.07.2026: خلال فترة السماح (12 شهرًا من بداية الإعانة، وتمددها الأشهر الكاملة بدون إعانة) يُغطى الإيجار حتى 150 % من الحد الأعلى للإيجار كحد أقصى، حتى في فترات السماح الجارية. تكاليف التدفئة غير محمية وتُفحص من الشهر الأول (§ 22 Abs. 1 SGB II). بعد ذلك تُغطى التكاليف غير المناسبة عادةً لمدة 6 أشهر كحد أقصى بعد طلب خفضها. SGB XII (§ 35): فترة سماح بدون حد 150 %.",
+kdzHint:"منذ 01.07.2026: خلال فترة السماح (12 شهرًا من بداية الإعانة، وتمددها الأشهر الكاملة بدون إعانة) يُغطى الإيجار حتى 150 % من الحد الأعلى للإيجار كحد أقصى، حتى في فترات السماح الجارية. تكاليف التدفئة غير محمية وتُفحص من الشهر الأول (§ 22 Abs. 1 SGB II). بعد ذلك تُغطى التكاليف غير المناسبة عادةً لمدة 6 أشهر كحد أقصى بعد طلب خفضها. ينطبق الشيء نفسه في SGB XII (§ 35). لا توجد فترة سماح إذا تجاوز الإيجار حد كبح الإيجارات.",
 hzG:"حد تكاليف التدفئة المناسبة (اختياري)",hzGHint:"حسب مؤشر التدفئة أو Jobcenter. اتركه فارغًا = تكاليف التدفئة الفعلية. تكاليف التدفئة غير محمية في فترة السماح.",heatRg:"التدفئة المعترف بها (الحد {g})"},
 uk:{kdzL:"Стан витрат на житло",kdzN:"лише належні витрати (звичайний випадок)",kdzK:"пільговий період: перший рік отримання допомоги",kdzS:"після пільгового періоду: триває зниження витрат (макс. 6 місяців)",
-kdzHint:"З 01.07.2026: у пільговий період (12 місяців від початку допомоги; повні місяці без допомоги його продовжують) оренда покривається щонайбільше до 150 % межі оренди, також для вже розпочатих пільгових періодів. Опалення не захищене і перевіряється з першого місяця (§ 22 Abs. 1 SGB II). Після цього неналежні витрати після вимоги їх знизити зазвичай покриваються щонайбільше 6 місяців. SGB XII (§ 35): пільговий період без межі 150 %.",
+kdzHint:"З 01.07.2026: у пільговий період (12 місяців від початку допомоги; повні місяці без допомоги його продовжують) оренда покривається щонайбільше до 150 % межі оренди, також для вже розпочатих пільгових періодів. Опалення не захищене і перевіряється з першого місяця (§ 22 Abs. 1 SGB II). Після цього неналежні витрати після вимоги їх знизити зазвичай покриваються щонайбільше 6 місяців. Те саме діє в SGB XII (§ 35). Пільгового періоду немає, якщо оренда перевищує гальмо орендної плати.",
 hzG:"Межа належних витрат на опалення (необов'язково)",hzGHint:"За індексом опалення або Jobcenter. Залиште порожнім = фактичні витрати. У пільговий період опалення не захищене.",heatRg:"Визнане опалення (межа {g})"},
 ru:{kdzL:"Статус расходов на жильё",kdzN:"только соразмерные расходы (обычный случай)",kdzK:"льготный период: первый год получения пособия",kdzS:"после льготного периода: идёт снижение расходов (макс. 6 месяцев)",
-kdzHint:"С 01.07.2026: в льготный период (12 месяцев с начала пособия; полные месяцы без пособия его продлевают) аренда покрывается не более чем до 150 % предела аренды, в том числе для уже идущих льготных периодов. Отопление не защищено и проверяется с первого месяца (§ 22 Abs. 1 SGB II). После этого несоразмерные расходы после требования их снизить обычно покрываются не более 6 месяцев. SGB XII (§ 35): льготный период без предела 150 %.",
+kdzHint:"С 01.07.2026: в льготный период (12 месяцев с начала пособия; полные месяцы без пособия его продлевают) аренда покрывается не более чем до 150 % предела аренды, в том числе для уже идущих льготных периодов. Отопление не защищено и проверяется с первого месяца (§ 22 Abs. 1 SGB II). После этого несоразмерные расходы после требования их снизить обычно покрываются не более 6 месяцев. То же действует в SGB XII (§ 35). Льготного периода нет, если аренда превышает «тормоз аренды».",
 hzG:"Предел соразмерных расходов на отопление (необязательно)",hzGHint:"По индексу отопления или Jobcenter. Оставьте пустым = фактические расходы. В льготный период отопление не защищено.",heatRg:"Признанное отопление (предел {g})"}
 };
 for(const l in Z) Object.assign(I[l], Z[l]);
@@ -817,7 +818,7 @@ kz2:"Heizkosten sind nicht geschützt. Sie werden ab dem ersten Monat auf Angeme
 kz3:"Beginn: mit dem ersten Monat, für den Leistungen bezogen werden.",
 kz4:"Unterbrechung: Volle Monate ohne Leistung zählen nicht mit. Die Karenzzeit verlängert sich um diese Monate – sie beginnt aber nicht von vorne.",
 kz5:"Neubeginn: Eine neue, volle Karenzzeit von 12 Monaten gibt es erst, wenn vorher mindestens 3 Jahre (36 Monate) lang keine Leistungen nach SGB II oder SGB XII bezogen wurden (§ 22 Abs. 1 SGB II, § 35 SGB XII). Bei einer kürzeren Pause laufen nur die restlichen Monate der alten Karenzzeit weiter.",
-kz6:"Danach: Ist die Miete zu hoch, fordert das Jobcenter zur Kostensenkung auf. Die tatsächlichen Kosten werden dann in der Regel noch höchstens 6 Monate übernommen. Für das Vermögen gilt dieselbe Karenzzeit (40.000 € + 15.000 € je weitere Person).",
+kz6:"Danach: Ist die Miete zu hoch, fordert das Jobcenter zur Kostensenkung auf. Die tatsächlichen Kosten werden dann in der Regel noch höchstens 6 Monate übernommen. Beim Vermögen gibt es keine Karenzzeit mehr: Freibetrag je Person nach Alter (5.000 € bis 29, 10.000 € ab 30, 12.500 € ab 40, 20.000 € ab 50 Jahren, § 12 Abs. 2 SGB II).",
 kz7:"Umzug: Wer ohne Zustimmung in eine teurere Wohnung zieht, bekommt nur die bisherige Miete – auch in der Karenzzeit.",
 kzEx:"Beispiele: Leistungen ab März 2026 → Karenzzeit bis Februar 2027. Fehlt im August 2026 ein voller Monat Leistung, endet sie erst im März 2027. Endete ein früherer Bezug im Juni 2024 und beginnt der neue im Mai 2026, liegen nur 22 Monate dazwischen → keine neue Karenzzeit, nur die Restmonate.",
 kzCalcH:"Karenzzeit für diesen Fall berechnen",kzStart:"Beginn des aktuellen Leistungsbezugs (Monat)",kzPrev:"Ende eines früheren Leistungsbezugs (falls vorhanden)",kzGap:"Volle Monate ohne Leistung seit Beginn",kzUsed:"Schon verbrauchte Karenzmonate aus dem früheren Bezug",
@@ -831,7 +832,7 @@ kz2:"Heating costs are not protected. They are checked for appropriateness from 
 kz3:"Start: with the first month for which benefits are received.",
 kz4:"Interruption: full months without benefits do not count. The waiting period is extended by these months – but it does not start again.",
 kz5:"Restart: a new, full 12-month waiting period only applies if no SGB II or SGB XII benefits were received for at least 3 years (36 months) before (§ 22 (1) SGB II, § 35 SGB XII). After a shorter break, only the remaining months of the old waiting period continue.",
-kz6:"Afterwards: if the rent is too high, the Jobcenter asks for a cost reduction. Actual costs are then usually covered for at most 6 more months. The same waiting period applies to assets (40,000 € + 15,000 € per additional person).",
+kz6:"Afterwards: if the rent is too high, the Jobcenter asks for a cost reduction. Actual costs are then usually covered for at most 6 more months. There is no longer a waiting period for assets: allowance per person by age (5,000 € up to 29, 10,000 € from 30, 12,500 € from 40, 20,000 € from 50, § 12 (2) SGB II).",
 kz7:"Moving: anyone who moves into a more expensive flat without approval only gets the previous rent – also during the waiting period.",
 kzEx:"Examples: benefits from March 2026 → waiting period until February 2027. If August 2026 is a full month without benefits, it ends in March 2027. If earlier benefits ended in June 2024 and new ones start in May 2026, only 22 months lie in between → no new waiting period, only the remaining months.",
 kzCalcH:"Calculate the waiting period for this case",kzStart:"Start of current benefits (month)",kzPrev:"End of earlier benefits (if any)",kzGap:"Full months without benefits since start",kzUsed:"Waiting-period months already used in earlier benefits",
@@ -845,7 +846,7 @@ kz2:"Isınma giderleri korunmaz. İlk aydan itibaren uygunluk açısından kontr
 kz3:"Başlangıç: yardım alınan ilk ay.",
 kz4:"Kesinti: Yardımsız geçen tam aylar sayılmaz. Bekleme süresi bu aylar kadar uzar – ama baştan başlamaz.",
 kz5:"Yeniden başlama: 12 aylık yeni bir bekleme süresi ancak öncesinde en az 3 yıl (36 ay) SGB II veya SGB XII yardımı alınmamışsa başlar (§ 22 Abs. 1 SGB II, § 35 SGB XII). Daha kısa bir aradan sonra eski bekleme süresinin yalnızca kalan ayları devam eder.",
-kz6:"Sonrası: Kira çok yüksekse Jobcenter giderlerin azaltılmasını ister. Gerçek giderler genellikle en fazla 6 ay daha karşılanır. Varlık için de aynı bekleme süresi geçerlidir (40.000 € + her ek kişi için 15.000 €).",
+kz6:"Sonrası: Kira çok yüksekse Jobcenter giderlerin azaltılmasını ister. Gerçek giderler genellikle en fazla 6 ay daha karşılanır. Varlık için artık bekleme süresi yoktur: yaşa göre kişi başı muafiyet (29 yaşa kadar 5.000 €, 30'dan itibaren 10.000 €, 40'tan itibaren 12.500 €, 50'den itibaren 20.000 €, § 12 Abs. 2 SGB II).",
 kz7:"Taşınma: Onay almadan daha pahalı bir daireye taşınan kişi yalnızca eski kirayı alır – bekleme süresinde de.",
 kzEx:"Örnekler: Mart 2026'dan itibaren yardım → bekleme süresi Şubat 2027'ye kadar. Ağustos 2026 tam bir ay yardımsız geçerse Mart 2027'de biter. Önceki yardım Haziran 2024'te bittiyse ve yenisi Mayıs 2026'da başlarsa arada sadece 22 ay vardır → yeni bekleme süresi yok, sadece kalan aylar.",
 kzCalcH:"Bu durum için bekleme süresini hesapla",kzStart:"Mevcut yardımın başlangıcı (ay)",kzPrev:"Önceki yardımın bitişi (varsa)",kzGap:"Başlangıçtan beri yardımsız tam aylar",kzUsed:"Önceki yardımda kullanılmış bekleme ayları",
@@ -859,7 +860,7 @@ kz2:"تكاليف التدفئة غير محمية، وتُفحص من الشه�
 kz3:"البداية: أول شهر تُستلم فيه الإعانة.",
 kz4:"الانقطاع: الأشهر الكاملة بدون إعانة لا تُحتسب. تمتد فترة السماح بعدد هذه الأشهر – لكنها لا تبدأ من جديد.",
 kz5:"البدء من جديد: لا تبدأ فترة سماح جديدة كاملة مدتها 12 شهرًا إلا إذا لم تُستلم أي إعانات وفق SGB II أو SGB XII لمدة 3 سنوات (36 شهرًا) على الأقل قبلها (§ 22 Abs. 1 SGB II, § 35 SGB XII). بعد انقطاع أقصر تستمر فقط الأشهر المتبقية من فترة السماح القديمة.",
-kz6:"بعد ذلك: إذا كان الإيجار مرتفعًا جدًا يطلب Jobcenter خفض التكاليف. تُغطى التكاليف الفعلية عادةً لمدة 6 أشهر إضافية كحد أقصى. تنطبق فترة السماح نفسها على الأصول (40.000 € + 15.000 € لكل شخص إضافي).",
+kz6:"بعد ذلك: إذا كان الإيجار مرتفعًا جدًا يطلب Jobcenter خفض التكاليف. تُغطى التكاليف الفعلية عادةً لمدة 6 أشهر إضافية كحد أقصى. لم تعد هناك فترة سماح للأصول: إعفاء لكل شخص حسب العمر (5.000 € حتى 29 سنة، 10.000 € من 30، 12.500 € من 40، 20.000 € من 50، § 12 Abs. 2 SGB II).",
 kz7:"الانتقال: من ينتقل دون موافقة إلى شقة أغلى يحصل فقط على الإيجار السابق – حتى خلال فترة السماح.",
 kzEx:"أمثلة: إعانة من مارس 2026 ← فترة السماح حتى فبراير 2027. إذا كان أغسطس 2026 شهرًا كاملًا بدون إعانة تنتهي في مارس 2027. إذا انتهت إعانة سابقة في يونيو 2024 وبدأت الجديدة في مايو 2026 فبينهما 22 شهرًا فقط ← لا فترة سماح جديدة، فقط الأشهر المتبقية.",
 kzCalcH:"احسب فترة السماح لهذه الحالة",kzStart:"بداية الإعانة الحالية (الشهر)",kzPrev:"نهاية إعانة سابقة (إن وجدت)",kzGap:"الأشهر الكاملة بدون إعانة منذ البداية",kzUsed:"أشهر فترة السماح المستهلكة في الإعانة السابقة",
@@ -873,7 +874,7 @@ kz2:"Опалення не захищене. Його перевіряють н�
 kz3:"Початок: перший місяць, за який отримується допомога.",
 kz4:"Перерва: повні місяці без допомоги не враховуються. Пільговий період подовжується на ці місяці – але не починається знову.",
 kz5:"Новий початок: новий повний 12-місячний пільговий період настає лише тоді, коли перед цим щонайменше 3 роки (36 місяців) не отримувалися виплати за SGB II чи SGB XII (§ 22 Abs. 1 SGB II, § 35 SGB XII). Після коротшої перерви продовжуються лише залишкові місяці старого періоду.",
-kz6:"Після цього: якщо оренда завелика, Jobcenter вимагає знизити витрати. Фактичні витрати зазвичай покриваються ще щонайбільше 6 місяців. Для майна діє той самий пільговий період (40 000 € + 15 000 € за кожну наступну особу).",
+kz6:"Після цього: якщо оренда завелика, Jobcenter вимагає знизити витрати. Фактичні витрати зазвичай покриваються ще щонайбільше 6 місяців. Для майна пільгового періоду більше немає: пільга на особу за віком (5 000 € до 29 років, 10 000 € з 30, 12 500 € з 40, 20 000 € з 50, § 12 Abs. 2 SGB II).",
 kz7:"Переїзд: хто без згоди переїжджає в дорожче житло, отримує лише попередню оренду – також у пільговий період.",
 kzEx:"Приклади: допомога з березня 2026 → пільговий період до лютого 2027. Якщо серпень 2026 – повний місяць без допомоги, він закінчується в березні 2027. Якщо попередня допомога закінчилася в червні 2024, а нова почалася в травні 2026, між ними лише 22 місяці → нового періоду немає, лише залишкові місяці.",
 kzCalcH:"Розрахувати пільговий період для цього випадку",kzStart:"Початок поточної допомоги (місяць)",kzPrev:"Кінець попередньої допомоги (якщо була)",kzGap:"Повні місяці без допомоги від початку",kzUsed:"Уже використані місяці пільгового періоду з попередньої допомоги",
@@ -887,7 +888,7 @@ kz2:"Отопление не защищено. Его проверяют на с
 kz3:"Начало: первый месяц, за который получается пособие.",
 kz4:"Перерыв: полные месяцы без пособия не засчитываются. Льготный период продлевается на эти месяцы – но не начинается заново.",
 kz5:"Новый старт: новый полный 12-месячный льготный период наступает только если перед этим не менее 3 лет (36 месяцев) не получались выплаты по SGB II или SGB XII (§ 22 Abs. 1 SGB II, § 35 SGB XII). После более короткого перерыва продолжаются только оставшиеся месяцы старого периода.",
-kz6:"После этого: если аренда слишком высока, Jobcenter требует снизить расходы. Фактические расходы обычно покрываются ещё не более 6 месяцев. Для имущества действует тот же льготный период (40 000 € + 15 000 € за каждого следующего человека).",
+kz6:"После этого: если аренда слишком высока, Jobcenter требует снизить расходы. Фактические расходы обычно покрываются ещё не более 6 месяцев. Для имущества льготного периода больше нет: льгота на человека по возрасту (5 000 € до 29 лет, 10 000 € с 30, 12 500 € с 40, 20 000 € с 50, § 12 Abs. 2 SGB II).",
 kz7:"Переезд: кто без согласия переезжает в более дорогое жильё, получает только прежнюю аренду – и в льготный период тоже.",
 kzEx:"Примеры: пособие с марта 2026 → льготный период до февраля 2027. Если август 2026 – полный месяц без пособия, он заканчивается в марте 2027. Если прежнее пособие закончилось в июне 2024, а новое началось в мае 2026, между ними только 22 месяца → нового периода нет, только оставшиеся месяцы.",
 kzCalcH:"Рассчитать льготный период для этого случая",kzStart:"Начало текущего пособия (месяц)",kzPrev:"Окончание прежнего пособия (если было)",kzGap:"Полные месяцы без пособия с начала",kzUsed:"Уже использованные месяцы льготного периода из прежнего пособия",
@@ -898,7 +899,7 @@ kz2023:"Льготный период существует только с 01.01
 };
 for(const l in KZ) Object.assign(I[l], KZ[l]);
 const KI = {
-de:{mehrH:"Weitere Kinder und Personen in der Wohnung",umgCnt:"Kinder im Umgang (leben zeitweise hier, Kindergeld bekommt der andere Elternteil)",umgAge:"Alter des Umgangskindes",umgNights:"Übernachtungen hier pro Jahr (je Kind, ungefähr)",ext25:"Weitere Personen in der Wohnung, die nicht zu dieser Gemeinschaft gehören (z. B. Kinder ab 25)",unborn:"Ungeborenes Kind bei der Mietobergrenze mitzählen (falls die Richtlinie das vorsieht)",
+de:{mehrH:"Weitere Kinder und Personen in der Wohnung",umgCnt:"Kinder im Umgang (leben zeitweise hier, Kindergeld bekommt der andere Elternteil)",umgAge:"Alter des Umgangskindes",umgNights:"Übernachtungen hier pro Jahr (je Kind, ungefähr)",ext25:"Weitere Personen in der Wohnung mit eigenem Leistungsbezug oder als Untermieter (z. B. Kind ab 25 mit eigenem Bürgergeld)",unborn:"Ungeborenes Kind bei der Mietobergrenze mitzählen (falls die Richtlinie das vorsieht)",
 umgInfo:"Umgangskinder: Mietobergrenze für {n} Personen angesetzt (zusätzlicher Wohnraum bei regelmäßigem Umgang ab {x} Übernachtungen im Jahr). Regelbedarf anteilig für etwa {d} Tage im Monat (temporäre Bedarfsgemeinschaft).",
 umgShort:"Umgangskinder: Für weniger als {x} Übernachtungen im Jahr wird kein zusätzlicher Wohnraum angesetzt. Regelbedarf anteilig für etwa {d} Tage im Monat.",
 umgWg:"Wohngeld: Das Umgangskind zählt als Haushaltsmitglied (wechselnder Aufenthalt, ab {x} Übernachtungen im Jahr).",
@@ -907,7 +908,7 @@ unbornInfo:"Ungeborenes Kind bei der Mietobergrenze mitgezählt.",
 kwgInfo:"Kinderwohngeld: Kind {n} ist mit Unterhalt bzw. Unterhaltsvorschuss, Kindergeld und Kinderwohngeld ({a}) nicht hilfebedürftig und gehört nicht mehr zur Bedarfsgemeinschaft. Das Kinderwohngeld ist vorrangig zu beantragen (§ 12a SGB II). Überschüssiges Kindergeld wird den Eltern angerechnet.",
 kwgAmt:"inkl. Kinderwohngeld {a}",umgR:"Regelbedarf Umgangskinder (anteilig, etwa {d} Tage)",shareR:"− Anteil anderer Personen an den Wohnkosten (eigener Anteil: {p})",kwgRow:"+ Kinderwohngeld",
 kidsKz:"Haushalte mit Kindern: Bei unabweisbaren Kosten sind in der Karenzzeit Ausnahmen vom 150-%-Deckel möglich. Bitte Einzelfall prüfen."},
-en:{mehrH:"Other children and people in the flat",umgCnt:"Children on contact visits (live here part-time, the other parent gets child benefit)",umgAge:"Age of the visiting child",umgNights:"Nights here per year (per child, approx.)",ext25:"Other people in the flat who do not belong to this household (e.g. children aged 25+)",unborn:"Count the unborn child for the rent limit (if the guideline provides for it)",
+en:{mehrH:"Other children and people in the flat",umgCnt:"Children on contact visits (live here part-time, the other parent gets child benefit)",umgAge:"Age of the visiting child",umgNights:"Nights here per year (per child, approx.)",ext25:"Other people in the flat with their own benefits or as subtenants (e.g. child aged 25+ with own citizen's income)",unborn:"Count the unborn child for the rent limit (if the guideline provides for it)",
 umgInfo:"Visiting children: rent limit for {n} persons applied (extra living space for regular contact from {x} nights a year). Standard need pro rata for about {d} days a month (temporary benefit community).",
 umgShort:"Visiting children: below {x} nights a year no extra living space is applied. Standard need pro rata for about {d} days a month.",
 umgWg:"Housing benefit: the visiting child counts as a household member (alternating residence, from {x} nights a year).",
@@ -916,7 +917,7 @@ unbornInfo:"Unborn child counted for the rent limit.",
 kwgInfo:"Child housing benefit: child {n} is not in need with maintenance or advance maintenance, child benefit and child housing benefit ({a}) and no longer belongs to the benefit community. Child housing benefit must be applied for first (§ 12a SGB II). Surplus child benefit counts towards the parents.",
 kwgAmt:"incl. child housing benefit {a}",umgR:"Standard need visiting children (pro rata, about {d} days)",shareR:"− share of other people in housing costs (own share: {p})",kwgRow:"+ child housing benefit",
 kidsKz:"Households with children: for unavoidable costs, exceptions from the 150 % cap are possible during the waiting period. Please check the individual case."},
-tr:{mehrH:"Dairedeki diğer çocuklar ve kişiler",umgCnt:"Görüşme kapsamındaki çocuklar (zaman zaman burada yaşar, çocuk parasını diğer ebeveyn alır)",umgAge:"Görüşme çocuğunun yaşı",umgNights:"Yılda burada geçirilen gece sayısı (çocuk başına, yaklaşık)",ext25:"Bu haneye ait olmayan diğer kişiler (ör. 25 yaş üstü çocuklar)",unborn:"Doğmamış çocuğu kira üst sınırında say (yönerge öngörüyorsa)",
+tr:{mehrH:"Dairedeki diğer çocuklar ve kişiler",umgCnt:"Görüşme kapsamındaki çocuklar (zaman zaman burada yaşar, çocuk parasını diğer ebeveyn alır)",umgAge:"Görüşme çocuğunun yaşı",umgNights:"Yılda burada geçirilen gece sayısı (çocuk başına, yaklaşık)",ext25:"Kendi yardımını alan veya alt kiracı olan diğer kişiler (ör. kendi Bürgergeld'i olan 25 yaş üstü çocuk)",unborn:"Doğmamış çocuğu kira üst sınırında say (yönerge öngörüyorsa)",
 umgInfo:"Görüşme çocukları: {n} kişilik kira üst sınırı uygulandı (yılda {x} geceden itibaren düzenli görüşmede ek yaşam alanı). Standart ihtiyaç ayda yaklaşık {d} gün için orantılı (geçici ihtiyaç topluluğu).",
 umgShort:"Görüşme çocukları: yılda {x} gecenin altında ek yaşam alanı uygulanmaz. Standart ihtiyaç ayda yaklaşık {d} gün için orantılı.",
 umgWg:"Konut yardımı: görüşme çocuğu hane üyesi sayılır (dönüşümlü kalış, yılda {x} geceden itibaren).",
@@ -925,7 +926,7 @@ unbornInfo:"Doğmamış çocuk kira üst sınırında sayıldı.",
 kwgInfo:"Çocuk konut yardımı: {n}. çocuk nafaka/nafaka avansı, çocuk parası ve çocuk konut yardımı ({a}) ile muhtaç değildir ve artık ihtiyaç topluluğuna ait değildir. Çocuk konut yardımı öncelikle başvurulmalıdır (§ 12a SGB II). Fazla çocuk parası ebeveynlere sayılır.",
 kwgAmt:"çocuk konut yardımı {a} dahil",umgR:"Görüşme çocukları standart ihtiyacı (orantılı, yaklaşık {d} gün)",shareR:"− diğer kişilerin konut giderlerindeki payı (kendi payı: {p})",kwgRow:"+ çocuk konut yardımı",
 kidsKz:"Çocuklu haneler: kaçınılmaz giderlerde bekleme süresinde %150 sınırından istisnalar mümkündür. Lütfen durumu ayrıca inceleyin."},
-ar:{mehrH:"أطفال وأشخاص آخرون في الشقة",umgCnt:"أطفال في إطار حق الزيارة (يعيشون هنا أحيانًا، وإعانة الطفل يأخذها الوالد الآخر)",umgAge:"عمر طفل الزيارة",umgNights:"عدد الليالي هنا سنويًا (لكل طفل، تقريبًا)",ext25:"أشخاص آخرون في الشقة لا ينتمون إلى هذه الأسرة (مثل الأبناء من 25 سنة)",unborn:"احتساب الطفل الذي لم يولد بعد في الحد الأعلى للإيجار (إن نصت اللائحة على ذلك)",
+ar:{mehrH:"أطفال وأشخاص آخرون في الشقة",umgCnt:"أطفال في إطار حق الزيارة (يعيشون هنا أحيانًا، وإعانة الطفل يأخذها الوالد الآخر)",umgAge:"عمر طفل الزيارة",umgNights:"عدد الليالي هنا سنويًا (لكل طفل، تقريبًا)",ext25:"أشخاص آخرون في الشقة يتلقون إعانة خاصة بهم أو مستأجرون من الباطن (مثل ابن من 25 سنة لديه Bürgergeld خاص)",unborn:"احتساب الطفل الذي لم يولد بعد في الحد الأعلى للإيجار (إن نصت اللائحة على ذلك)",
 umgInfo:"أطفال الزيارة: طُبق الحد الأعلى للإيجار لـ {n} أفراد (مساحة سكن إضافية عند الزيارة المنتظمة من {x} ليلة سنويًا). الحاجة الأساسية بشكل نسبي لحوالي {d} يومًا شهريًا (مجتمع احتياج مؤقت).",
 umgShort:"أطفال الزيارة: أقل من {x} ليلة سنويًا لا تُطبق مساحة سكن إضافية. الحاجة الأساسية بشكل نسبي لحوالي {d} يومًا شهريًا.",
 umgWg:"بدل السكن: يُحتسب طفل الزيارة فردًا من الأسرة (إقامة متناوبة، من {x} ليلة سنويًا).",
@@ -934,7 +935,7 @@ unbornInfo:"احتُسب الطفل الذي لم يولد بعد في الحد 
 kwgInfo:"بدل السكن للطفل: الطفل {n} ليس بحاجة بفضل النفقة/سلفة النفقة وإعانة الطفل وبدل السكن للطفل ({a})، ولم يعد ينتمي إلى مجتمع الاحتياج. يجب طلب بدل السكن للطفل أولًا (§ 12a SGB II). فائض إعانة الطفل يُحتسب للوالدين.",
 kwgAmt:"بما في ذلك بدل سكن الطفل {a}",umgR:"الحاجة الأساسية لأطفال الزيارة (نسبيًا، حوالي {d} يومًا)",shareR:"− حصة الأشخاص الآخرين من تكاليف السكن (الحصة الخاصة: {p})",kwgRow:"+ بدل سكن الطفل",
 kidsKz:"الأسر التي لديها أطفال: في حالة التكاليف التي لا مفر منها تكون الاستثناءات من حد 150 % ممكنة خلال فترة السماح. يرجى فحص الحالة الفردية."},
-uk:{mehrH:"Інші діти та особи в квартирі",umgCnt:"Діти за правом спілкування (живуть тут частково, Kindergeld отримує інший батько)",umgAge:"Вік дитини",umgNights:"Ночей тут на рік (на дитину, приблизно)",ext25:"Інші особи в квартирі, які не належать до цього домогосподарства (напр. діти від 25 років)",unborn:"Враховувати ненароджену дитину для межі оренди (якщо директива це передбачає)",
+uk:{mehrH:"Інші діти та особи в квартирі",umgCnt:"Діти за правом спілкування (живуть тут частково, Kindergeld отримує інший батько)",umgAge:"Вік дитини",umgNights:"Ночей тут на рік (на дитину, приблизно)",ext25:"Інші особи в квартирі з власними виплатами або суборендарі (напр. дитина від 25 років із власним Bürgergeld)",unborn:"Враховувати ненароджену дитину для межі оренди (якщо директива це передбачає)",
 umgInfo:"Діти за правом спілкування: застосовано межу оренди для {n} осіб (додаткова площа при регулярному спілкуванні від {x} ночей на рік). Базова потреба пропорційно приблизно за {d} днів на місяць (тимчасова спільнота потреби).",
 umgShort:"Діти за правом спілкування: менше {x} ночей на рік – додаткова площа не застосовується. Базова потреба пропорційно приблизно за {d} днів на місяць.",
 umgWg:"Житлова допомога: дитина вважається членом домогосподарства (почергове проживання, від {x} ночей на рік).",
@@ -943,7 +944,7 @@ unbornInfo:"Ненароджену дитину враховано для меж
 kwgInfo:"Житлова допомога для дитини: дитина {n} завдяки аліментам/авансу аліментів, Kindergeld і житловій допомозі для дитини ({a}) не потребує допомоги і більше не належить до спільноти потреби. Житлову допомогу для дитини слід подати в першу чергу (§ 12a SGB II). Надлишок Kindergeld зараховується батькам.",
 kwgAmt:"включно з житловою допомогою для дитини {a}",umgR:"Базова потреба дітей за правом спілкування (пропорційно, близько {d} днів)",shareR:"− частка інших осіб у витратах на житло (власна частка: {p})",kwgRow:"+ житлова допомога для дитини",
 kidsKz:"Домогосподарства з дітьми: при неминучих витратах у пільговий період можливі винятки з межі 150 %. Перевірте окремий випадок."},
-ru:{mehrH:"Другие дети и лица в квартире",umgCnt:"Дети по праву общения (живут здесь частично, Kindergeld получает другой родитель)",umgAge:"Возраст ребёнка",umgNights:"Ночей здесь в год (на ребёнка, примерно)",ext25:"Другие лица в квартире, не относящиеся к этому домохозяйству (напр. дети от 25 лет)",unborn:"Учитывать нерождённого ребёнка для предела аренды (если директива это предусматривает)",
+ru:{mehrH:"Другие дети и лица в квартире",umgCnt:"Дети по праву общения (живут здесь частично, Kindergeld получает другой родитель)",umgAge:"Возраст ребёнка",umgNights:"Ночей здесь в год (на ребёнка, примерно)",ext25:"Другие лица в квартире с собственными выплатами или субарендаторы (напр. ребёнок от 25 лет с собственным Bürgergeld)",unborn:"Учитывать нерождённого ребёнка для предела аренды (если директива это предусматривает)",
 umgInfo:"Дети по праву общения: применён предел аренды для {n} человек (дополнительная площадь при регулярном общении от {x} ночей в год). Базовая потребность пропорционально примерно за {d} дней в месяц (временное сообщество нуждающихся).",
 umgShort:"Дети по праву общения: менее {x} ночей в год – дополнительная площадь не применяется. Базовая потребность пропорционально примерно за {d} дней в месяц.",
 umgWg:"Жилищное пособие: ребёнок считается членом домохозяйства (попеременное проживание, от {x} ночей в год).",
@@ -1035,6 +1036,15 @@ uhPR:"− уплаченные алименты лицо {n} (§ 11b Abs. 1 Nr. 
 warnMixed:"Смешанное сообщество нуждающихся: один взрослый постоянно нетрудоспособен или достиг пенсионного возраста. У него приоритетное право на базовое обеспечение по главе 4 SGB XII (§ 5 Abs. 2 SGB II). Его доход корректируется по SGB XII; дефицит определяется для всего домохозяйства."}
 };
 for(const l in MX) Object.assign(I[l], MX[l]);
+const NW = {
+de:{mpb:"Miete liegt über der Mietpreisbremse oder über einer festgelegten Quadratmeter-Obergrenze (dann gilt keine Karenzzeit)",mpbInfo:"Keine Karenzzeit: Die Miete überschreitet die Mietpreisbremse bzw. eine Quadratmeter-Obergrenze (§ 22 Abs. 1 Satz 8 SGB II, § 35 Abs. 1 Satz 9 SGB XII). Es gilt die normale Mietobergrenze.",pWahl:"Wahlrecht",vWahlH:"Wahlrecht: {v} statt SGB II möglich",vWahlT:"Es fehlen höchstens 100 € ({a}). Nach § 6a Abs. 1a BKGG besteht trotzdem Anspruch auf Kinderzuschlag, wenn kein SGB II beantragt wird. Ein Verweis nach § 12a SGB II ist nicht zulässig – die Familie entscheidet."},
+en:{mpb:"Rent exceeds the rent brake or a set limit per square metre (then no waiting period applies)",mpbInfo:"No waiting period: the rent exceeds the rent brake or a limit per square metre (§ 22 (1) sentence 8 SGB II, § 35 (1) sentence 9 SGB XII). The normal rent limit applies.",pWahl:"choice",vWahlH:"Choice: {v} instead of SGB II possible",vWahlT:"At most 100 € is missing ({a}). Under § 6a (1a) BKGG there is still a right to the child supplement if no SGB II is applied for. A referral under § 12a SGB II is not permitted – the family decides."},
+tr:{mpb:"Kira, kira freni sınırını veya belirlenmiş metrekare üst sınırını aşıyor (bu durumda bekleme süresi uygulanmaz)",mpbInfo:"Bekleme süresi yok: Kira, kira freni veya metrekare üst sınırını aşıyor (§ 22 Abs. 1 Satz 8 SGB II, § 35 Abs. 1 Satz 9 SGB XII). Normal kira üst sınırı geçerlidir.",pWahl:"seçim hakkı",vWahlH:"Seçim hakkı: SGB II yerine {v} mümkün",vWahlT:"En fazla 100 € eksik ({a}). § 6a Abs. 1a BKGG'ye göre SGB II başvurusu yapılmazsa yine de çocuk ek ödeneği hakkı vardır. § 12a SGB II'ye göre yönlendirme yapılamaz – karar ailenindir."},
+ar:{mpb:"الإيجار يتجاوز حد كبح الإيجارات أو حدًا أعلى محددًا للمتر المربع (عندها لا تنطبق فترة السماح)",mpbInfo:"لا فترة سماح: الإيجار يتجاوز حد كبح الإيجارات أو الحد الأعلى للمتر المربع (§ 22 Abs. 1 Satz 8 SGB II, § 35 Abs. 1 Satz 9 SGB XII). يُطبق الحد الأعلى العادي للإيجار.",pWahl:"حق الاختيار",vWahlH:"حق الاختيار: {v} ممكن بدلًا من SGB II",vWahlT:"ينقص 100 € على الأكثر ({a}). وفق § 6a Abs. 1a BKGG يوجد مع ذلك حق في إعانة الأطفال الإضافية إذا لم يُقدَّم طلب SGB II. الإحالة وفق § 12a SGB II غير جائزة – القرار للأسرة."},
+uk:{mpb:"Оренда перевищує гальмо орендної плати або встановлену межу за квадратний метр (тоді пільговий період не діє)",mpbInfo:"Пільгового періоду немає: оренда перевищує гальмо орендної плати або межу за кв. м (§ 22 Abs. 1 Satz 8 SGB II, § 35 Abs. 1 Satz 9 SGB XII). Діє звичайна межа оренди.",pWahl:"право вибору",vWahlH:"Право вибору: {v} замість SGB II можливо",vWahlT:"Бракує щонайбільше 100 € ({a}). За § 6a Abs. 1a BKGG право на доплату на дитину все одно є, якщо не подано заяву на SGB II. Направлення за § 12a SGB II не допускається – вирішує сім'я."},
+ru:{mpb:"Аренда превышает «тормоз аренды» или установленный предел за квадратный метр (тогда льготный период не действует)",mpbInfo:"Льготного периода нет: аренда превышает «тормоз аренды» или предел за кв. м (§ 22 Abs. 1 Satz 8 SGB II, § 35 Abs. 1 Satz 9 SGB XII). Действует обычный предел аренды.",pWahl:"право выбора",vWahlH:"Право выбора: {v} вместо SGB II возможно",vWahlT:"Не хватает не более 100 € ({a}). По § 6a Abs. 1a BKGG право на детскую надбавку всё равно есть, если не подано заявление на SGB II. Направление по § 12a SGB II недопустимо – решает семья."}
+};
+for(const l in NW) Object.assign(I[l], NW[l]);
 let L = "de";
 try{ const s = localStorage.getItem("vp-wob-lang"); if(s && I[s]) L = s; }catch(e){}
 function t(k, v){
@@ -1057,7 +1067,7 @@ const DEFAULTS = {
   rb:{single:563, partner:506, u25:451, k14:471, k6:390, k0:357},
   kindergeld:259,
   fb:{grund:100, g1:520, q1:0.2, g2:1000, q2:0.3, g3o:1200, g3m:1500, q3:0.1, pausch:30},
-  kdu:{p:[484.00,592.20,706.50,825.35,1026.00,1135.00,1242.00,1350.00,1458.00,1566.00,1675.00,1782.00], plus:108, karenz:1.5},
+  kdu:{p:[484.00,592.20,706.50,825.35,1026.00,1134.00,1242.00,1350.00,1458.00,1566.00,1675.00,1782.00], plus:108, karenz:1.5},
   wg:{hb:[511,619,737,858,982], hbPlus:119,
       klima:[19.20,24.80,29.60,34.40,39.20], klimaPlus:4.80,
       hke:[14.40,18.60,22.20,25.80,29.40], hkePlus:3.60,
@@ -1065,20 +1075,20 @@ const DEFAULTS = {
       a:[4.000e-2,3.000e-2,2.000e-2,1.000e-2,0,-1.000e-2,-2.000e-2,-3.000e-2,-4.000e-2,-6.000e-2,-9.000e-2,-1.200e-1],
       b:[4.797e-4,3.571e-4,2.917e-4,2.163e-4,1.907e-4,1.722e-4,1.592e-4,1.583e-4,1.376e-4,1.249e-4,1.141e-4,1.107e-4],
       c:[4.080e-5,3.040e-5,2.450e-5,1.760e-5,1.720e-5,1.660e-5,1.650e-5,1.650e-5,1.660e-5,1.660e-5,1.960e-5,2.210e-5],
-      wk:1230, aeFrei:1320, min:10, mMin:[54,67,79,92,103,103], yMin:[396,679,906,1132,1358,1585]},
-  kiz:{max:297, minPaar:900, minAE:600, quote:0.45, ae:[77,63,53,46,41], paar:[83,71,62,55,50]},
+      wk:1230, aeFrei:1320, min:10, mMin:[54,67,79,92,103,103,115,128,140,152,187,298], yMin:[396,679,906,1132,1358,1585,1811,2037,2264,2490,2717,2943]},
+  kiz:{max:297, minPaar:900, minAE:600, quote:0.45, ae:[77,63,53,46,40,36,33,30,27,25], paar:[83,71,62,55,50,45,41,38,35,33]},
   sv:{mindest:1318.33, kv:14.0, zb:2.9, pv:3.6, pvAb:0.25, pvKl:0.6, minijob:603, gez:18.36},
   mb:{schw:17, g:17, ww:[2.3,1.4,1.2,0.8]},
   grz:{base:100, q:0.3, capPct:50},
   xii:{erwQ:0.3, erwCapPct:50},
   wgx:{renteWk:102, rentePa:0.1, sb:1800, uhMax:3000},
   kids:{tempFactor:0.5, wgUmgMin:122, sswMog:12, sswMb:13},
-  verm:{iiK:40000, iiKPlus:15000, ii:15000, xiiAd:10000, xiiKid:500, wg:60000, wgPlus:30000, kiz:40000, kizPlus:15000}
+  verm:{ii:[5000,10000,12500,20000], xiiAd:10000, xiiKid:500, wg:60000, wgPlus:30000, kiz:40000, kizPlus:15000}
 };
 const clone = o => JSON.parse(JSON.stringify(o));
 function deepMerge(tg,s){ for(const k in s){ if(s[k] && typeof s[k]==="object" && !Array.isArray(s[k])) tg[k]=deepMerge(tg[k]||{},s[k]); else tg[k]=s[k]; } return tg; }
 let P = clone(DEFAULTS);
-try{ const s = localStorage.getItem("vp-wob-params6"); if(s) P = deepMerge(clone(DEFAULTS), JSON.parse(s)); }catch(e){}
+try{ const s = localStorage.getItem("vp-wob-params7"); if(s) P = deepMerge(clone(DEFAULTS), JSON.parse(s)); }catch(e){}
 const getP = (o,p)=>p.split(".").reduce((x,k)=>x==null?x:x[k],o);
 const setP = (o,p,v)=>{ const ks=p.split("."), last=ks.pop(); ks.reduce((x,k)=>x[k],o)[last]=v; };
 
@@ -1095,34 +1105,34 @@ const GROUPS = [
     ["xii.erwQ","SGB XII: Absetzbetrag Erwerb (Anteil vom Brutto)"],["xii.erwCapPct","SGB XII: Höchstbetrag % RBS 1"],["grz.base","Grundrente: Sockelfreibetrag €"],["grz.q","Grundrente: Anteil darüber"],["grz.capPct","Grundrente: Höchstbetrag % RBS 1"]]},
   {t:"Kinder bei den Unterkunftskosten (Wolfsburg)", src:"Angaben aus der Praxis Jobcenter Wolfsburg: ungeborenes Kind ab 12. SSW; Wechselmodell volle Anerkennung; temporärer Umgang halbe Differenz. Zusätzlich BSG zum Umgangsrecht (zusätzlicher Wohnraum, temporäre Bedarfsgemeinschaft); § 5 WoGG (Haushaltsmitglieder); Kopfteilprinzip; Mischhaushalt im WoGG.", warn:"Annahmen – bitte mit der KdU-Richtlinie Wolfsburg abgleichen.", items:[
     ["kids.tempFactor","Umgang temporär: Anteil der Differenz zur nächsten Haushaltsgröße"],["kids.wgUmgMin","Wohngeld: Umgangskind Haushaltsmitglied ab Übernachtungen/Jahr (sonst nur Wechselmodell)"],["kids.sswMog","Schwangerschaft: Kind zählt bei Mietobergrenze ab Woche"],["kids.sswMb","Schwangerschaft: Mehrbedarf ab Woche"]]},
-  {t:"Vermögensgrenzen", src:"§ 12 SGB II; § 90 SGB XII i. V. m. VO; WoGVwV 21.37; § 6a Abs. 3 BKGG", warn:"Vermögen des ganzen Haushalts gegen die Summe der Freibeträge (Freibeträge sind in der Gemeinschaft übertragbar).", items:[
-    ["verm.iiK","SGB II Karenzzeit: 1. Person €"],["verm.iiKPlus","SGB II Karenzzeit: je weitere Person €"],["verm.ii","SGB II nach Karenzzeit: je Person €"],["verm.xiiAd","SGB XII: je erwachsene Person €"],["verm.xiiKid","SGB XII: je Kind €"],["verm.wg","Wohngeld: 1. Person €"],["verm.wgPlus","Wohngeld: je weitere Person €"],["verm.kiz","Kinderzuschlag: 1. Person €"],["verm.kizPlus","Kinderzuschlag: je weitere Person €"]]},
-  {t:"Mietobergrenzen Wolfsburg (Grundmiete inkl. Betriebskosten)", src:"Jobcenter Wolfsburg, jobcenter-wolfsburg.de, abgerufen am 07.11.2026. Wohnfläche: 50/60/75/85/95 m², danach +10 m² je Person.", warn:"4 Personen: Auf der Website steht „825,35,70 €“ (Tippfehler). Eingetragen ist 825,35 € – bitte beim Jobcenter bestätigen.",
-    items:Array.from({length:12},(_,i)=>["kdu.p."+i,(i+1)+(i?" Personen":" Person")]).concat([["kdu.plus","je weitere Person ab 13 (Annahme)"],["kdu.karenz","Deckel Karenzzeit (Faktor, ab 01.07.2026)"]])},
+  {t:"Vermögensgrenzen", src:"§ 12 Abs. 2 SGB II (Freibetrag je Person nach Alter, übertragbar); § 90 SGB XII i. V. m. § 1 VO; § 6a Abs. 3 BKGG (40.000 € + 15.000 €); Wohngeld: WoGVwV 21.37.", warn:"Seit der Neuen Grundsicherung gibt es im SGB II keine Karenzzeit-Freibeträge mehr.", items:[
+    ["verm.ii.0","SGB II je Person bis 29 Jahre €"],["verm.ii.1","SGB II je Person ab 30 Jahre €"],["verm.ii.2","SGB II je Person ab 40 Jahre €"],["verm.ii.3","SGB II je Person ab 50 Jahre €"],["verm.xiiAd","SGB XII: je erwachsene Person €"],["verm.xiiKid","SGB XII: je Kind €"],["verm.wg","Wohngeld: 1. Person €"],["verm.wgPlus","Wohngeld: je weitere Person €"],["verm.kiz","Kinderzuschlag: 1. Person €"],["verm.kizPlus","Kinderzuschlag: je weitere Person €"]]},
+  {t:"Mietobergrenzen Wolfsburg (Grundmiete inkl. Betriebskosten)", src:"Jobcenter Wolfsburg, Seite „Mietgrenzen ab 01.04.2026“ (jobcenter-wolfsburg.de, abgerufen am 07.11.2026); je weitere Person ab 13: 108 €. Wohnfläche 50/60/75/85/95 m², danach +10 m².", warn:"Die datierte Tabelle nennt für 6 Personen 1.134,00 € und für 4 Personen 825,35 €; eine weitere Seite der Website nennt 1.135,00 € bzw. „825,35,70 €“.",
+    items:Array.from({length:12},(_,i)=>["kdu.p."+i,(i+1)+(i?" Personen":" Person")]).concat([["kdu.plus","je weitere Person ab 13"],["kdu.karenz","Deckel Karenzzeit (Faktor, ab 01.07.2026)"]])},
   {t:"Wohngeld – Höchstbeträge Mietstufe IV", src:"Anlage 1 WoGG ab 01.01.2025; Wolfsburg = Mietstufe IV.", items:PERS.map((p,i)=>["wg.hb."+i,p]).concat([["wg.hbPlus","je weitere Person"]])},
   {t:"Wohngeld – Klima- und Heizkostenkomponente", src:"§ 12 WoGG (Richtflächen 48/62/74/86/98 m², +12 m²).", items:
     PERS.map((p,i)=>["wg.klima."+i,"Klima "+p]).concat([["wg.klimaPlus","Klima je weitere"]],PERS.map((p,i)=>["wg.hke."+i,"Heizkostenentlastung "+p]),[["wg.hkePlus","Entlastung je weitere"]],PERS.map((p,i)=>["wg.hkk."+i,"Heizkostenkomponente "+p]),[["wg.hkkPlus","Komponente je weitere"]])},
   {t:"Wohngeld – Einkommen", src:"§§ 14–17a WoGG, § 9a EStG", warn:"Reform ab 2027 im Gesetzgebungsverfahren (u. a. Freibeträge, Heizkostenkomponente, Mindestbetrag 15 €) – noch nicht berücksichtigt.", items:[
     ["wg.wk","Werbungskosten-Pauschbetrag Arbeit €/Jahr"],["wgx.renteWk","Werbungskosten-Pauschbetrag Rente €/Jahr"],["wgx.rentePa","Pauschalabzug Rente (KV/PV)"],["wg.aeFrei","Freibetrag Alleinerziehende €/Jahr (einmal je Haushalt, mind. 1 Kind unter 18)"],["wgx.sb","Freibetrag GdB 100 / Pflege €/Jahr"],["wgx.uhMax","Abzug gezahlter Unterhalt höchstens €/Jahr (§ 18 WoGG)"],["wg.min","Mindestbetrag Wohngeld (§ 21 WoGG) €"]]},
   {t:"Wohngeldformel – Werte a, b, c", src:"Anlage 2 WoGG ab 01.01.2025. 1,15 · (M − (a + b·M + c·Y) · Y)", abc:true},
-  {t:"Wohngeld – Mindestwerte für M und Y", src:"Anlage 3 Nr. 1 WoGG ab 01.01.2025 (Werte unterhalb werden durch diese ersetzt); ab 6 Personen gleicher Wert.", items:
-    [1,2,3,4,5,6].map((k,i)=>["wg.mMin."+i,"M mindestens, "+k+(k===6?"+":"")+" Pers. €"]).concat([1,2,3,4,5,6].map((k,i)=>["wg.yMin."+i,"Y mindestens, "+k+(k===6?"+":"")+" Pers. €"]))},
+  {t:"Wohngeld – Mindestwerte für M und Y", src:"Anlage 3 Nr. 1 WoGG ab 01.01.2025 (Werte unterhalb werden durch diese ersetzt).", items:
+    [1,2,3,4,5,6,7,8,9,10,11,12].map((k,i)=>["wg.mMin."+i,"M mindestens, "+k+" Pers. €"]).concat([1,2,3,4,5,6,7,8,9,10,11,12].map((k,i)=>["wg.yMin."+i,"Y mindestens, "+k+" Pers. €"]))},
   {t:"Kranken-/Pflegeversicherung und Rundfunkbeitrag 2026", src:"§ 240 Abs. 4 SGB V (1/90 der Bezugsgröße 3.955 € × 30), durchschnittlicher Zusatzbeitrag 2026, § 55 SGB XI, RBStV.", warn:"Zusatzbeitrag je Krankenkasse unterschiedlich.", items:[
     ["sv.mindest","Mindestbemessungsgrundlage €/Monat"],["sv.kv","KV-Satz ermäßigt (ohne Krankengeld) %"],["sv.zb","Zusatzbeitrag Durchschnitt %"],["sv.pv","PV-Satz %"],["sv.pvAb","PV-Abschlag je Kind ab 2. Kind %-Punkte"],["sv.pvKl","PV-Zuschlag Kinderlose %-Punkte"],["sv.minijob","Minijob-Grenze €/Monat"],["sv.gez","Rundfunkbeitrag €/Monat"]]},
-  {t:"Kinderzuschlag", src:"§ 6a BKGG; Merkblatt Kinderzuschlag (BA).", warn:"Wohnkostenanteile laut Merkblatt Kinderzuschlag und DA-KiZ (Stand 20.02.2026): 77/63/53 % und 83/71 % bestätigt; Werte ab 4 Kindern (Alleinerziehende) bzw. 3 Kindern (Paare) aus Sekundärquellen, 5+ geschätzt.",
+  {t:"Kinderzuschlag", src:"§ 6a BKGG; Merkblatt Kinderzuschlag (BA).", warn:"Wohnanteile laut DA-KiZ Stand 20.02.2026, C.3.1.2 (12. Existenzminimumbericht, § 6a Abs. 5 BKGG).",
     items:[["kiz.max","Höchstbetrag je Kind €"],["kiz.minPaar","Mindesteinkommen Paar € brutto"],["kiz.minAE","Mindesteinkommen alleinerziehend € brutto"],["kiz.quote","Minderungsquote Einkommen"]]
-      .concat([1,2,3,4,5].map((k,i)=>["kiz.ae."+i,"Wohnkostenanteil alleinerz., "+k+(k===5?"+":"")+" Kind(er) %"]))
-      .concat([1,2,3,4,5].map((k,i)=>["kiz.paar."+i,"Wohnkostenanteil Paar, "+k+(k===5?"+":"")+" Kind(er) %"]))}
+      .concat([1,2,3,4,5,6,7,8,9,10].map((k,i)=>["kiz.ae."+i,"Wohnanteil alleinerz., "+k+" Kind(er) %"]))
+      .concat([1,2,3,4,5,6,7,8,9,10].map((k,i)=>["kiz.paar."+i,"Wohnanteil Paar, "+k+" Kind(er) %"]))}
 ];
 
 /* ================= Haushalt ================= */
 const AD0 = {gj:1990, ef:"ja", ssw:0, avB:0, avN:0, uhP:0, merkG:false, sb:false, kv:"auto", jb:0, jn:0, rb:0, rn:0, grz:false, so:0};
 const SON0 = {azubi:false, eu:false, asyl:false, stat:false};
 const EX = {
-  fam:{mode:"fam", typ:"paar", verh:false, ad:[Object.assign({},AD0,{gj:1988,jb:1700,jn:1330}),Object.assign({},AD0,{gj:1990})], kids:[{age:4,uh:0},{age:9,uh:0}], son:clone(SON0), pa:"0.3", stabil:true, mi:780, hz:110, ww:false, kdz:"normal", hzG:null, kzStart:"", kzPrev:"", kzGap:0, kzUsed:null, umgCnt:0, umgAge:8, umgNights:0, umgArt:"temp", ext25:0, mog:null, verm:2000, step:1},
-  wg:{mode:"wg", typ:"solo", verh:false, ad:[Object.assign({},AD0,{gj:1957,ef:"ar",rb:1250,rn:1096,grz:true}),Object.assign({},AD0)], kids:[], son:clone(SON0), pa:"0.3", stabil:true, mi:520, hz:70, ww:false, kdz:"normal", hzG:null, kzStart:"", kzPrev:"", kzGap:0, kzUsed:null, umgCnt:0, umgAge:8, umgNights:0, umgArt:"temp", ext25:0, mog:null, verm:5000, step:1}
+  fam:{mode:"fam", typ:"paar", verh:false, ad:[Object.assign({},AD0,{gj:1988,jb:1700,jn:1330}),Object.assign({},AD0,{gj:1990})], kids:[{age:4,uh:0},{age:9,uh:0}], son:clone(SON0), pa:"0.3", stabil:true, mi:780, hz:110, ww:false, kdz:"normal", hzG:null, kzStart:"", kzPrev:"", kzGap:0, kzUsed:null, mpb:false, umgCnt:0, umgAge:8, umgNights:0, umgArt:"temp", ext25:0, mog:null, verm:2000, step:1},
+  wg:{mode:"wg", typ:"solo", verh:false, ad:[Object.assign({},AD0,{gj:1957,ef:"ar",rb:1250,rn:1096,grz:true}),Object.assign({},AD0)], kids:[], son:clone(SON0), pa:"0.3", stabil:true, mi:520, hz:70, ww:false, kdz:"normal", hzG:null, kzStart:"", kzPrev:"", kzGap:0, kzUsed:null, mpb:false, umgCnt:0, umgAge:8, umgNights:0, umgArt:"temp", ext25:0, mog:null, verm:5000, step:1}
 };
-const emptyFor = mode => ({mode, typ: mode==="fam"?"paar":"solo", verh:false, ad:[Object.assign({},AD0,{gj:0}),Object.assign({},AD0,{gj:0})], kids:[], son:clone(SON0), pa:"0.3", stabil:true, mi:0, hz:0, ww:false, kdz:"normal", hzG:null, kzStart:"", kzPrev:"", kzGap:0, kzUsed:null, umgCnt:0, umgAge:8, umgNights:0, umgArt:"temp", ext25:0, mog:null, verm:0, step:1});
+const emptyFor = mode => ({mode, typ: mode==="fam"?"paar":"solo", verh:false, ad:[Object.assign({},AD0,{gj:0}),Object.assign({},AD0,{gj:0})], kids:[], son:clone(SON0), pa:"0.3", stabil:true, mi:0, hz:0, ww:false, kdz:"normal", hzG:null, kzStart:"", kzPrev:"", kzGap:0, kzUsed:null, mpb:false, umgCnt:0, umgAge:8, umgNights:0, umgArt:"temp", ext25:0, mog:null, verm:0, step:1});
 let S = clone(EX.fam);
 try{ const s = localStorage.getItem("vp-wob-input4"); if(s){ const o=JSON.parse(s); S = Object.assign(clone(EX[o.mode==="wg"?"wg":"fam"]), o); } }catch(e){}
 S.ad.forEach(a=>{ if(a.ssw==null) a.ssw = a.schw ? 13 : 0; ["avB","avN","uhP"].forEach(k=>{ if(a[k]==null) a[k]=0; }); });
@@ -1147,7 +1157,7 @@ function person(a){
 }
 /* Kinderzuschlag wird immer geprüft, wenn Kinder unter 25 eingetragen sind – auch im Modus „Nur Wohngeld“ */
 function famEff(H){ return H.mode==="fam" || H.kids.some(k=>k.age>=0 && k.age<25); }
-function rbKind(age){ if(age>=18) return P.rb.u25; if(age>=14) return P.rb.k14; if(age>=6) return P.rb.k6; return P.rb.k0; }
+function rbKind(age){ if(age>=18) return SYS==="XII" ? P.rb.single : P.rb.u25; if(age>=14) return P.rb.k14; if(age>=6) return P.rb.k6; return P.rb.k0; }
 function wwRate(age){ const r=P.mb.ww; if(age>=18) return r[0]; if(age>=14) return r[1]; if(age>=6) return r[2]; return r[3]; }
 function byN(arr, plus, n){ const i = Math.min(n,arr.length)-1; return arr[i] + Math.max(0,n-arr.length)*plus; }
 function freibetrag(brutto, mitKind){
@@ -1181,7 +1191,7 @@ function grund(H){
   else if(pers.some(p=>p.isEF)) regime = H.son.eu ? "none" : "II";
   else if(pers.every((p,i)=>p.rag || ads[i].ef==="dau")) regime = "XII4";
   else regime = "XII3";
-  const sys = regime.indexOf("XII")===0 ? "XII" : "II";
+  const sys = regime.indexOf("XII")===0 ? "XII" : "II"; SYS = sys;
   const mixed = regime==="II" && pers.some((p,i)=>!p.isEF && (p.rag || ads[i].ef==="dau"));
   const kid15 = !pers.some(p=>p.isEF) && kids.some(k=>k.age>=15) && regime!=="asyl";
   const rbA = H.typ==="paar" ? P.rb.partner : P.rb.single;
@@ -1193,8 +1203,9 @@ function grund(H){
     mbPct = m.length ? Math.max((u7>=1||u16>=2)?36:0, Math.min(60,12*m.length)) : 0; }
   const mbAE = r2(P.rb.single*mbPct/100); if(mbAE>0) mbList.push([t("mbAE",{p:mbPct}), mbAE]);
   ads.forEach((a,i)=>{
-    if((a.ssw||0)>=P.kids.sswMb) mbList.push([t("mbS",{n:i+1}), r2(rbA*P.mb.schw/100)]);
-    if(a.merkG && !pers[i].isEF) mbList.push([t("mbG",{n:i+1}), r2(rbA*P.mb.g/100)]);
+    let cap = rbA - (i===0 ? mbAE : 0);   /* § 21 Abs. 8 SGB II, § 30 Abs. 6 SGB XII */
+    if((a.ssw||0)>=P.kids.sswMb){ const v=Math.max(0,Math.min(r2(rbA*P.mb.schw/100),cap)); cap-=v; if(v>0) mbList.push([t("mbS",{n:i+1}), v]); }
+    if(a.merkG && !pers[i].isEF){ const v=Math.max(0,Math.min(r2(rbA*P.mb.g/100), sys==="XII"?cap:rbA)); if(v>0) mbList.push([t("mbG",{n:i+1}), v]); }
   });
   const wwAd = H.ww ? r2(rbA*P.mb.ww[0]/100)*nAd : 0;
   const wwKids = kids.map(k=>H.ww ? r2(rbKind(k.age)*wwRate(k.age)/100) : 0);
@@ -1204,10 +1215,10 @@ function grund(H){
   const rbEltern = rbA*nAd;
   const mogBase = byN(P.kdu.p,P.kdu.plus,nBase), mogFull = byN(P.kdu.p,P.kdu.plus,nKdU);
   const grenzeTab = !umgOn ? mogBase : wechsel ? mogFull : r2(mogBase + (mogFull-mogBase)*P.kids.tempFactor), grenze = (H.mog!=null && H.mog>0) ? H.mog : grenzeTab;
-  /* Unterkunft: Karenzzeit seit 01.07.2026 höchstens 150 % der Grenze (§ 22 Abs. 1 SGB II); SGB XII ohne Deckel.
+  /* Unterkunft: Karenzzeit höchstens 150 % der Grenze (§ 22 Abs. 1 Satz 6 SGB II, § 35 Abs. 1 Satz 7 SGB XII); keine Karenzzeit bei Mietpreisbremse (Satz 8/9).
      Heizkosten sind in der Karenzzeit nicht geschützt; während laufender Kostensenkung tatsächliche Kosten (max. 6 Monate). */
-  const kar = H.kdz==="karenz", senk = H.kdz==="senk";
-  const mieteCap = senk ? Infinity : kar ? (sys==="II" ? grenze*P.kdu.karenz : Infinity) : grenze;
+  const kar = H.kdz==="karenz" && !H.mpb, senk = H.kdz==="senk";
+  const mieteCap = senk ? Infinity : kar ? grenze*P.kdu.karenz : grenze;
   const mieteAnerk = Math.min(H.mi, mieteCap);
   const heatAnerk = (H.hzG>0 && !senk) ? Math.min(H.hz, H.hzG) : H.hz;
   const kduTotal = mieteAnerk + heatAnerk, kdu = kduTotal*shareBG, kopf = kdu/n;
@@ -1233,7 +1244,7 @@ function sgb(G, x){
   const wgShare = (x.wg||0)/G.n; let kgSurplus=0, childGap=0;
   G.kids.forEach((k,i)=>{
     const need = rbKind(k.age)+G.kopf+G.wwKids[i], own = k.uh+(x.kiz?x.kiz[i]:0)+(x.kwg?x.kwg[i]:0)+wgShare;
-    if(own>=need){ kgSurplus+=P.kindergeld; }
+    if(own>=need || (G.sys==="XII" && k.age>=18)){ kgSurplus+=P.kindergeld; if(own<need) childGap+=need-own; return; }
     else { const rem=need-own, used=Math.min(P.kindergeld,rem); kgSurplus+=P.kindergeld-used; childGap+=rem-used; }
   });
   const pGap = (G.rbEltern+G.mbAdults+G.umgNeed+G.kopf*G.nAd+(x.kv||0)) - (G.elternEink+kgSurplus+wgShare*G.nAd);
@@ -1241,11 +1252,13 @@ function sgb(G, x){
 }
 function vermLimits(G,H){
   const v=P.verm, n=G.n;
-  const sgbL = G.sys==="XII" ? v.xiiAd*G.nAd + v.xiiKid*G.kids.length : (H.kdz==="karenz" ? v.iiK+v.iiKPlus*(n-1) : v.ii*n);
+  /* § 12 Abs. 2 SGB II: bis Vollendung 30: 5.000 €, ab 31. Lebensjahr 10.000 €, ab 41. 12.500 €, ab 51. 20.000 € je Person (übertragbar) */
+  const fbAge = age => age==null ? v.ii[1] : age>=50 ? v.ii[3] : age>=40 ? v.ii[2] : age>=30 ? v.ii[1] : v.ii[0];
+  const sgbL = G.sys==="XII" ? v.xiiAd*G.nAd + v.xiiKid*G.kids.length : G.pers.reduce((s,p)=>s+fbAge(p.age),0) + G.kids.reduce((s,k)=>s+fbAge(k.age),0);
   return {sgb:sgbL, wg:v.wg+v.wgPlus*(n-1), kiz:v.kiz+v.kizPlus*(n-1)};
 }
 function wohngeld(G,H,VL){
-  const umgWg = (G.umgCnt>0 && (G.wechsel || (H.umgNights||0)>=P.kids.wgUmgMin)) ? G.umgCnt : 0;
+  const umgWg = G.umgCnt>0 ? ((G.wechsel || (H.umgNights||0)>=P.kids.wgUmgMin) ? G.umgCnt : (G.umgCnt>=2 && (H.umgNights||0)>0 ? 1 : 0)) : 0;
   const n=G.n+umgWg, nT=n+G.ext;   /* Höchstbetrag nach allen Haushaltsmitgliedern, Miete anteilig (Mischhaushalt) */
   const hb=byN(P.wg.hb,P.wg.hbPlus,nT), kl=byN(P.wg.klima,P.wg.klimaPlus,nT), hke=byN(P.wg.hke,P.wg.hkePlus,nT), hkk=byN(P.wg.hkk,P.wg.hkkPlus,nT);
   const cap=hb+kl, mRent=Math.min(H.mi,cap), share=n/nT, M=(mRent+hke+hkk)*share, pa=num(H.pa);
@@ -1261,11 +1274,12 @@ function wohngeld(G,H,VL){
   G.kids.forEach((k,i)=>{ if(k.uh>0){ const j=k.uh*12; jahr+=j; rows.push([t("maintY",{n:i+1}),j,0,j]); } });
   if(G.ae && G.kids.some(k=>k.age<18)){ const f=P.wg.aeFrei; frei+=f; rows.push([t("aeY"),"","",-f]); }   /* § 17 Nr. 3 WoGG: einmal je Haushalt */
   const Yroh = Math.max(0,jahr-frei)/12, Mroh = M;
-  const mi6=Math.min(n,6)-1, Ymin=P.wg.yMin[mi6], Mmin=P.wg.mMin[mi6];   /* Anlage 3 Nr. 1 WoGG */
+  const mi6=Math.min(n,12)-1, Ymin=P.wg.yMin[mi6], Mmin=P.wg.mMin[mi6];   /* Anlage 3 Nr. 1 WoGG */
   const Y = Math.max(Yroh, Ymin), Mx = Math.max(Mroh, Mmin);
   const idx=Math.min(n,12)-1, a=P.wg.a[idx], b=P.wg.b[idx], c=P.wg.c[idx];
   const raw = 1.15*(Mx-(a+b*Mx+c*Y)*Y);
   let wg = Math.round(Math.max(0,Math.min(raw,Mx)));
+  if(n>12) wg = Math.min(wg + 65*(n-12), Mx);   /* § 19 Abs. 3 WoGG */
   const unterMin = wg>0 && wg<P.wg.min; if(wg<P.wg.min) wg=0;
   const vermEx = H.verm > VL.wg, asyl = G.regime==="asyl";
   if(vermEx || asyl) wg = 0;
@@ -1305,7 +1319,7 @@ function kinderWG(G,H,VL){
   const mAll=Math.min(H.mi,hb+kl)+hke+hkk;
   let set=G.kids.map((k,i)=>i).filter(i=>G.kids[i].uh>0);
   for(let it=0; it<6 && set.length; it++){
-    const k=set.length, mi6=Math.min(k,6)-1;
+    const k=set.length, mi6=Math.min(k,12)-1;
     const M=Math.max(mAll*k/nT, P.wg.mMin[mi6]), Y=Math.max(set.reduce((s,i)=>s+G.kids[i].uh,0), P.wg.yMin[mi6]);   /* Anlage 3 WoGG */
     const idx=Math.min(k,12)-1, a=P.wg.a[idx], b=P.wg.b[idx], c=P.wg.c[idx];
     let wg=Math.round(Math.max(0,Math.min(1.15*(M-(a+b*M+c*Y)*Y),M))); if(wg<P.wg.min) wg=0;
@@ -1387,7 +1401,9 @@ function berechne(H){
   const V = xs.map((x,i)=>{
     if(i===0) return {gap:s0.gap, st:s0.gap>0?"gap":"ok", zus:0};
     const g=sgb(G,Object.assign({kv:KV.total},x)).gap, gn=sgb(G,x).gap;
-    const st = !has[i] ? "na" : g===0 ? "ok" : (gn===0 ? "zus" : "gap");
+    let st = !has[i] ? "na" : g===0 ? "ok" : (gn===0 ? "zus" : "gap");
+    /* § 6a Abs. 1a BKGG: Kinderzuschlag trotz Hilfebedürftigkeit, wenn höchstens 100 € fehlen und Erwerbsabsetzbeträge (§ 11b Abs. 2-3) mind. 100 € */
+    if(st==="gap" && (i===2||i===3) && K.kiz>0 && g<=100 && G.inc.reduce((s2,x)=>s2+x.fbII,0)>=100) st="wahl";
     return {gap:g, gapNoKv:gn, st, zus: st==="zus" ? g : 0};
   });
   const sgbAvail = (G.regime==="II"||G.regime==="XII3"||G.regime==="XII4") && H.verm<=VL.sgb;
@@ -1488,6 +1504,7 @@ function fillForm(){
   $("pa").value=S.pa; $("kdz").value=S.kdz||"normal"; $("hzG").value=S.hzG||"";
   ["umgCnt","umgAge","umgNights","ext25"].forEach(id=>{ $(id).value = S[id]||""; }); $("umgArt").value=S.umgArt||"temp";
   if(S.umgCnt>0 || S.ext25>0) $("mehr").open = true;
+  $("mpb").checked=!!S.mpb;
   $("kzStart").value=S.kzStart||""; $("kzPrev").value=S.kzPrev||""; $("kzGap").value=S.kzGap||""; $("kzUsed").value=S.kzUsed==null?"":S.kzUsed; $("verh").checked=!!S.verh; $("ww").checked=!!S.ww; $("stabil").checked=S.stabil!==false;
   Object.keys(SON0).forEach(k=>{ $("s_"+k).checked=!!S.son[k]; });
   if(Object.keys(SON0).some(k=>S.son[k])) $("sonder").open = true;
@@ -1497,6 +1514,7 @@ function bind(){
   ["mi","hz","verm"].forEach(id=>$(id).addEventListener("input",()=>{ S[id]=Math.max(0,num($(id).value)); update(); }));
   $("pa").addEventListener("change",()=>{ S.pa=$("pa").value; update(); });
   $("kdz").addEventListener("change",()=>{ S.kdz=$("kdz").value; update(); });
+  $("mpb").addEventListener("change",()=>{ S.mpb=$("mpb").checked; update(); });
   ["umgCnt","umgAge","umgNights","ext25"].forEach(id=>$(id).addEventListener("input",()=>{ S[id]=Math.max(0,Math.floor(num($(id).value))); update(); }));
   $("umgArt").addEventListener("change",()=>{ S.umgArt=$("umgArt").value; update(); });
   $("kzStart").addEventListener("input",()=>{ S.kzStart=$("kzStart").value; kzAutoSet(); update(); });
@@ -1565,7 +1583,9 @@ function update(){
   else if(ok(3)){cls="ok";h=t("vBothH");tx=t("vBothT");best=3;}
   else {
     const z=idx.filter(i=>i>0 && V[i].st==="zus").sort((a,b)=>V[a].zus-V[b].zus)[0];
+    const wv=idx.filter(i=>V[i].st==="wahl").sort((a,b)=>V[a].gap-V[b].gap)[0];
     if(z){cls="ok";h=t("vZusH",{v:t("v"+z)});tx=t("vZusT",{a:eur(KV.total),b:eur(V[z].zus)});best=z;}
+    else if(wv){cls="warn";h=t("vWahlH",{v:t("v"+wv)});tx=t("vWahlT",{a:eur(V[wv].gap)});best=wv;}
     else {cls="bad";h=t("vSgbH");tx=famEff(S) ? t("vSgbT",{a:eur(V[3].gap)}) : t("vSgbWgT",{a:eur(V[1].gap)});}
   }
   if(best>0 && G.sys==="II" && !S.stabil){ cls="warn"; tx=t("vNotStableT",{v:t("v"+best)}); h=t("vNotStableH"); }
@@ -1576,6 +1596,7 @@ function update(){
   /* Hinweise */
   const chips=[['sys',t("regimeL",{r:t("rg_"+G.regime)})]];
   if(G.mixed) chips.push(['w',t("warnMixed")]);
+  if(S.mpb && S.kdz==="karenz") chips.push(['w',t("mpbInfo")]);
   if(G.kid15) chips.push(['w',t("warnKid15")]);
   if(G.umgCnt>0) chips.push(['w', G.wechsel ? t("umgInfoW",{b:G.nKdU,c:eur(G.grenzeTab),d:Math.round(G.umgDays)}) : t("umgInfoT",{a:G.nBase,e:eur(G.mogBase),b:G.nKdU,f:eur(G.mogFull),c:eur(G.grenzeTab),d:Math.round(G.umgDays)})]);
   if(W.umgWg>0) chips.push(['w',t("umgWg",{x:P.kids.wgUmgMin})]);
@@ -1610,7 +1631,7 @@ function update(){
     else { own=R.need+KV.total-s0kv.gap; ben=Math.max(0,s0kv.gap-v.gap); zus=v.zus; gap=v.gap-zus; }
     let pill;
     if(i===0) pill = v.gap>0?'<span class="pill bad">'+esc(t("pNeedy"))+'</span>':'<span class="pill ok">'+esc(t("pNot"))+'</span>';
-    else pill = {ok:'<span class="pill ok">'+esc(t("pOk"))+'</span>',zus:'<span class="pill zus">'+esc(t("pZus"))+'</span>',gap:'<span class="pill bad">'+esc(t("pGap"))+'</span>',na:'<span class="pill na">'+esc(t("pNa"))+'</span>'}[v.st];
+    else pill = {ok:'<span class="pill ok">'+esc(t("pOk"))+'</span>',zus:'<span class="pill zus">'+esc(t("pZus"))+'</span>',wahl:'<span class="pill zus">'+esc(t("pWahl"))+'</span>',gap:'<span class="pill bad">'+esc(t("pGap"))+'</span>',na:'<span class="pill na">'+esc(t("pNa"))+'</span>'}[v.st];
     const parts=[];
     if(i===0 && KW.total>0) parts.push(t("kwgAmt",{a:eur(KW.total)}));
     if(i===1) parts.push(W.wg>0?eur(W.wg):(W.vermEx?t("vWgVerm",{c:eur(VL.wg)}):W.unterMin?t("rBelow"):t("rNoWg")));
@@ -1702,11 +1723,11 @@ function renderParams(){
   box.querySelectorAll("input[data-p]").forEach(inp=>inp.addEventListener("change",()=>{
     const p=inp.dataset.p, v=num(inp.value); setP(P,p,v);
     inp.parentElement.classList.toggle("ch", v!==getP(DEFAULTS,p));
-    try{ localStorage.setItem("vp-wob-params6",JSON.stringify(P)); }catch(e){}
+    try{ localStorage.setItem("vp-wob-params7",JSON.stringify(P)); }catch(e){}
     update();
   }));
 }
-$("resetP").addEventListener("click",()=>{ P=clone(DEFAULTS); try{ localStorage.removeItem("vp-wob-params6"); }catch(e){} renderParams(); update(); });
+$("resetP").addEventListener("click",()=>{ P=clone(DEFAULTS); try{ localStorage.removeItem("vp-wob-params7"); }catch(e){} renderParams(); update(); });
 $("copyP").addEventListener("click",()=>{
   const txt=JSON.stringify(P,null,2);
   const fb=()=>{ const ta=$("copyBox"); ta.hidden=false; ta.value=txt; ta.select(); $("copyMsg").textContent=t("selectCopy"); };

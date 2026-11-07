@@ -12,4 +12,4 @@ Was geprüft wird: Erwerbsfähigkeit und Regelaltersgrenze (zuständig ist SGB I
 - `vorrangpruefung.html`: Quelldatei der Artifact-Seite.
 
 Sprachen: Deutsch, English, Türkçe, العربية, Українська, Русский. Alle Rechenwerte lassen sich in der Seite unter „Parameter und Quellen“ ändern.
-Mietobergrenzen laut Jobcenter Wolfsburg (abgerufen 07.11.2026; Wert für 4 Personen wegen Tippfehler auf der Website bitte bestätigen). Wohnkostenanteile Kinderzuschlag laut Merkblatt/DA-KiZ bestätigt (ab 4 bzw. 3 Kindern Sekundärquellen).
+Alle Rechenregeln sind gegen die Gesetzestexte (Stand 07.11.2026), die DA-KiZ und die Mietgrenzen des Jobcenters Wolfsburg ab 01.04.2026 geprüft – siehe PRUEFPROTOKOLL.md.
