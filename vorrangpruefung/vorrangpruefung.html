@@ -145,6 +145,7 @@ label.f{display:flex;flex-direction:column;gap:6px;font-size:.88rem;font-weight:
 .brow small{display:block;color:var(--muted);font-size:.78rem}
 .brow.diff{border-top:1px dashed var(--line);padding-top:8px}
 .brow.diff b.pos{color:var(--ok)} .brow.diff b.neg{color:var(--bad)}
+#mogWarn{background:var(--surface);border-inline-start-color:var(--accent)}
 .warnchip{font-size:.82rem;background:var(--gold-soft);border-inline-start:4px solid var(--gold);padding:7px 10px;border-radius:8px;margin:0}
 .kvsel{font-size:.88rem;padding:9px 10px}
 
@@ -375,7 +376,7 @@ rw1:"1 · Bedarf und Einkommen nach SGB II",colNeed:"Bedarf",colEur:"€ / Monat
 rw2:"2 · {wg} (Mietstufe IV, {n} Personen)",colM:"Miete M",hbR:"Höchstbetrag {a} + Klimakomponente {b}",capR:"Miete bis zum Höchstbetrag",hkeR:"+ Heizkostenentlastung",hkkR:"+ Heizkostenkomponente",colY:"Jahreseinkommen",colGross:"brutto / Jahr",colWk:"Werbungskosten",colAfter:"nach Abzügen",earnY:"Erwerb Person {n}",otherY:"Weitere Einnahmen",maintY:"Unterhalt Kind {n}",aeY:"− Freibetrag Alleinerziehende",yR:"Y pro Monat (Abzug {p} bei Erwerb)",
 rw3:"3 · {kiz}",colStep:"Schritt",kGross:"Brutto Eltern (Minimum {a})",kNeed:"Bedarf Eltern inkl. {p} % der Wohnkosten",kInc:"Einkommen Eltern bereinigt",kEx:"Einkommen über Bedarf",kBase:"Höchstbetrag abzüglich 45 % Kindeseinkommen",kMinus:"− 45 % vom Einkommen über Bedarf",kTot:"{kiz} gesamt",
 rw4:"4 · Prüfung mit vorrangigen Leistungen",colVar:"Variante",colGap:"Lücke",rw4h:"{kiz} zählt im SGB II als Einkommen des Kindes, {wg} wird nach Köpfen verteilt. Die beiden Leistungen rechnen sich gegenseitig nicht an.",
-lim:["Vorprüfung, kein Bescheid. Verbindlich entscheiden Wohngeldstelle und Familienkasse.","Gerechnet wird mit gleichbleibendem Einkommen. § 12a SGB II verlangt mindestens 3 Monate.","Die Mietgrenzen für Wolfsburg haben Stand 2022 und müssen aktualisiert werden. Die Wohngeldwerte gelten bis 31.12.2026.","Vereinfacht: nur Mehrbedarf für Alleinerziehende, kein Kinderwohngeld, keine Bildung und Teilhabe; sonstiges Einkommen mindert den Kinderzuschlag hier zu 45 % statt 100 %.","Alle Daten bleiben im Browser. Es wird nichts übertragen."],
+lim:["Vorprüfung, kein Bescheid. Verbindlich entscheiden Wohngeldstelle und Familienkasse.","Gerechnet wird mit gleichbleibendem Einkommen. § 12a SGB II verlangt mindestens 3 Monate.","Die Mietobergrenzen stammen von der Website des Jobcenters Wolfsburg (abgerufen am 07.11.2026). Die Wohngeldwerte gelten bis 31.12.2026.","Vereinfacht: nur Mehrbedarf für Alleinerziehende, kein Kinderwohngeld, keine Bildung und Teilhabe; sonstiges Einkommen mindert den Kinderzuschlag hier zu 45 % statt 100 %.","Alle Daten bleiben im Browser. Es wird nichts übertragen."],
 footer:"Prototyp für einen Verbesserungsvorschlag. Kein offizielles Angebot der Bundesagentur für Arbeit oder der Stadt Wolfsburg."},
 
 en:{wg:"Housing benefit",kiz:"Child supplement",tag:"Prototype · Idea management",title:"Priority Check Wolfsburg",
@@ -405,7 +406,7 @@ rw1:"1 · Need and income under SGB II",colNeed:"Need",colEur:"€ / month",rbP:
 rw2:"2 · {wg} (rent level IV, {n} persons)",colM:"Rent M",hbR:"Maximum {a} + climate component {b}",capR:"Rent up to the maximum",hkeR:"+ heating relief",hkkR:"+ heating component",colY:"Annual income",colGross:"gross / year",colWk:"Work expenses",colAfter:"after deductions",earnY:"Earnings person {n}",otherY:"Other income",maintY:"Maintenance child {n}",aeY:"− single-parent allowance",yR:"Y per month (deduction {p} on earnings)",
 rw3:"3 · {kiz}",colStep:"Step",kGross:"Parents' gross (minimum {a})",kNeed:"Parents' need incl. {p} % of housing costs",kInc:"Parents' adjusted income",kEx:"Income above need",kBase:"Maximum minus 45 % of child income",kMinus:"− 45 % of income above need",kTot:"{kiz} total",
 rw4:"4 · Check with priority benefits",colVar:"Option",colGap:"Shortfall",rw4h:"In SGB II, {kiz} counts as the child's income and {wg} is split per head. The two benefits do not count against each other.",
-lim:["Pre-check only, not a decision. The housing benefit office and the Familienkasse decide.","Income is assumed to stay the same. § 12a SGB II requires at least 3 months.","Wolfsburg rent limits are from 2022 and must be updated. Housing benefit values apply until 31 Dec 2026.","Simplified: only the single-parent additional need, no Kinderwohngeld, no education and participation benefits; other income reduces the child supplement by 45 % here instead of 100 %.","All data stays in the browser. Nothing is sent."],
+lim:["Pre-check only, not a decision. The housing benefit office and the Familienkasse decide.","Income is assumed to stay the same. § 12a SGB II requires at least 3 months.","Rent limits are taken from the Jobcenter Wolfsburg website (retrieved 07 Nov 2026). Housing benefit values apply until 31 Dec 2026.","Simplified: only the single-parent additional need, no Kinderwohngeld, no education and participation benefits; other income reduces the child supplement by 45 % here instead of 100 %.","All data stays in the browser. Nothing is sent."],
 footer:"Prototype for an improvement proposal. Not an official service of the Federal Employment Agency or the City of Wolfsburg."},
 
 tr:{wg:"Konut yardımı",kiz:"Çocuk ek ödeneği",tag:"Prototip · Fikir yönetimi",title:"Öncelik Kontrolü Wolfsburg",
@@ -435,7 +436,7 @@ rw1:"1 · SGB II'ye göre ihtiyaç ve gelir",colNeed:"İhtiyaç",colEur:"€ / a
 rw2:"2 · {wg} (kira seviyesi IV, {n} kişi)",colM:"Kira M",hbR:"Azami tutar {a} + iklim bileşeni {b}",capR:"Azami tutara kadar kira",hkeR:"+ ısınma indirimi",hkkR:"+ ısınma bileşeni",colY:"Yıllık gelir",colGross:"brüt / yıl",colWk:"İş giderleri",colAfter:"kesintiler sonrası",earnY:"Kazanç kişi {n}",otherY:"Diğer gelir",maintY:"Nafaka çocuk {n}",aeY:"− tek ebeveyn muafiyeti",yR:"Aylık Y (kazançta {p} kesinti)",
 rw3:"3 · {kiz}",colStep:"Adım",kGross:"Ebeveyn brüt geliri (asgari {a})",kNeed:"Konut giderlerinin {p} %'si dahil ebeveyn ihtiyacı",kInc:"Ebeveynlerin düzeltilmiş geliri",kEx:"İhtiyacın üzerindeki gelir",kBase:"Azami tutar eksi çocuk gelirinin %45'i",kMinus:"− ihtiyaç üstü gelirin %45'i",kTot:"Toplam {kiz}",
 rw4:"4 · Öncelikli yardımlarla kontrol",colVar:"Seçenek",colGap:"Açık",rw4h:"SGB II'de {kiz} çocuğun geliri sayılır, {wg} kişi başına bölünür. İki yardım birbirinden düşülmez.",
-lim:["Yalnızca ön kontrol, karar değildir. Konut yardımı dairesi ve Familienkasse karar verir.","Gelirin değişmediği varsayılır. § 12a SGB II en az 3 ay şartı arar.","Wolfsburg kira sınırları 2022 tarihlidir ve güncellenmelidir. Konut yardımı değerleri 31.12.2026'ya kadar geçerlidir.","Basitleştirilmiş: yalnızca tek ebeveyn ek ihtiyacı, Kinderwohngeld ve eğitim-katılım yardımları yok; diğer gelirler çocuk ek ödeneğini burada %100 yerine %45 azaltır.","Tüm veriler tarayıcıda kalır. Hiçbir şey gönderilmez."],
+lim:["Yalnızca ön kontrol, karar değildir. Konut yardımı dairesi ve Familienkasse karar verir.","Gelirin değişmediği varsayılır. § 12a SGB II en az 3 ay şartı arar.","Kira üst sınırları Jobcenter Wolfsburg web sitesinden alınmıştır (07.11.2026). Konut yardımı değerleri 31.12.2026'ya kadar geçerlidir.","Basitleştirilmiş: yalnızca tek ebeveyn ek ihtiyacı, Kinderwohngeld ve eğitim-katılım yardımları yok; diğer gelirler çocuk ek ödeneğini burada %100 yerine %45 azaltır.","Tüm veriler tarayıcıda kalır. Hiçbir şey gönderilmez."],
 footer:"İyileştirme önerisi için prototip. Federal İş Ajansı'nın veya Wolfsburg Belediyesi'nin resmi hizmeti değildir."},
 
 ar:{wg:"بدل السكن",kiz:"إعانة الأطفال الإضافية",tag:"نموذج أولي · إدارة الأفكار",title:"فحص الأولوية – فولفسبورغ",
@@ -465,7 +466,7 @@ rw1:"1 · الحاجة والدخل وفق SGB II",colNeed:"الحاجة",colEur
 rw2:"2 · {wg} (مستوى الإيجار IV، {n} أفراد)",colM:"الإيجار M",hbR:"الحد الأقصى {a} + عنصر المناخ {b}",capR:"الإيجار حتى الحد الأقصى",hkeR:"+ تخفيف تكاليف التدفئة",hkkR:"+ عنصر التدفئة",colY:"الدخل السنوي",colGross:"الإجمالي / سنة",colWk:"نفقات العمل",colAfter:"بعد الخصومات",earnY:"دخل العمل للشخص {n}",otherY:"دخل آخر",maintY:"نفقة الطفل {n}",aeY:"− إعفاء الوالد المنفرد",yR:"Y شهريًا (خصم {p} على دخل العمل)",
 rw3:"3 · {kiz}",colStep:"الخطوة",kGross:"الدخل الإجمالي للوالدين (الحد الأدنى {a})",kNeed:"حاجة الوالدين مع {p} % من تكاليف السكن",kInc:"دخل الوالدين بعد الخصم",kEx:"الدخل فوق الحاجة",kBase:"الحد الأقصى ناقص 45 % من دخل الطفل",kMinus:"− 45 % من الدخل فوق الحاجة",kTot:"إجمالي {kiz}",
 rw4:"4 · الفحص مع الإعانات ذات الأولوية",colVar:"الخيار",colGap:"العجز",rw4h:"في SGB II تُحتسب {kiz} دخلًا للطفل، ويُوزع {wg} على الأفراد. لا تُخصم الإعانتان من بعضهما.",
-lim:["فحص أولي فقط وليس قرارًا. القرار لمكتب بدل السكن وFamilienkasse.","يُفترض أن الدخل ثابت. يشترط § 12a SGB II مدة 3 أشهر على الأقل.","حدود الإيجار في فولفسبورغ من عام 2022 ويجب تحديثها. قيم بدل السكن سارية حتى 31.12.2026.","مبسّط: فقط الحاجة الإضافية للوالد المنفرد، بدون Kinderwohngeld وبدون إعانات التعليم والمشاركة؛ الدخل الآخر يخفض إعانة الأطفال الإضافية هنا بنسبة 45 % بدلًا من 100 %.","تبقى جميع البيانات في المتصفح. لا يتم إرسال أي شيء."],
+lim:["فحص أولي فقط وليس قرارًا. القرار لمكتب بدل السكن وFamilienkasse.","يُفترض أن الدخل ثابت. يشترط § 12a SGB II مدة 3 أشهر على الأقل.","حدود الإيجار مأخوذة من موقع Jobcenter Wolfsburg (بتاريخ 07.11.2026). قيم بدل السكن سارية حتى 31.12.2026.","مبسّط: فقط الحاجة الإضافية للوالد المنفرد، بدون Kinderwohngeld وبدون إعانات التعليم والمشاركة؛ الدخل الآخر يخفض إعانة الأطفال الإضافية هنا بنسبة 45 % بدلًا من 100 %.","تبقى جميع البيانات في المتصفح. لا يتم إرسال أي شيء."],
 footer:"نموذج أولي لاقتراح تحسين. ليس خدمة رسمية من الوكالة الاتحادية للعمل أو مدينة فولفسبورغ."},
 
 uk:{wg:"Житлова допомога",kiz:"Доплата на дитину",tag:"Прототип · Управління ідеями",title:"Перевірка пріоритету Вольфсбург",
@@ -495,7 +496,7 @@ rw1:"1 · Потреба та дохід за SGB II",colNeed:"Потреба",c
 rw2:"2 · {wg} (рівень оренди IV, осіб: {n})",colM:"Оренда M",hbR:"Максимум {a} + кліматичний компонент {b}",capR:"Оренда до максимуму",hkeR:"+ знижка на опалення",hkkR:"+ компонент опалення",colY:"Річний дохід",colGross:"брутто / рік",colWk:"Витрати на роботу",colAfter:"після відрахувань",earnY:"Заробіток особи {n}",otherY:"Інші доходи",maintY:"Аліменти дитина {n}",aeY:"− пільга для одиноких батьків",yR:"Y на місяць (відрахування {p} із заробітку)",
 rw3:"3 · {kiz}",colStep:"Крок",kGross:"Брутто батьків (мінімум {a})",kNeed:"Потреба батьків з {p} % витрат на житло",kInc:"Скоригований дохід батьків",kEx:"Дохід понад потребу",kBase:"Максимум мінус 45 % доходу дитини",kMinus:"− 45 % доходу понад потребу",kTot:"{kiz} разом",
 rw4:"4 · Перевірка з пріоритетними виплатами",colVar:"Варіант",colGap:"Дефіцит",rw4h:"У SGB II {kiz} вважається доходом дитини, {wg} ділиться на осіб. Ці дві виплати не зараховуються одна проти одної.",
-lim:["Лише попередня перевірка, не рішення. Рішення ухвалюють Wohngeldstelle та Familienkasse.","Припускається незмінний дохід. § 12a SGB II вимагає щонайменше 3 місяці.","Ліміти оренди Вольфсбурга станом на 2022 рік, їх треба оновити. Значення житлової допомоги діють до 31.12.2026.","Спрощено: лише додаткова потреба одиноких батьків, без Kinderwohngeld і без виплат на освіту та участь; інші доходи тут зменшують доплату на дитину на 45 % замість 100 %.","Усі дані залишаються в браузері. Нічого не передається."],
+lim:["Лише попередня перевірка, не рішення. Рішення ухвалюють Wohngeldstelle та Familienkasse.","Припускається незмінний дохід. § 12a SGB II вимагає щонайменше 3 місяці.","Ліміти оренди взято з сайту Jobcenter Wolfsburg (станом на 07.11.2026). Значення житлової допомоги діють до 31.12.2026.","Спрощено: лише додаткова потреба одиноких батьків, без Kinderwohngeld і без виплат на освіту та участь; інші доходи тут зменшують доплату на дитину на 45 % замість 100 %.","Усі дані залишаються в браузері. Нічого не передається."],
 footer:"Прототип пропозиції щодо вдосконалення. Не є офіційною послугою Федерального агентства з праці чи міста Вольфсбург."},
 
 ru:{wg:"Жилищное пособие",kiz:"Детская надбавка",tag:"Прототип · Управление идеями",title:"Проверка приоритета Вольфсбург",
@@ -525,7 +526,7 @@ rw1:"1 · Потребность и доход по SGB II",colNeed:"Потре�
 rw2:"2 · {wg} (уровень аренды IV, человек: {n})",colM:"Аренда M",hbR:"Максимум {a} + климатический компонент {b}",capR:"Аренда до максимума",hkeR:"+ скидка на отопление",hkkR:"+ компонент отопления",colY:"Годовой доход",colGross:"брутто / год",colWk:"Расходы на работу",colAfter:"после вычетов",earnY:"Заработок лица {n}",otherY:"Другие доходы",maintY:"Алименты ребёнок {n}",aeY:"− льгота для одиноких родителей",yR:"Y в месяц (вычет {p} с заработка)",
 rw3:"3 · {kiz}",colStep:"Шаг",kGross:"Брутто родителей (минимум {a})",kNeed:"Потребность родителей с {p} % расходов на жильё",kInc:"Скорректированный доход родителей",kEx:"Доход сверх потребности",kBase:"Максимум минус 45 % дохода ребёнка",kMinus:"− 45 % дохода сверх потребности",kTot:"{kiz} всего",
 rw4:"4 · Проверка с приоритетными пособиями",colVar:"Вариант",colGap:"Дефицит",rw4h:"В SGB II {kiz} считается доходом ребёнка, {wg} делится на всех. Эти два пособия не засчитываются друг против друга.",
-lim:["Только предварительная проверка, не решение. Решают Wohngeldstelle и Familienkasse.","Предполагается неизменный доход. § 12a SGB II требует не менее 3 месяцев.","Лимиты аренды Вольфсбурга по состоянию на 2022 год, их нужно обновить. Значения жилищного пособия действуют до 31.12.2026.","Упрощено: только доп. потребность одинокого родителя, без Kinderwohngeld и без выплат на образование и участие; другие доходы здесь уменьшают детскую надбавку на 45 % вместо 100 %.","Все данные остаются в браузере. Ничего не передаётся."],
+lim:["Только предварительная проверка, не решение. Решают Wohngeldstelle и Familienkasse.","Предполагается неизменный доход. § 12a SGB II требует не менее 3 месяцев.","Лимиты аренды взяты с сайта Jobcenter Wolfsburg (на 07.11.2026). Значения жилищного пособия действуют до 31.12.2026.","Упрощено: только доп. потребность одинокого родителя, без Kinderwohngeld и без выплат на образование и участие; другие доходы здесь уменьшают детскую надбавку на 45 % вместо 100 %.","Все данные остаются в браузере. Ничего не передаётся."],
 footer:"Прототип предложения по улучшению. Не является официальной услугой Федерального агентства по труду или города Вольфсбург."}
 };
 /* Ergänzung: Kranken-/Pflegeversicherung, § 26 SGB II, Rundfunkbeitrag, Mietobergrenze */
@@ -533,7 +534,7 @@ const X = {
 de:{married:"Verheiratet oder eingetragene Lebenspartnerschaft",kvLabel:"Krankenversicherung ohne SGB II",kvAuto:"automatisch: {s}",kvJob:"über eigenen Job versichert",kvFam:"familienversichert über Ehepartner",kvLeist:"über ALG I oder andere Leistung versichert",kvFrei:"muss sich freiwillig versichern",
 kvHint:"Im SGB II zahlt das Jobcenter die Kranken- und Pflegeversicherung. Ohne SGB II müssen sich unverheiratete Partner ohne versicherten Job und Alleinerziehende mit Minijob selbst versichern. Das kostet mindestens rund 270 € im Monat.",
 sJob:"pflichtversichert über Job",sFam:"familienversichert",sLeist:"über Leistung versichert",sFrei:"freiwillig, {a} im Monat",
-mog:"Mietobergrenze laut Richtlinie Wolfsburg ({n} Personen)",mogWarn:"Der hinterlegte Wert ist nicht aktuell (Stand 2022). Bitte den gültigen Wert aus der Richtlinie eintragen.",mogReset:"Tabellenwert verwenden",
+mog:"Mietobergrenze laut Richtlinie Wolfsburg ({n} Personen)",mogWarn:"Wert laut Jobcenter Wolfsburg (Grundmiete inkl. Betriebskosten, Stand 07.11.2026). Bei Bedarf überschreiben.",mogReset:"Tabellenwert verwenden",
 kKv:"KV/PV ohne SGB II",legZus:"Zuschuss KV/PV",pZus:"reicht mit KV/PV-Zuschuss",
 vZusH:"{v} und Zuschuss zur KV/PV beantragen",vZusT:"Ohne SGB II wäre der Haushalt nur wegen der Beiträge zur Kranken- und Pflegeversicherung ({a}) hilfebedürftig. Das Jobcenter zahlt dann nur einen Zuschuss von {b} nach § 26 SGB II statt Bürgergeld.",
 budgetH:"Was bleibt im Monat?",bSgb:"Mit SGB II",bVor:"Mit {wg} + {kiz}",bVorSub:"nach {kv} KV/PV und {gez} Rundfunkbeitrag",bVorZus:"inkl. {z} Zuschuss KV/PV",bDiff:"Unterschied",
@@ -544,7 +545,7 @@ lim2:["Kranken-/Pflegeversicherung: Mindestbeitrag mit durchschnittlichem Zusatz
 en:{married:"Married or registered partnership",kvLabel:"Health insurance without SGB II",kvAuto:"automatic: {s}",kvJob:"insured through own job",kvFam:"family insurance via spouse",kvLeist:"insured via unemployment or other benefit",kvFrei:"must take out voluntary insurance",
 kvHint:"Under SGB II the Jobcenter pays health and long-term care insurance. Without SGB II, unmarried partners without an insured job and single parents with a minijob must insure themselves. This costs at least about 270 € per month.",
 sJob:"insured through job",sFam:"family insurance",sLeist:"insured via benefit",sFrei:"voluntary, {a} per month",
-mog:"Rent limit under Wolfsburg guideline ({n} persons)",mogWarn:"The stored value is out of date (2022). Please enter the current value from the guideline.",mogReset:"Use table value",
+mog:"Rent limit under Wolfsburg guideline ({n} persons)",mogWarn:"Value from Jobcenter Wolfsburg (rent incl. service charges, as of 07 Nov 2026). Overwrite if needed.",mogReset:"Use table value",
 kKv:"Health/care ins. without SGB II",legZus:"insurance subsidy",pZus:"enough with insurance subsidy",
 vZusH:"Apply for {v} plus health/care insurance subsidy",vZusT:"Without SGB II the household would be in need only because of health and care insurance contributions ({a}). The Jobcenter then pays only a subsidy of {b} under § 26 SGB II instead of Bürgergeld.",
 budgetH:"What is left each month?",bSgb:"With SGB II",bVor:"With {wg} + {kiz}",bVorSub:"after {kv} health/care insurance and {gez} broadcasting fee",bVorZus:"incl. {z} insurance subsidy",bDiff:"Difference",
@@ -555,7 +556,7 @@ lim2:["Health/care insurance: minimum contribution with average additional rate 
 tr:{married:"Evli veya kayıtlı birliktelik",kvLabel:"SGB II olmadan sağlık sigortası",kvAuto:"otomatik: {s}",kvJob:"kendi işi üzerinden sigortalı",kvFam:"eş üzerinden aile sigortalı",kvLeist:"işsizlik parası veya başka yardım üzerinden sigortalı",kvFrei:"isteğe bağlı sigorta yaptırmalı",
 kvHint:"SGB II'de sağlık ve bakım sigortasını Jobcenter öder. SGB II olmadan, sigortalı işi olmayan evli olmayan partnerler ve minijob yapan tek ebeveynler kendilerini sigortalatmak zorundadır. Bu ayda en az yaklaşık 270 € tutar.",
 sJob:"iş üzerinden zorunlu sigortalı",sFam:"aile sigortalı",sLeist:"yardım üzerinden sigortalı",sFrei:"isteğe bağlı, ayda {a}",
-mog:"Wolfsburg yönergesine göre kira üst sınırı ({n} kişi)",mogWarn:"Kayıtlı değer güncel değil (2022). Lütfen yönergedeki geçerli değeri girin.",mogReset:"Tablo değerini kullan",
+mog:"Wolfsburg yönergesine göre kira üst sınırı ({n} kişi)",mogWarn:"Jobcenter Wolfsburg değeri (07.11.2026 itibarıyla). Gerekirse değiştirin.",mogReset:"Tablo değerini kullan",
 kKv:"SGB II olmadan sağlık/bakım sig.",legZus:"sigorta desteği",pZus:"sigorta desteğiyle yeterli",
 vZusH:"{v} ve sağlık/bakım sigortası desteği için başvurun",vZusT:"SGB II olmadan hane yalnızca sağlık ve bakım sigortası primleri ({a}) nedeniyle muhtaç olurdu. Bu durumda Jobcenter, Bürgergeld yerine § 26 SGB II'ye göre yalnızca {b} destek öder.",
 budgetH:"Ayda ne kalıyor?",bSgb:"SGB II ile",bVor:"{wg} + {kiz} ile",bVorSub:"{kv} sağlık/bakım sigortası ve {gez} yayın ücreti sonrası",bVorZus:"{z} sigorta desteği dahil",bDiff:"Fark",
@@ -566,7 +567,7 @@ lim2:["Sağlık/bakım sigortası: ortalama %2,9 ek primle asgari prim. Kasanın
 ar:{married:"متزوجان أو شراكة مسجلة",kvLabel:"التأمين الصحي بدون SGB II",kvAuto:"تلقائي: {s}",kvJob:"مؤمَّن عبر عمله",kvFam:"تأمين عائلي عبر الزوج/الزوجة",kvLeist:"مؤمَّن عبر إعانة البطالة أو إعانة أخرى",kvFrei:"يجب التأمين الاختياري",
 kvHint:"في SGB II يدفع مركز العمل (Jobcenter) التأمين الصحي وتأمين الرعاية. بدون SGB II يجب على الشريك غير المتزوج بدون عمل مؤمَّن وعلى الوالد المنفرد الذي يعمل Minijob أن يؤمّن نفسه. التكلفة حوالي 270 € شهريًا على الأقل.",
 sJob:"مؤمَّن إلزاميًا عبر العمل",sFam:"تأمين عائلي",sLeist:"مؤمَّن عبر إعانة",sFrei:"اختياري، {a} شهريًا",
-mog:"الحد الأعلى للإيجار حسب لائحة فولفسبورغ ({n} أفراد)",mogWarn:"القيمة المخزنة غير محدثة (2022). يرجى إدخال القيمة السارية من اللائحة.",mogReset:"استخدام قيمة الجدول",
+mog:"الحد الأعلى للإيجار حسب لائحة فولفسبورغ ({n} أفراد)",mogWarn:"القيمة حسب Jobcenter Wolfsburg (بتاريخ 07.11.2026). يمكن تعديلها عند الحاجة.",mogReset:"استخدام قيمة الجدول",
 kKv:"التأمين الصحي بدون SGB II",legZus:"دعم التأمين",pZus:"كافٍ مع دعم التأمين",
 vZusH:"قدّم طلب {v} ودعم التأمين الصحي وتأمين الرعاية",vZusT:"بدون SGB II ستكون الأسرة بحاجة فقط بسبب اشتراكات التأمين الصحي وتأمين الرعاية ({a}). عندها يدفع Jobcenter دعمًا قدره {b} فقط وفق § 26 SGB II بدلًا من Bürgergeld.",
 budgetH:"ماذا يتبقى شهريًا؟",bSgb:"مع SGB II",bVor:"مع {wg} + {kiz}",bVorSub:"بعد {kv} للتأمين الصحي و{gez} لرسوم البث",bVorZus:"بما في ذلك {z} دعم التأمين",bDiff:"الفرق",
@@ -577,7 +578,7 @@ lim2:["التأمين الصحي: الحد الأدنى للاشتراك مع م
 uk:{married:"У шлюбі або зареєстроване партнерство",kvLabel:"Медичне страхування без SGB II",kvAuto:"автоматично: {s}",kvJob:"застрахований через власну роботу",kvFam:"сімейне страхування через чоловіка/дружину",kvLeist:"застрахований через допомогу з безробіття чи іншу виплату",kvFrei:"має застрахуватися добровільно",
 kvHint:"У SGB II медичне страхування і страхування догляду оплачує Jobcenter. Без SGB II неодружені партнери без застрахованої роботи та одинокі батьки з Minijob мають страхуватися самі. Це коштує щонайменше близько 270 € на місяць.",
 sJob:"обов'язково застрахований через роботу",sFam:"сімейне страхування",sLeist:"застрахований через виплату",sFrei:"добровільно, {a} на місяць",
-mog:"Межа оренди за директивою Вольфсбурга ({n} осіб)",mogWarn:"Збережене значення застаріле (2022). Введіть чинне значення з директиви.",mogReset:"Використати значення з таблиці",
+mog:"Межа оренди за директивою Вольфсбурга ({n} осіб)",mogWarn:"Значення за даними Jobcenter Wolfsburg (станом на 07.11.2026). За потреби змініть.",mogReset:"Використати значення з таблиці",
 kKv:"Мед./догл. страхування без SGB II",legZus:"доплата на страхування",pZus:"достатньо з доплатою на страхування",
 vZusH:"Подайте заяву на {v} і доплату на медичне страхування",vZusT:"Без SGB II домогосподарство потребувало б допомоги лише через внески на медичне страхування і страхування догляду ({a}). Тоді Jobcenter платить лише доплату {b} за § 26 SGB II замість Bürgergeld.",
 budgetH:"Що залишається щомісяця?",bSgb:"Із SGB II",bVor:"Із {wg} + {kiz}",bVorSub:"після {kv} на страхування та {gez} радіозбору",bVorZus:"включно з доплатою {z}",bDiff:"Різниця",
@@ -588,7 +589,7 @@ lim2:["Медичне страхування: мінімальний внесо�
 ru:{married:"В браке или зарегистрированное партнёрство",kvLabel:"Медицинская страховка без SGB II",kvAuto:"автоматически: {s}",kvJob:"застрахован через свою работу",kvFam:"семейная страховка через супруга",kvLeist:"застрахован через пособие по безработице или другую выплату",kvFrei:"должен застраховаться добровольно",
 kvHint:"В SGB II медицинскую страховку и страхование по уходу оплачивает Jobcenter. Без SGB II незарегистрированные партнёры без застрахованной работы и одинокие родители с Minijob должны страховаться сами. Это стоит минимум около 270 € в месяц.",
 sJob:"обязательно застрахован через работу",sFam:"семейная страховка",sLeist:"застрахован через выплату",sFrei:"добровольно, {a} в месяц",
-mog:"Предел аренды по директиве Вольфсбурга ({n} чел.)",mogWarn:"Сохранённое значение устарело (2022). Введите действующее значение из директивы.",mogReset:"Использовать значение из таблицы",
+mog:"Предел аренды по директиве Вольфсбурга ({n} чел.)",mogWarn:"Значение по данным Jobcenter Wolfsburg (на 07.11.2026). При необходимости измените.",mogReset:"Использовать значение из таблицы",
 kKv:"Мед./уход страховка без SGB II",legZus:"доплата на страховку",pZus:"достаточно с доплатой на страховку",
 vZusH:"Подайте заявление на {v} и доплату на медстраховку",vZusT:"Без SGB II домохозяйство нуждалось бы только из-за взносов на медицинское страхование и страхование по уходу ({a}). Тогда Jobcenter платит лишь доплату {b} по § 26 SGB II вместо Bürgergeld.",
 budgetH:"Что остаётся в месяц?",bSgb:"С SGB II",bVor:"С {wg} + {kiz}",bVorSub:"после {kv} на страховку и {gez} радиосбора",bVorZus:"включая доплату {z}",bDiff:"Разница",
@@ -731,7 +732,7 @@ const DEFAULTS = {
   rb:{single:563, partner:506, u25:451, k14:471, k6:390, k0:357},
   kindergeld:259,
   fb:{grund:100, g1:520, q1:0.2, g2:1000, q2:0.3, g3o:1200, g3m:1500, q3:0.1, pausch:30},
-  kdu:{p:[540.10,654.50,778.80,907.50,1030.00], plus:120, karenz:1.5},
+  kdu:{p:[484.00,592.20,706.50,825.35,1026.00,1135.00,1242.00,1350.00,1458.00,1566.00,1675.00,1782.00], plus:108, karenz:1.5},
   wg:{hb:[511,619,737,858,982], hbPlus:119,
       klima:[19.20,24.80,29.60,34.40,39.20], klimaPlus:4.80,
       hke:[14.40,18.60,22.20,25.80,29.40], hkePlus:3.60,
@@ -751,7 +752,7 @@ const DEFAULTS = {
 const clone = o => JSON.parse(JSON.stringify(o));
 function deepMerge(tg,s){ for(const k in s){ if(s[k] && typeof s[k]==="object" && !Array.isArray(s[k])) tg[k]=deepMerge(tg[k]||{},s[k]); else tg[k]=s[k]; } return tg; }
 let P = clone(DEFAULTS);
-try{ const s = localStorage.getItem("vp-wob-params"); if(s) P = deepMerge(clone(DEFAULTS), JSON.parse(s)); }catch(e){}
+try{ const s = localStorage.getItem("vp-wob-params2"); if(s) P = deepMerge(clone(DEFAULTS), JSON.parse(s)); }catch(e){}
 const getP = (o,p)=>p.split(".").reduce((x,k)=>x==null?x:x[k],o);
 const setP = (o,p,v)=>{ const ks=p.split("."), last=ks.pop(); ks.reduce((x,k)=>x[k],o)[last]=v; };
 
@@ -768,8 +769,8 @@ const GROUPS = [
     ["xii.erwQ","SGB XII: Absetzbetrag Erwerb (Anteil vom Brutto)"],["xii.erwCapPct","SGB XII: Höchstbetrag % RBS 1"],["grz.base","Grundrente: Sockelfreibetrag €"],["grz.q","Grundrente: Anteil darüber"],["grz.capPct","Grundrente: Höchstbetrag % RBS 1"]]},
   {t:"Vermögensgrenzen", src:"§ 12 SGB II; § 90 SGB XII i. V. m. VO; WoGVwV 21.37; § 6a Abs. 3 BKGG", warn:"Vereinfacht: Vermögen des ganzen Haushalts gegen die Summe der Freibeträge.", items:[
     ["verm.iiK","SGB II Karenzzeit: 1. Person €"],["verm.iiKPlus","SGB II Karenzzeit: je weitere Person €"],["verm.ii","SGB II nach Karenzzeit: je Person €"],["verm.xiiAd","SGB XII: je erwachsene Person €"],["verm.xiiKid","SGB XII: je Kind €"],["verm.wg","Wohngeld: 1. Person €"],["verm.wgPlus","Wohngeld: je weitere Person €"],["verm.kiz","Kinderzuschlag: 1. Person €"],["verm.kizPlus","Kinderzuschlag: je weitere Person €"]]},
-  {t:"Angemessene Bruttokaltmiete Wolfsburg", src:"Mietobergrenzen Stadt Wolfsburg, Stand 01.01.2022.", warn:"Veraltet. Bitte aktuelle KdU-Richtlinie eintragen. 5 Personen und Mehrbetrag geschätzt.",
-    items:PERS.map((p,i)=>["kdu.p."+i,p]).concat([["kdu.plus","je weitere Person (Annahme)"],["kdu.karenz","Deckel Karenzzeit (Faktor, ab 01.07.2026)"]])},
+  {t:"Mietobergrenzen Wolfsburg (Grundmiete inkl. Betriebskosten)", src:"Jobcenter Wolfsburg, jobcenter-wolfsburg.de, abgerufen am 07.11.2026. Wohnfläche: 50/60/75/85/95 m², danach +10 m² je Person.", warn:"4 Personen: Auf der Website steht „825,35,70 €“ (Tippfehler). Eingetragen ist 825,35 € – bitte beim Jobcenter bestätigen.",
+    items:Array.from({length:12},(_,i)=>["kdu.p."+i,(i+1)+(i?" Personen":" Person")]).concat([["kdu.plus","je weitere Person ab 13 (Annahme)"],["kdu.karenz","Deckel Karenzzeit (Faktor, ab 01.07.2026)"]])},
   {t:"Wohngeld – Höchstbeträge Mietstufe IV", src:"Anlage 1 WoGG ab 01.01.2025; Wolfsburg = Mietstufe IV.", items:PERS.map((p,i)=>["wg.hb."+i,p]).concat([["wg.hbPlus","je weitere Person"]])},
   {t:"Wohngeld – Klima- und Heizkostenkomponente", src:"§ 12 WoGG (Richtflächen 48/62/74/86/98 m², +12 m²).", items:
     PERS.map((p,i)=>["wg.klima."+i,"Klima "+p]).concat([["wg.klimaPlus","Klima je weitere"]],PERS.map((p,i)=>["wg.hke."+i,"Heizkostenentlastung "+p]),[["wg.hkePlus","Entlastung je weitere"]],PERS.map((p,i)=>["wg.hkk."+i,"Heizkostenkomponente "+p]),[["wg.hkkPlus","Komponente je weitere"]])},
@@ -1232,11 +1233,11 @@ function renderParams(){
   box.querySelectorAll("input[data-p]").forEach(inp=>inp.addEventListener("change",()=>{
     const p=inp.dataset.p, v=num(inp.value); setP(P,p,v);
     inp.parentElement.classList.toggle("ch", v!==getP(DEFAULTS,p));
-    try{ localStorage.setItem("vp-wob-params",JSON.stringify(P)); }catch(e){}
+    try{ localStorage.setItem("vp-wob-params2",JSON.stringify(P)); }catch(e){}
     update();
   }));
 }
-$("resetP").addEventListener("click",()=>{ P=clone(DEFAULTS); try{ localStorage.removeItem("vp-wob-params"); }catch(e){} renderParams(); update(); });
+$("resetP").addEventListener("click",()=>{ P=clone(DEFAULTS); try{ localStorage.removeItem("vp-wob-params2"); }catch(e){} renderParams(); update(); });
 $("copyP").addEventListener("click",()=>{
   const txt=JSON.stringify(P,null,2);
   const fb=()=>{ const ta=$("copyBox"); ta.hidden=false; ta.value=txt; ta.select(); $("copyMsg").textContent=t("selectCopy"); };

@@ -12,4 +12,4 @@ Was geprüft wird: Erwerbsfähigkeit und Regelaltersgrenze (zuständig ist SGB I
 - `vorrangpruefung.html`: Quelldatei der Artifact-Seite.
 
 Sprachen: Deutsch, English, Türkçe, العربية, Українська, Русский. Alle Rechenwerte lassen sich in der Seite unter „Parameter und Quellen“ ändern.
-Werte, die noch zu prüfen sind: KdU-Grenzen Wolfsburg (Stand 2022), Wohnkostenanteile beim Kinderzuschlag, Alleinerziehenden-Freibetrag nach § 17 WoGG.
+Mietobergrenzen laut Jobcenter Wolfsburg (abgerufen 07.11.2026; Wert für 4 Personen wegen Tippfehler auf der Website bitte bestätigen). Noch zu prüfen, Wohnkostenanteile beim Kinderzuschlag, Alleinerziehenden-Freibetrag nach § 17 WoGG.
