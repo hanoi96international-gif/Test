@@ -93,7 +93,7 @@ label.f{display:flex;flex-direction:column;gap:6px;font-size:.88rem;font-weight:
 .money:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
 .money input{border:0;outline:0;background:transparent;padding:11px 12px;width:100%;min-width:0;font-size:1.05rem;font-weight:600;font-variant-numeric:tabular-nums}
 .money span{padding-inline:12px;color:var(--muted);font-weight:700}
-select.sel{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:11px 12px;width:100%}
+.sel{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:11px 12px;width:100%}
 .pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 @media (max-width:440px){.pair{grid-template-columns:minmax(0,1fr)}}
 .person{display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:12px;background:var(--surface-2)}
@@ -153,6 +153,22 @@ select.sel{border:1px solid var(--line);border-radius:10px;background:var(--surf
 .warnchip{font-size:.82rem;background:var(--gold-soft);border-inline-start:4px solid var(--gold);padding:7px 10px;border-radius:8px;margin:0}
 .kvsel{font-size:.88rem;padding:9px 10px}
 
+.choices.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:620px){.choices.three{grid-template-columns:minmax(0,1fr)}}
+.choice[hidden]{display:none}
+.checks{display:flex;flex-direction:column;gap:8px}
+.ck{display:flex;gap:10px;align-items:flex-start;font-size:.9rem;cursor:pointer}
+.ck input{width:20px;height:20px;accent-color:var(--accent);flex:none;margin-top:1px}
+details.more{border:1px dashed var(--line);border-radius:12px;box-shadow:none}
+details.more summary{padding:12px 14px;font-weight:600;font-size:.92rem}
+details.more .checks{padding:0 14px 14px}
+.chipline{margin:0;font-size:.82rem;color:var(--muted)} .chipline b{color:var(--fg)}
+.chips{display:flex;flex-direction:column;gap:6px}
+.chip{font-size:.82rem;padding:7px 10px;border-radius:8px;background:var(--surface-2);margin:0}
+.chip.sys{background:var(--accent-soft);font-weight:700}
+.chip.w{background:var(--gold-soft);border-inline-start:4px solid var(--gold)}
+.steps{grid-template-columns:repeat(4,minmax(0,1fr))}
+
 /* Akkordeons */
 details{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
 summary{cursor:pointer;padding:16px 22px;font-weight:700;list-style-position:inside}
@@ -200,8 +216,24 @@ footer{font-size:.8rem;color:var(--muted)}
       <p class="note" data-i18n="example"></p>
 
       <section data-step="1">
-        <h2 class="q" data-i18n="q1"></h2>
+        <h2 class="q" data-i18n="modeQ"></h2>
         <div class="choices">
+          <button type="button" class="choice" data-mode="fam">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 22 24 7l19 15"/><path d="M10 19v22h28V19"/><circle cx="20" cy="27" r="3"/><circle cx="29" cy="29" r="2.4"/><path d="M15 41c0-4 2-7 5-7s5 3 5 7"/><path d="M25 41c0-3 2-5 4-5s4 2 4 5"/></svg>
+            <div><b data-i18n="modeFam"></b><span data-i18n="modeFamD"></span></div>
+          </button>
+          <button type="button" class="choice" data-mode="wg">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 22 24 7l19 15"/><path d="M10 19v22h28V19"/><path d="M20 41V29h8v12"/></svg>
+            <div><b data-i18n="modeWg"></b><span data-i18n="modeWgD"></span></div>
+          </button>
+        </div>
+
+        <h2 class="q" data-i18n="q1"></h2>
+        <div class="choices three">
+          <button type="button" class="choice" data-typ="solo" id="typSolo">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="24" cy="15" r="7"/><path d="M10 42c0-9 6-15 14-15s14 6 14 15"/></svg>
+            <div><b data-i18n="solo"></b><span data-i18n="soloD"></span></div>
+          </button>
           <button type="button" class="choice" data-typ="paar">
             <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="17" cy="15" r="6"/><circle cx="31" cy="15" r="6"/><path d="M5 41c0-7 5-12 12-12s12 5 12 12"/><path d="M19 41c0-7 5-12 12-12s12 5 12 12"/></svg>
             <div><b data-i18n="couple"></b><span data-i18n="coupleD"></span></div>
@@ -212,31 +244,34 @@ footer{font-size:.8rem;color:var(--muted)}
           </button>
         </div>
         <label class="toggle" id="verhRow"><input type="checkbox" id="verh"><span data-i18n="married"></span></label>
-        <p class="sub" data-i18n="kids"></p>
-        <div class="kids" id="kids"></div>
-        <button type="button" class="add" id="addKid"><span aria-hidden="true">＋</span><span data-i18n="addKid"></span></button>
+
+        <div id="kidsBox" style="display:flex;flex-direction:column;gap:10px">
+          <p class="sub" id="kidsTitle"></p>
+          <div class="kids" id="kids"></div>
+          <button type="button" class="add" id="addKid"><span aria-hidden="true">＋</span><span data-i18n="addKid"></span></button>
+        </div>
+
+        <details class="more" id="sonder">
+          <summary data-i18n="sonderH"></summary>
+          <div class="checks">
+            <label class="ck"><input type="checkbox" id="s_azubi"><span data-i18n="sAzubi"></span></label>
+            <label class="ck"><input type="checkbox" id="s_eu"><span data-i18n="sEu"></span></label>
+            <label class="ck"><input type="checkbox" id="s_asyl"><span data-i18n="sAsyl"></span></label>
+            <label class="ck"><input type="checkbox" id="s_stat"><span data-i18n="sStat"></span></label>
+          </div>
+        </details>
       </section>
 
       <section data-step="2" hidden>
-        <h2 class="q" data-i18n="q2"></h2>
-        <div class="person">
-          <h4 data-i18n-adult="1"></h4>
-          <div class="pair">
-            <label class="f"><span data-i18n="gross"></span><div class="money"><input id="b1" type="number" inputmode="decimal" min="0" step="any"><span>€</span></div></label>
-            <label class="f"><span data-i18n="net"></span><div class="money"><input id="n1" type="number" inputmode="decimal" min="0" step="any"><span>€</span></div></label>
-          </div>
-          <label class="f"><span data-i18n="kvLabel"></span><select class="sel kvsel" id="kv1"><option value="auto"></option><option value="job" data-i18n="kvJob"></option><option value="fam" data-i18n="kvFam"></option><option value="leist" data-i18n="kvLeist"></option><option value="frei" data-i18n="kvFrei"></option></select></label>
-        </div>
-        <div class="person" id="p2">
-          <h4 data-i18n-adult="2"></h4>
-          <div class="pair">
-            <label class="f"><span data-i18n="gross"></span><div class="money"><input id="b2" type="number" inputmode="decimal" min="0" step="any"><span>€</span></div></label>
-            <label class="f"><span data-i18n="net"></span><div class="money"><input id="n2" type="number" inputmode="decimal" min="0" step="any"><span>€</span></div></label>
-          </div>
-          <label class="f"><span data-i18n="kvLabel"></span><select class="sel kvsel" id="kv2"><option value="auto"></option><option value="job" data-i18n="kvJob"></option><option value="fam" data-i18n="kvFam"></option><option value="leist" data-i18n="kvLeist"></option><option value="frei" data-i18n="kvFrei"></option></select></label>
-        </div>
-        <p class="hint" data-i18n="grossHint"></p>
+        <h2 class="q" data-i18n="qP"></h2>
+        <div id="persons" style="display:flex;flex-direction:column;gap:14px"></div>
         <p class="warnchip" data-i18n="kvHint"></p>
+      </section>
+
+      <section data-step="3" hidden>
+        <h2 class="q" data-i18n="q2"></h2>
+        <div id="incomes" style="display:flex;flex-direction:column;gap:14px"></div>
+        <p class="hint" data-i18n="grossHint"></p>
         <label class="f"><span data-i18n="job"></span>
           <select class="sel" id="pa">
             <option value="0.3" data-i18n="job3"></option>
@@ -244,22 +279,25 @@ footer{font-size:.8rem;color:var(--muted)}
             <option value="0.1" data-i18n="job1"></option>
             <option value="0" data-i18n="job0"></option>
           </select></label>
-        <label class="f"><span data-i18n="other"></span><div class="money"><input id="so" type="number" inputmode="decimal" min="0" step="any"><span>€</span></div></label>
+        <label class="toggle"><input type="checkbox" id="stabil"><span data-i18n="stabil"></span></label>
       </section>
 
-      <section data-step="3" hidden>
+      <section data-step="4" hidden>
         <h2 class="q" data-i18n="q3"></h2>
         <div class="pair">
           <label class="f"><span data-i18n="rent"></span><div class="money"><input id="mi" type="number" inputmode="decimal" min="0" step="any"><span>€</span></div></label>
           <label class="f"><span data-i18n="heat"></span><div class="money"><input id="hz" type="number" inputmode="decimal" min="0" step="any"><span>€</span></div></label>
         </div>
         <p class="hint" data-i18n="rentHint"></p>
+        <label class="toggle"><input type="checkbox" id="ww"><span data-i18n="ww"></span></label>
         <div class="person">
           <label class="f"><span id="mogLabel"></span><div class="money"><input id="mog" type="number" inputmode="decimal" min="0" step="any"><span>€</span></div></label>
           <p class="warnchip" id="mogWarn" data-i18n="mogWarn"></p>
           <div><button type="button" class="btn ghost" id="mogReset" data-i18n="mogReset"></button></div>
         </div>
         <label class="toggle"><input type="checkbox" id="ka"><span data-i18n="karenz"></span></label>
+        <label class="f"><span data-i18n="verm"></span><div class="money"><input id="verm" type="number" inputmode="decimal" min="0" step="any"><span>€</span></div></label>
+        <p class="hint" data-i18n="vermHint"></p>
       </section>
 
       <div class="nav">
@@ -278,6 +316,7 @@ footer{font-size:.8rem;color:var(--muted)}
     <section class="card" id="resCard" aria-live="polite">
       <div class="res-head"><h2 data-i18n="result"></h2></div>
       <div id="verdict"></div>
+      <div class="chips" id="chips"></div>
       <div class="kpis" id="kpis"></div>
       <div class="bars">
         <div class="bh"><h3 data-i18n="compare"></h3>
@@ -317,7 +356,7 @@ footer{font-size:.8rem;color:var(--muted)}
 const LANGS = [["de","Deutsch","de-DE"],["en","English","en-GB"],["tr","Türkçe","tr-TR"],["ar","العربية","ar-u-nu-latn"],["uk","Українська","uk-UA"],["ru","Русский","ru-RU"]];
 const I = {
 de:{wg:"Wohngeld",kiz:"Kinderzuschlag",tag:"Prototyp · Ideenmanagement",title:"Vorrangprüfung Wolfsburg",
-sub:"In drei Schritten prüfen, ob Wohngeld, Kinderzuschlag oder beides zusammen den Bezug von SGB II beendet.",
+sub:"In vier Schritten prüfen, ob Wohngeld, Kinderzuschlag oder beides zusammen den Bezug von SGB II beendet.",
 example:"Vorbelegt mit einem erfundenen Beispiel.",step1:"Haushalt",step2:"Einkommen",step3:"Wohnung",
 q1:"Wer lebt im Haushalt?",couple:"Paar",coupleD:"zwei Erwachsene",single:"Alleinerziehend",singleD:"ein Erwachsener mit Kind(ern)",
 kids:"Kinder",addKid:"Kind hinzufügen",child:"Kind {n}",age:"Alter",remove:"Kind {n} entfernen",maint:"Unterhalt / Unterhaltsvorschuss im Monat",noKids:"Noch keine Kinder eingetragen.",
@@ -347,7 +386,7 @@ lim:["Vorprüfung, kein Bescheid. Verbindlich entscheiden Wohngeldstelle und Fam
 footer:"Prototyp für einen Verbesserungsvorschlag. Kein offizielles Angebot der Bundesagentur für Arbeit oder der Stadt Wolfsburg."},
 
 en:{wg:"Housing benefit",kiz:"Child supplement",tag:"Prototype · Idea management",title:"Priority Check Wolfsburg",
-sub:"Check in three steps whether housing benefit, child supplement or both together end the need for SGB II support.",
+sub:"Check in four steps whether housing benefit, child supplement or both together end the need for SGB II support.",
 example:"Pre-filled with a made-up example.",step1:"Household",step2:"Income",step3:"Housing",
 q1:"Who lives in the household?",couple:"Couple",coupleD:"two adults",single:"Single parent",singleD:"one adult with child(ren)",
 kids:"Children",addKid:"Add child",child:"Child {n}",age:"Age",remove:"Remove child {n}",maint:"Child maintenance / advance payment per month",noKids:"No children added yet.",
@@ -377,7 +416,7 @@ lim:["Pre-check only, not a decision. The housing benefit office and the Familie
 footer:"Prototype for an improvement proposal. Not an official service of the Federal Employment Agency or the City of Wolfsburg."},
 
 tr:{wg:"Konut yardımı",kiz:"Çocuk ek ödeneği",tag:"Prototip · Fikir yönetimi",title:"Öncelik Kontrolü Wolfsburg",
-sub:"Üç adımda kontrol edin: Konut yardımı, çocuk ek ödeneği ya da ikisi birlikte SGB II ihtiyacını sona erdiriyor mu?",
+sub:"Dört adımda kontrol edin: Konut yardımı, çocuk ek ödeneği ya da ikisi birlikte SGB II ihtiyacını sona erdiriyor mu?",
 example:"Uydurma bir örnekle doldurulmuştur.",step1:"Hane",step2:"Gelir",step3:"Konut",
 q1:"Hanede kimler yaşıyor?",couple:"Çift",coupleD:"iki yetişkin",single:"Tek ebeveyn",singleD:"çocuklu bir yetişkin",
 kids:"Çocuklar",addKid:"Çocuk ekle",child:"Çocuk {n}",age:"Yaş",remove:"Çocuk {n} kaldır",maint:"Aylık nafaka / nafaka avansı",noKids:"Henüz çocuk eklenmedi.",
@@ -407,7 +446,7 @@ lim:["Yalnızca ön kontrol, karar değildir. Konut yardımı dairesi ve Familie
 footer:"İyileştirme önerisi için prototip. Federal İş Ajansı'nın veya Wolfsburg Belediyesi'nin resmi hizmeti değildir."},
 
 ar:{wg:"بدل السكن",kiz:"إعانة الأطفال الإضافية",tag:"نموذج أولي · إدارة الأفكار",title:"فحص الأولوية – فولفسبورغ",
-sub:"تحقق في ثلاث خطوات مما إذا كان بدل السكن أو إعانة الأطفال الإضافية أو كلاهما معًا ينهي الحاجة إلى إعانة SGB II.",
+sub:"تحقق في أربع خطوات مما إذا كان بدل السكن أو إعانة الأطفال الإضافية أو كلاهما معًا ينهي الحاجة إلى إعانة SGB II.",
 example:"معبأ مسبقًا بمثال وهمي.",step1:"الأسرة",step2:"الدخل",step3:"السكن",
 q1:"من يعيش في الأسرة؟",couple:"زوجان",coupleD:"شخصان بالغان",single:"والد/والدة منفرد",singleD:"شخص بالغ مع طفل أو أكثر",
 kids:"الأطفال",addKid:"إضافة طفل",child:"الطفل {n}",age:"العمر",remove:"حذف الطفل {n}",maint:"النفقة / سلفة النفقة شهريًا",noKids:"لم تتم إضافة أطفال بعد.",
@@ -437,7 +476,7 @@ lim:["فحص أولي فقط وليس قرارًا. القرار لمكتب بد
 footer:"نموذج أولي لاقتراح تحسين. ليس خدمة رسمية من الوكالة الاتحادية للعمل أو مدينة فولفسبورغ."},
 
 uk:{wg:"Житлова допомога",kiz:"Доплата на дитину",tag:"Прототип · Управління ідеями",title:"Перевірка пріоритету Вольфсбург",
-sub:"Перевірте за три кроки, чи житлова допомога, доплата на дитину або обидві разом припиняють потребу в SGB II.",
+sub:"Перевірте за чотири кроки, чи житлова допомога, доплата на дитину або обидві разом припиняють потребу в SGB II.",
 example:"Заповнено вигаданим прикладом.",step1:"Домогосподарство",step2:"Дохід",step3:"Житло",
 q1:"Хто живе в домогосподарстві?",couple:"Пара",coupleD:"двоє дорослих",single:"Одинокий з дітьми",singleD:"один дорослий з дитиною (дітьми)",
 kids:"Діти",addKid:"Додати дитину",child:"Дитина {n}",age:"Вік",remove:"Видалити дитину {n}",maint:"Аліменти / аванс аліментів на місяць",noKids:"Дітей ще не додано.",
@@ -467,7 +506,7 @@ lim:["Лише попередня перевірка, не рішення. Рі�
 footer:"Прототип пропозиції щодо вдосконалення. Не є офіційною послугою Федерального агентства з праці чи міста Вольфсбург."},
 
 ru:{wg:"Жилищное пособие",kiz:"Детская надбавка",tag:"Прототип · Управление идеями",title:"Проверка приоритета Вольфсбург",
-sub:"За три шага проверьте, прекращают ли жилищное пособие, детская надбавка или оба вместе потребность в SGB II.",
+sub:"За четыре шага проверьте, прекращают ли жилищное пособие, детская надбавка или оба вместе потребность в SGB II.",
 example:"Заполнено вымышленным примером.",step1:"Домохозяйство",step2:"Доход",step3:"Жильё",
 q1:"Кто живёт в домохозяйстве?",couple:"Пара",coupleD:"двое взрослых",single:"Одинокий родитель",singleD:"один взрослый с ребёнком (детьми)",
 kids:"Дети",addKid:"Добавить ребёнка",child:"Ребёнок {n}",age:"Возраст",remove:"Удалить ребёнка {n}",maint:"Алименты / аванс алиментов в месяц",noKids:"Дети ещё не добавлены.",
@@ -566,14 +605,130 @@ kvCalc:"Добровольный взнос = большее из минимал
 lim2:["Медстраховка: минимальный взнос со средним дополнительным взносом 2,9 %. Ставка кассы может отличаться. Надбавка для бездетных не учтена.","Радиосбор 18,36 €: учтён в сравнении бюджета, но не в проверке нуждаемости."]}
 };
 for(const l in X) Object.assign(I[l], X[l]);
+/* Ergänzung: Modi, Erwerbsfähigkeit, Zuständigkeit (SGB II / SGB XII), Rente, Vermögen, Sonderfälle */
+const Y = {
+de:{modeQ:"Was soll geprüft werden?",modeFam:"Wohngeld + Kinderzuschlag",modeFamD:"für Familien mit Kindern",modeWg:"Nur Wohngeld",modeWgD:"für Singles, Paare und Rentner",solo:"Single",soloD:"eine Person allein",stP:"Personen",qP:"Wer sind die Erwachsenen?",kidsOpt:"Kinder (optional)",
+by:"Geburtsjahr",ef:"Erwerbsfähigkeit",efJa:"erwerbsfähig (mind. 3 Std. täglich arbeitsfähig)",efDau:"voll erwerbsgemindert – dauerhaft",efZeit:"voll erwerbsgemindert – vorübergehend",efAR:"bezieht vorzeitige Altersrente",ageL:"etwa {a} Jahre",ragYes:"Regelaltersgrenze erreicht",ragNo:"vor der Regelaltersgrenze",
+schw:"schwanger ab der 13. Woche",merkG:"Schwerbehindertenausweis mit Merkzeichen G",sb100:"GdB 100 oder pflegebedürftig zu Hause",kvRente:"über Rente versichert (KVdR)",sRente:"über Rente versichert",
+jobH:"Arbeit",renteH:"Rente",renteB:"Rente brutto",renteN:"Zahlbetrag",grz:"mindestens 33 Jahre Grundrentenzeiten (Grundrentenzuschlag)",soP:"Weitere Einnahmen (z. B. ALG I, Krankengeld)",stabil:"Das Einkommen bleibt voraussichtlich mindestens 3 Monate gleich",ww:"Warmwasser über Durchlauferhitzer oder Boiler (dezentral)",verm:"Vermögen des Haushalts",vermHint:"Erspartes, Wertpapiere usw. Selbst genutzte angemessene Wohnung und angemessenes Auto zählen nicht.",
+sonderH:"Besonderheiten (falls zutreffend)",sAzubi:"Ausbildung oder Studium mit BAföG- bzw. BAB-Anspruch",sEu:"EU-Bürger nur zur Arbeitsuche oder in den ersten 3 Monaten",sAsyl:"Leistungen nach dem Asylbewerberleistungsgesetz",sStat:"länger als 6 Monate in einer stationären Einrichtung",
+rg_II:"SGB II (Bürgergeld / Grundsicherungsgeld)",rg_XII4:"SGB XII – Grundsicherung im Alter und bei Erwerbsminderung",rg_XII3:"SGB XII – Hilfe zum Lebensunterhalt",rg_asyl:"Asylbewerberleistungsgesetz",rg_none:"kein Anspruch auf SGB II",regimeL:"Zuständig: {r}",
+vSgbWgT:"Auch mit {wg} bleibt eine Lücke von {a}. Kein Verweis nach § 12a SGB II.",vNotStableH:"Kein Verweis: Einkommen nicht gesichert",vNotStableT:"Rechnerisch reicht „{v}“. § 12a SGB II verlangt aber, dass die Hilfebedürftigkeit mindestens 3 Monate am Stück überwunden wird.",
+vVermH:"Kein Anspruch auf Grundsicherung wegen Vermögen",vVermT:"Das Vermögen ({a}) liegt über dem Freibetrag von {b}. {wg} ist bis {c} Vermögen möglich und direkt zu beantragen.",vWgVerm:"{wg} ausgeschlossen: Vermögen über {c} (§ 21 Nr. 3 WoGG).",
+vAsylH:"Leistungen nach dem AsylbLG",vAsylT:"Kein Anspruch auf SGB II oder SGB XII und kein {wg} (§ 7 Abs. 1 WoGG). Bitte den Einzelfall prüfen.",vEuH:"Kein Anspruch auf SGB II (§ 7 Abs. 1 Satz 2 SGB II)",vEuT:"{wg} und {kiz} direkt prüfen. Gegebenenfalls Überbrückungsleistungen nach § 23 SGB XII.",
+warnMixed:"Gemischte Bedarfsgemeinschaft: Eine erwachsene Person ist nicht erwerbsfähig. Sie hat gegebenenfalls vorrangig Anspruch auf Grundsicherung nach dem 4. Kapitel SGB XII (§ 5 Abs. 2 SGB II). Hier vereinfacht gemeinsam gerechnet.",
+warnKid15:"Kein Erwachsener ist erwerbsfähig, aber ein Kind ist 15 oder älter. Dann kann trotzdem eine SGB-II-Bedarfsgemeinschaft bestehen. Bitte manuell prüfen.",
+warnAzubi:"Auszubildende und Studierende mit Förderanspruch sind von Bürgergeld weitgehend ausgeschlossen (§ 7 Abs. 5 SGB II, § 22 SGB XII) und unter Umständen auch vom Wohngeld (§ 20 Abs. 2 WoGG). Bitte manuell prüfen.",
+warnStat:"Bei Unterbringung in einer stationären Einrichtung über 6 Monate besteht kein Anspruch auf SGB II (§ 7 Abs. 4 SGB II). Bitte manuell prüfen.",
+warnRag:"Das Alter wird aus dem Geburtsjahr geschätzt und liegt nahe an der Regelaltersgrenze. Bitte mit dem Geburtsdatum genau prüfen.",noKizMode:"Kinderzuschlag wird im Modus „Nur Wohngeld“ nicht geprüft.",
+lawXII:"Sozialhilfe ist nachrangig (§ 2 SGB XII): Deckt Wohngeld den Bedarf, geht es vor. Wer SGB-XII-Leistungen erhält, ist vom Wohngeld ausgeschlossen (§ 7 WoGG).",
+incRente:"Person {n}: Rente {a} − Grundrentenfreibetrag {b}",incSo:"Person {n}: weitere Einnahmen",pauschR:"− Versicherungspauschale Person {n}",mbS:"Mehrbedarf Schwangerschaft Person {n}",mbG:"Mehrbedarf Merkzeichen G Person {n}",mbWW:"Mehrbedarf dezentrale Warmwassererzeugung",
+wgRente:"Rente Person {n}",wgGrz:"− Grundrentenfreibetrag Person {n}",wgSb:"− Freibetrag Schwerbehinderung/Pflege Person {n}",rw0:"0 · Zuständigkeit und Vermögen",vermR:"Vermögen {a} · Grenze Grundsicherung {b} · Grenze {wg} {c}",bVorWg:"Mit {wg}",bBenWg:"+ {wg}",kizVerm:"Vermögen über der Grenze von {x}."},
+
+en:{modeQ:"What should be checked?",modeFam:"Housing benefit + child supplement",modeFamD:"for families with children",modeWg:"Housing benefit only",modeWgD:"for singles, couples and pensioners",solo:"Single",soloD:"one person alone",stP:"People",qP:"Who are the adults?",kidsOpt:"Children (optional)",
+by:"Year of birth",ef:"Ability to work",efJa:"able to work (at least 3 hours a day)",efDau:"fully unable to work – permanently",efZeit:"fully unable to work – temporarily",efAR:"receives early old-age pension",ageL:"about {a} years",ragYes:"statutory retirement age reached",ragNo:"below statutory retirement age",
+schw:"pregnant from week 13",merkG:"disability card with mark G",sb100:"degree of disability 100 or in need of care at home",kvRente:"insured through pension (KVdR)",sRente:"insured through pension",
+jobH:"Work",renteH:"Pension",renteB:"Pension gross",renteN:"Amount paid",grz:"at least 33 years of basic pension periods (Grundrente)",soP:"Other income (e.g. unemployment or sick pay)",stabil:"Income is expected to stay the same for at least 3 months",ww:"Hot water from instantaneous heater or boiler (decentralised)",verm:"Household assets",vermHint:"Savings, securities etc. An appropriate self-used home and an appropriate car do not count.",
+sonderH:"Special circumstances (if applicable)",sAzubi:"Training or studies with BAföG/BAB entitlement",sEu:"EU citizen only seeking work or in the first 3 months",sAsyl:"Benefits under the Asylum Seekers' Benefits Act",sStat:"in a residential institution for more than 6 months",
+rg_II:"SGB II (citizen's income / basic income)",rg_XII4:"SGB XII – basic income in old age and reduced earning capacity",rg_XII3:"SGB XII – subsistence assistance",rg_asyl:"Asylum Seekers' Benefits Act",rg_none:"no SGB II entitlement",regimeL:"Responsible: {r}",
+vSgbWgT:"Even with {wg} a shortfall of {a} remains. No referral under § 12a SGB II.",vNotStableH:"No referral: income not secured",vNotStableT:"Mathematically “{v}” is enough. But § 12a SGB II requires the need to end for at least 3 consecutive months.",
+vVermH:"No basic income entitlement because of assets",vVermT:"Assets ({a}) exceed the allowance of {b}. {wg} is possible up to {c} in assets – apply directly.",vWgVerm:"{wg} excluded: assets above {c} (§ 21 No. 3 WoGG).",
+vAsylH:"Benefits under the AsylbLG",vAsylT:"No entitlement to SGB II or SGB XII and no {wg} (§ 7 (1) WoGG). Please check the individual case.",vEuH:"No SGB II entitlement (§ 7 (1) sentence 2 SGB II)",vEuT:"Check {wg} and {kiz} directly. Bridging benefits under § 23 SGB XII may apply.",
+warnMixed:"Mixed benefit community: one adult cannot work. They may have priority entitlement to basic income under chapter 4 SGB XII (§ 5 (2) SGB II). Calculated jointly here for simplicity.",
+warnKid15:"No adult is able to work, but a child is 15 or older. An SGB II benefit community may still exist. Please check manually.",
+warnAzubi:"Trainees and students with funding entitlement are largely excluded from basic income (§ 7 (5) SGB II, § 22 SGB XII) and possibly from housing benefit (§ 20 (2) WoGG). Please check manually.",
+warnStat:"After more than 6 months in a residential institution there is no SGB II entitlement (§ 7 (4) SGB II). Please check manually.",
+warnRag:"Age is estimated from the year of birth and is close to the retirement age. Please check with the exact date of birth.",noKizMode:"Child supplement is not checked in “Housing benefit only” mode.",
+lawXII:"Social assistance is subordinate (§ 2 SGB XII): if housing benefit covers the need, it takes priority. SGB XII recipients are excluded from housing benefit (§ 7 WoGG).",
+incRente:"Person {n}: pension {a} − basic pension allowance {b}",incSo:"Person {n}: other income",pauschR:"− insurance flat rate person {n}",mbS:"Additional need pregnancy person {n}",mbG:"Additional need mark G person {n}",mbWW:"Additional need decentralised hot water",
+wgRente:"Pension person {n}",wgGrz:"− basic pension allowance person {n}",wgSb:"− disability/care allowance person {n}",rw0:"0 · Responsibility and assets",vermR:"Assets {a} · limit basic income {b} · limit {wg} {c}",bVorWg:"With {wg}",bBenWg:"+ {wg}",kizVerm:"Assets above the limit of {x}."},
+
+tr:{modeQ:"Ne kontrol edilsin?",modeFam:"Konut yardımı + çocuk ek ödeneği",modeFamD:"çocuklu aileler için",modeWg:"Sadece konut yardımı",modeWgD:"bekârlar, çiftler ve emekliler için",solo:"Bekâr",soloD:"tek başına bir kişi",stP:"Kişiler",qP:"Yetişkinler kimler?",kidsOpt:"Çocuklar (isteğe bağlı)",
+by:"Doğum yılı",ef:"Çalışabilirlik",efJa:"çalışabilir (günde en az 3 saat)",efDau:"tam çalışma gücü kaybı – kalıcı",efZeit:"tam çalışma gücü kaybı – geçici",efAR:"erken yaşlılık emekli aylığı alıyor",ageL:"yaklaşık {a} yaş",ragYes:"yasal emeklilik yaşına ulaşıldı",ragNo:"yasal emeklilik yaşının altında",
+schw:"13. haftadan itibaren hamile",merkG:"G işaretli engelli kartı",sb100:"engellilik derecesi 100 veya evde bakıma muhtaç",kvRente:"emeklilik üzerinden sigortalı (KVdR)",sRente:"emeklilik üzerinden sigortalı",
+jobH:"İş",renteH:"Emekli aylığı",renteB:"Brüt emekli aylığı",renteN:"Ödenen tutar",grz:"en az 33 yıl temel emeklilik süresi (Grundrente)",soP:"Diğer gelirler (ör. işsizlik parası, hastalık parası)",stabil:"Gelirin en az 3 ay aynı kalması bekleniyor",ww:"Sıcak su şofben veya boylerle (merkezi olmayan)",verm:"Hanenin varlıkları",vermHint:"Birikim, menkul kıymetler vb. Kendi oturduğu uygun konut ve uygun araba sayılmaz.",
+sonderH:"Özel durumlar (varsa)",sAzubi:"BAföG/BAB hakkı olan eğitim veya öğrenim",sEu:"Sadece iş arayan veya ilk 3 ayındaki AB vatandaşı",sAsyl:"Sığınmacılara Yardım Yasası kapsamında yardım",sStat:"6 aydan uzun süredir yatılı bir kurumda",
+rg_II:"SGB II (Bürgergeld / temel güvence)",rg_XII4:"SGB XII – yaşlılık ve çalışma gücü kaybında temel güvence",rg_XII3:"SGB XII – geçim yardımı",rg_asyl:"Sığınmacılara Yardım Yasası",rg_none:"SGB II hakkı yok",regimeL:"Sorumlu: {r}",
+vSgbWgT:"{wg} ile de {a} açık kalıyor. § 12a SGB II'ye göre yönlendirme yok.",vNotStableH:"Yönlendirme yok: gelir güvence altında değil",vNotStableT:"Hesaben „{v}“ yeterli. Ancak § 12a SGB II, muhtaçlığın en az 3 ay kesintisiz sona ermesini şart koşar.",
+vVermH:"Varlık nedeniyle temel güvence hakkı yok",vVermT:"Varlık ({a}) {b} muafiyet sınırının üzerinde. {wg}, {c} tutarına kadar varlıkla mümkündür – doğrudan başvurun.",vWgVerm:"{wg} hariç: varlık {c} üzerinde (§ 21 Nr. 3 WoGG).",
+vAsylH:"AsylbLG kapsamında yardım",vAsylT:"SGB II veya SGB XII hakkı ve {wg} yok (§ 7 Abs. 1 WoGG). Lütfen durumu ayrıca inceleyin.",vEuH:"SGB II hakkı yok (§ 7 Abs. 1 Satz 2 SGB II)",vEuT:"{wg} ve {kiz} doğrudan kontrol edin. Gerekirse § 23 SGB XII'ye göre geçiş yardımı.",
+warnMixed:"Karma ihtiyaç topluluğu: bir yetişkin çalışamıyor. Öncelikle SGB XII 4. bölüme göre temel güvence hakkı olabilir (§ 5 Abs. 2 SGB II). Burada basitleştirilerek birlikte hesaplandı.",
+warnKid15:"Hiçbir yetişkin çalışamıyor ama bir çocuk 15 yaş veya üstünde. Yine de bir SGB II ihtiyaç topluluğu olabilir. Lütfen elle kontrol edin.",
+warnAzubi:"Destek hakkı olan çırak ve öğrenciler temel güvenceden büyük ölçüde hariçtir (§ 7 Abs. 5 SGB II, § 22 SGB XII), konut yardımından da hariç olabilir (§ 20 Abs. 2 WoGG). Lütfen elle kontrol edin.",
+warnStat:"6 aydan uzun yatılı kurumda kalışta SGB II hakkı yoktur (§ 7 Abs. 4 SGB II). Lütfen elle kontrol edin.",
+warnRag:"Yaş doğum yılından tahmin ediliyor ve emeklilik yaşına yakın. Lütfen tam doğum tarihiyle kontrol edin.",noKizMode:"„Sadece konut yardımı“ modunda çocuk ek ödeneği kontrol edilmez.",
+lawXII:"Sosyal yardım ikincildir (§ 2 SGB XII): konut yardımı ihtiyacı karşılıyorsa önceliklidir. SGB XII yardımı alanlar konut yardımından hariçtir (§ 7 WoGG).",
+incRente:"Kişi {n}: emekli aylığı {a} − temel emeklilik muafiyeti {b}",incSo:"Kişi {n}: diğer gelirler",pauschR:"− sigorta götürü tutarı kişi {n}",mbS:"Ek ihtiyaç hamilelik kişi {n}",mbG:"Ek ihtiyaç G işareti kişi {n}",mbWW:"Ek ihtiyaç merkezi olmayan sıcak su",
+wgRente:"Emekli aylığı kişi {n}",wgGrz:"− temel emeklilik muafiyeti kişi {n}",wgSb:"− engellilik/bakım muafiyeti kişi {n}",rw0:"0 · Sorumluluk ve varlık",vermR:"Varlık {a} · temel güvence sınırı {b} · {wg} sınırı {c}",bVorWg:"{wg} ile",bBenWg:"+ {wg}",kizVerm:"Varlık {x} sınırının üzerinde."},
+
+ar:{modeQ:"ماذا تريد أن تفحص؟",modeFam:"بدل السكن + إعانة الأطفال الإضافية",modeFamD:"للأسر التي لديها أطفال",modeWg:"بدل السكن فقط",modeWgD:"للأفراد والأزواج والمتقاعدين",solo:"شخص بمفرده",soloD:"شخص واحد يعيش وحده",stP:"الأشخاص",qP:"من هم البالغون؟",kidsOpt:"الأطفال (اختياري)",
+by:"سنة الميلاد",ef:"القدرة على العمل",efJa:"قادر على العمل (3 ساعات يوميًا على الأقل)",efDau:"عجز كامل عن العمل – دائم",efZeit:"عجز كامل عن العمل – مؤقت",efAR:"يتقاضى معاش شيخوخة مبكرًا",ageL:"حوالي {a} سنة",ragYes:"بلغ سن التقاعد القانوني",ragNo:"دون سن التقاعد القانوني",
+schw:"حامل من الأسبوع 13",merkG:"بطاقة إعاقة مع العلامة G",sb100:"درجة إعاقة 100 أو بحاجة إلى رعاية في المنزل",kvRente:"مؤمَّن عبر المعاش (KVdR)",sRente:"مؤمَّن عبر المعاش",
+jobH:"العمل",renteH:"المعاش",renteB:"المعاش الإجمالي",renteN:"المبلغ المدفوع",grz:"33 سنة على الأقل من فترات المعاش الأساسي (Grundrente)",soP:"دخل آخر (مثل إعانة البطالة أو المرض)",stabil:"من المتوقع أن يبقى الدخل ثابتًا 3 أشهر على الأقل",ww:"الماء الساخن عبر سخان فوري أو غلاية (لا مركزي)",verm:"أصول الأسرة",vermHint:"المدخرات والأوراق المالية وغيرها. لا يُحتسب السكن المناسب الذي تسكنه ولا السيارة المناسبة.",
+sonderH:"حالات خاصة (إن وجدت)",sAzubi:"تدريب مهني أو دراسة مع استحقاق BAföG أو BAB",sEu:"مواطن من الاتحاد الأوروبي يبحث عن عمل فقط أو في أول 3 أشهر",sAsyl:"إعانات وفق قانون إعانات طالبي اللجوء",sStat:"في مؤسسة إيوائية لأكثر من 6 أشهر",
+rg_II:"SGB II (Bürgergeld / الضمان الأساسي)",rg_XII4:"SGB XII – الضمان الأساسي في الشيخوخة وعند العجز",rg_XII3:"SGB XII – مساعدة المعيشة",rg_asyl:"قانون إعانات طالبي اللجوء",rg_none:"لا يوجد استحقاق لـ SGB II",regimeL:"الجهة المختصة: {r}",
+vSgbWgT:"حتى مع {wg} يبقى عجز قدره {a}. لا إحالة وفق § 12a SGB II.",vNotStableH:"لا إحالة: الدخل غير مضمون",vNotStableT:"حسابيًا يكفي „{v}“. لكن § 12a SGB II يشترط انتهاء الحاجة لمدة 3 أشهر متتالية على الأقل.",
+vVermH:"لا استحقاق للضمان الأساسي بسبب الأصول",vVermT:"الأصول ({a}) تتجاوز حد الإعفاء البالغ {b}. {wg} ممكن حتى أصول بقيمة {c} – قدّم الطلب مباشرة.",vWgVerm:"{wg} مستبعد: الأصول فوق {c} (§ 21 Nr. 3 WoGG).",
+vAsylH:"إعانات وفق AsylbLG",vAsylT:"لا استحقاق لـ SGB II أو SGB XII ولا {wg} (§ 7 Abs. 1 WoGG). يرجى فحص الحالة الفردية.",vEuH:"لا استحقاق لـ SGB II (§ 7 Abs. 1 Satz 2 SGB II)",vEuT:"افحص {wg} و{kiz} مباشرة. قد تنطبق إعانات انتقالية وفق § 23 SGB XII.",
+warnMixed:"مجتمع احتياج مختلط: أحد البالغين غير قادر على العمل. قد يكون له حق أولوية في الضمان الأساسي وفق الفصل 4 من SGB XII (§ 5 Abs. 2 SGB II). حُسب هنا معًا للتبسيط.",
+warnKid15:"لا يوجد بالغ قادر على العمل، لكن أحد الأطفال عمره 15 سنة أو أكثر. قد يوجد مع ذلك مجتمع احتياج وفق SGB II. يرجى الفحص يدويًا.",
+warnAzubi:"المتدربون والطلاب الذين لهم حق الدعم مستبعدون إلى حد كبير من الضمان الأساسي (§ 7 Abs. 5 SGB II, § 22 SGB XII) وربما من بدل السكن (§ 20 Abs. 2 WoGG). يرجى الفحص يدويًا.",
+warnStat:"عند الإقامة في مؤسسة إيوائية أكثر من 6 أشهر لا يوجد استحقاق لـ SGB II (§ 7 Abs. 4 SGB II). يرجى الفحص يدويًا.",
+warnRag:"العمر مقدَّر من سنة الميلاد وهو قريب من سن التقاعد. يرجى الفحص بتاريخ الميلاد الدقيق.",noKizMode:"لا تُفحص إعانة الأطفال الإضافية في وضع „بدل السكن فقط“.",
+lawXII:"المساعدة الاجتماعية ثانوية (§ 2 SGB XII): إذا غطى بدل السكن الحاجة فله الأولوية. متلقو إعانات SGB XII مستبعدون من بدل السكن (§ 7 WoGG).",
+incRente:"الشخص {n}: المعاش {a} − إعفاء المعاش الأساسي {b}",incSo:"الشخص {n}: دخل آخر",pauschR:"− مبلغ التأمين الثابت للشخص {n}",mbS:"حاجة إضافية للحمل، الشخص {n}",mbG:"حاجة إضافية للعلامة G، الشخص {n}",mbWW:"حاجة إضافية للماء الساخن اللامركزي",
+wgRente:"معاش الشخص {n}",wgGrz:"− إعفاء المعاش الأساسي للشخص {n}",wgSb:"− إعفاء الإعاقة/الرعاية للشخص {n}",rw0:"0 · الجهة المختصة والأصول",vermR:"الأصول {a} · حد الضمان الأساسي {b} · حد {wg} {c}",bVorWg:"مع {wg}",bBenWg:"+ {wg}",kizVerm:"الأصول فوق الحد البالغ {x}."},
+
+uk:{modeQ:"Що потрібно перевірити?",modeFam:"Житлова допомога + доплата на дитину",modeFamD:"для сімей з дітьми",modeWg:"Лише житлова допомога",modeWgD:"для одиноких, пар і пенсіонерів",solo:"Одинока особа",soloD:"одна людина",stP:"Особи",qP:"Хто є дорослими?",kidsOpt:"Діти (необов'язково)",
+by:"Рік народження",ef:"Працездатність",efJa:"працездатний (щонайменше 3 год на день)",efDau:"повна втрата працездатності – постійно",efZeit:"повна втрата працездатності – тимчасово",efAR:"отримує дострокову пенсію за віком",ageL:"близько {a} років",ragYes:"досягнуто пенсійного віку",ragNo:"до пенсійного віку",
+schw:"вагітність з 13-го тижня",merkG:"посвідчення інваліда з позначкою G",sb100:"ступінь інвалідності 100 або потреба в догляді вдома",kvRente:"застрахований через пенсію (KVdR)",sRente:"застрахований через пенсію",
+jobH:"Робота",renteH:"Пенсія",renteB:"Пенсія брутто",renteN:"Сума виплати",grz:"щонайменше 33 роки базового пенсійного стажу (Grundrente)",soP:"Інші доходи (напр. ALG I, лікарняні)",stabil:"Дохід, імовірно, не зміниться щонайменше 3 місяці",ww:"Гаряча вода через проточний нагрівач або бойлер (децентралізовано)",verm:"Майно домогосподарства",vermHint:"Заощадження, цінні папери тощо. Власне належне житло та належний автомобіль не враховуються.",
+sonderH:"Особливі обставини (якщо є)",sAzubi:"Навчання з правом на BAföG/BAB",sEu:"Громадянин ЄС лише для пошуку роботи або в перші 3 місяці",sAsyl:"Виплати за Законом про допомогу шукачам притулку",sStat:"понад 6 місяців у стаціонарному закладі",
+rg_II:"SGB II (Bürgergeld / базове забезпечення)",rg_XII4:"SGB XII – базове забезпечення в старості та при втраті працездатності",rg_XII3:"SGB XII – допомога на прожиття",rg_asyl:"Закон про допомогу шукачам притулку",rg_none:"немає права на SGB II",regimeL:"Відповідальний: {r}",
+vSgbWgT:"Навіть із {wg} бракує {a}. Направлення за § 12a SGB II немає.",vNotStableH:"Без направлення: дохід не гарантований",vNotStableT:"За розрахунком „{v}“ достатньо. Але § 12a SGB II вимагає припинення потреби щонайменше на 3 місяці поспіль.",
+vVermH:"Немає права на базове забезпечення через майно",vVermT:"Майно ({a}) перевищує пільгову межу {b}. {wg} можлива при майні до {c} – подавайте заяву напряму.",vWgVerm:"{wg} виключено: майно понад {c} (§ 21 Nr. 3 WoGG).",
+vAsylH:"Виплати за AsylbLG",vAsylT:"Немає права на SGB II чи SGB XII і на {wg} (§ 7 Abs. 1 WoGG). Перевірте окремий випадок.",vEuH:"Немає права на SGB II (§ 7 Abs. 1 Satz 2 SGB II)",vEuT:"Перевірте {wg} і {kiz} напряму. Можливі перехідні виплати за § 23 SGB XII.",
+warnMixed:"Змішана спільнота потреби: одна доросла особа непрацездатна. Вона може мати пріоритетне право на базове забезпечення за главою 4 SGB XII (§ 5 Abs. 2 SGB II). Тут для спрощення розраховано разом.",
+warnKid15:"Жоден дорослий не працездатний, але дитині 15 років або більше. Тоді все ж може існувати спільнота потреби за SGB II. Перевірте вручну.",
+warnAzubi:"Учні та студенти з правом на підтримку здебільшого виключені з базового забезпечення (§ 7 Abs. 5 SGB II, § 22 SGB XII) і, можливо, з житлової допомоги (§ 20 Abs. 2 WoGG). Перевірте вручну.",
+warnStat:"При перебуванні в стаціонарному закладі понад 6 місяців немає права на SGB II (§ 7 Abs. 4 SGB II). Перевірте вручну.",
+warnRag:"Вік оцінено за роком народження, він близький до пенсійного. Перевірте за точною датою народження.",noKizMode:"У режимі „Лише житлова допомога“ доплата на дитину не перевіряється.",
+lawXII:"Соціальна допомога є субсидіарною (§ 2 SGB XII): якщо житлова допомога покриває потребу, вона має перевагу. Отримувачі SGB XII виключені з житлової допомоги (§ 7 WoGG).",
+incRente:"Особа {n}: пенсія {a} − пільга базової пенсії {b}",incSo:"Особа {n}: інші доходи",pauschR:"− страхова паушальна сума особи {n}",mbS:"Додаткова потреба вагітність особа {n}",mbG:"Додаткова потреба позначка G особа {n}",mbWW:"Додаткова потреба децентралізована гаряча вода",
+wgRente:"Пенсія особи {n}",wgGrz:"− пільга базової пенсії особи {n}",wgSb:"− пільга інвалідність/догляд особи {n}",rw0:"0 · Відповідальність і майно",vermR:"Майно {a} · межа базового забезпечення {b} · межа {wg} {c}",bVorWg:"Із {wg}",bBenWg:"+ {wg}",kizVerm:"Майно понад межу {x}."},
+
+ru:{modeQ:"Что нужно проверить?",modeFam:"Жилищное пособие + детская надбавка",modeFamD:"для семей с детьми",modeWg:"Только жилищное пособие",modeWgD:"для одиноких, пар и пенсионеров",solo:"Одинокий",soloD:"один человек",stP:"Лица",qP:"Кто взрослые?",kidsOpt:"Дети (необязательно)",
+by:"Год рождения",ef:"Трудоспособность",efJa:"трудоспособен (не менее 3 ч в день)",efDau:"полная нетрудоспособность – постоянно",efZeit:"полная нетрудоспособность – временно",efAR:"получает досрочную пенсию по старости",ageL:"около {a} лет",ragYes:"пенсионный возраст достигнут",ragNo:"до пенсионного возраста",
+schw:"беременность с 13-й недели",merkG:"удостоверение инвалида с отметкой G",sb100:"степень инвалидности 100 или нуждается в уходе дома",kvRente:"застрахован через пенсию (KVdR)",sRente:"застрахован через пенсию",
+jobH:"Работа",renteH:"Пенсия",renteB:"Пенсия брутто",renteN:"Сумма выплаты",grz:"не менее 33 лет базового пенсионного стажа (Grundrente)",soP:"Другие доходы (напр. ALG I, больничные)",stabil:"Доход, вероятно, не изменится не менее 3 месяцев",ww:"Горячая вода через проточный нагреватель или бойлер (децентрализованно)",verm:"Имущество домохозяйства",vermHint:"Сбережения, ценные бумаги и т. п. Собственное соразмерное жильё и соразмерный автомобиль не учитываются.",
+sonderH:"Особые обстоятельства (если есть)",sAzubi:"Обучение с правом на BAföG/BAB",sEu:"Гражданин ЕС только для поиска работы или в первые 3 месяца",sAsyl:"Выплаты по Закону о пособиях для просителей убежища",sStat:"более 6 месяцев в стационарном учреждении",
+rg_II:"SGB II (Bürgergeld / базовое обеспечение)",rg_XII4:"SGB XII – базовое обеспечение в старости и при нетрудоспособности",rg_XII3:"SGB XII – помощь на жизнь",rg_asyl:"Закон о пособиях для просителей убежища",rg_none:"нет права на SGB II",regimeL:"Ответственный: {r}",
+vSgbWgT:"Даже с {wg} не хватает {a}. Направления по § 12a SGB II нет.",vNotStableH:"Без направления: доход не гарантирован",vNotStableT:"По расчёту „{v}“ достаточно. Но § 12a SGB II требует прекращения нуждаемости не менее чем на 3 месяца подряд.",
+vVermH:"Нет права на базовое обеспечение из-за имущества",vVermT:"Имущество ({a}) превышает льготный предел {b}. {wg} возможно при имуществе до {c} – подавайте заявление напрямую.",vWgVerm:"{wg} исключено: имущество свыше {c} (§ 21 Nr. 3 WoGG).",
+vAsylH:"Выплаты по AsylbLG",vAsylT:"Нет права на SGB II или SGB XII и на {wg} (§ 7 Abs. 1 WoGG). Проверьте отдельный случай.",vEuH:"Нет права на SGB II (§ 7 Abs. 1 Satz 2 SGB II)",vEuT:"Проверьте {wg} и {kiz} напрямую. Возможны переходные выплаты по § 23 SGB XII.",
+warnMixed:"Смешанное сообщество нуждающихся: один взрослый нетрудоспособен. У него может быть приоритетное право на базовое обеспечение по главе 4 SGB XII (§ 5 Abs. 2 SGB II). Здесь для упрощения рассчитано вместе.",
+warnKid15:"Ни один взрослый не трудоспособен, но ребёнку 15 лет или больше. Тогда всё же может существовать сообщество нуждающихся по SGB II. Проверьте вручную.",
+warnAzubi:"Учащиеся и студенты с правом на поддержку в основном исключены из базового обеспечения (§ 7 Abs. 5 SGB II, § 22 SGB XII) и, возможно, из жилищного пособия (§ 20 Abs. 2 WoGG). Проверьте вручную.",
+warnStat:"При пребывании в стационарном учреждении более 6 месяцев права на SGB II нет (§ 7 Abs. 4 SGB II). Проверьте вручную.",
+warnRag:"Возраст оценён по году рождения и близок к пенсионному. Проверьте по точной дате рождения.",noKizMode:"В режиме „Только жилищное пособие“ детская надбавка не проверяется.",
+lawXII:"Социальная помощь субсидиарна (§ 2 SGB XII): если жилищное пособие покрывает потребность, оно имеет приоритет. Получатели SGB XII исключены из жилищного пособия (§ 7 WoGG).",
+incRente:"Лицо {n}: пенсия {a} − льгота базовой пенсии {b}",incSo:"Лицо {n}: другие доходы",pauschR:"− страховая паушальная сумма лица {n}",mbS:"Доп. потребность беременность лицо {n}",mbG:"Доп. потребность отметка G лицо {n}",mbWW:"Доп. потребность децентрализованная горячая вода",
+wgRente:"Пенсия лица {n}",wgGrz:"− льгота базовой пенсии лица {n}",wgSb:"− льгота инвалидность/уход лица {n}",rw0:"0 · Ответственность и имущество",vermR:"Имущество {a} · предел базового обеспечения {b} · предел {wg} {c}",bVorWg:"С {wg}",bBenWg:"+ {wg}",kizVerm:"Имущество выше предела {x}."}
+};
+for(const l in Y) Object.assign(I[l], Y[l]);
 let L = "de";
 try{ const s = localStorage.getItem("vp-wob-lang"); if(s && I[s]) L = s; }catch(e){}
 function t(k, v){
   const d = I[L], s0 = (d[k]!==undefined ? d[k] : I.de[k]);
   if(typeof s0!=="string") return s0;
   const vars = Object.assign({wg:d.wg, kiz:d.kiz}, v||{});
-  return s0.replace(/\{(\w+)\}/g,(m,n)=>vars[n]!==undefined ? vars[n] : m);
+  let out = s0.replace(/\{(\w+)\}/g,(m,n)=>vars[n]!==undefined ? vars[n] : m);
+  if(SYS==="XII" && FIX.has(k)) out = out.replace(/§ ?12a SGB II/g,"§ 2 SGB XII").replace(/§ 26 SGB II/g,"§ 32 SGB XII").replace(/SGB([ -])II\b/g,"SGB$1XII").replace(/Bürgergeld/g,"Sozialhilfe").replace(/Jobcenter/g,"Sozialamt");
+  return out;
 }
+/* Texte, die je nach Zuständigkeit SGB II oder SGB XII nennen */
+let SYS = "II";
+const FIX = new Set(["sub","v0","kGap","bSgb","bSgbL","vNoneH","vSgbH","vSgbT","vSgbWgT","vZusH","vZusT","vWgT","vKizT","rw1","rw4h","rw5","gezHint","kvHint","kKv","kvLabel","bZus"]);
 const loc = ()=>LANGS.find(x=>x[0]===L)[2];
 const eur = v => new Intl.NumberFormat(loc(),{style:"currency",currency:"EUR"}).format(Math.round(v*100)/100);
 const pct = v => new Intl.NumberFormat(loc(),{style:"percent",maximumFractionDigits:2}).format(v);
@@ -593,7 +748,12 @@ const DEFAULTS = {
       c:[4.080e-5,3.040e-5,2.450e-5,1.760e-5,1.720e-5,1.660e-5,1.650e-5,1.650e-5,1.660e-5,1.660e-5,1.960e-5,2.210e-5],
       wk:1230, aeFrei:1320, min:10},
   kiz:{max:297, minPaar:900, minAE:600, quote:0.45, ae:[77,63,53,46,41], paar:[83,71,62,55,50]},
-  sv:{mindest:1318.33, kv:14.0, zb:2.9, pv:3.6, pvAb:0.25, minijob:603, gez:18.36}
+  sv:{mindest:1318.33, kv:14.0, zb:2.9, pv:3.6, pvAb:0.25, pvKl:0.6, minijob:603, gez:18.36},
+  mb:{schw:17, g:17, ww:[2.3,1.4,1.2,0.8]},
+  grz:{base:100, q:0.3, capPct:50},
+  xii:{erwQ:0.3, erwCapPct:50},
+  wgx:{renteWk:102, rentePa:0.1, sb:1800},
+  verm:{iiK:40000, iiKPlus:15000, ii:15000, xiiAd:10000, xiiKid:500, wg:60000, wgPlus:30000, kiz:40000, kizPlus:15000}
 };
 const clone = o => JSON.parse(JSON.stringify(o));
 function deepMerge(tg,s){ for(const k in s){ if(s[k] && typeof s[k]==="object" && !Array.isArray(s[k])) tg[k]=deepMerge(tg[k]||{},s[k]); else tg[k]=s[k]; } return tg; }
@@ -604,21 +764,27 @@ const setP = (o,p,v)=>{ const ks=p.split("."), last=ks.pop(); ks.reduce((x,k)=>x
 
 const PERS = ["1 Person","2 Personen","3 Personen","4 Personen","5 Personen"];
 const GROUPS = [
-  {t:"Regelbedarfe 2026 (SGB II)", src:"Bundesregierung: Nullrunde zum 01.01.2026.", items:[
+  {t:"Regelbedarfe 2026 (SGB II und SGB XII)", src:"Bundesregierung: Nullrunde zum 01.01.2026.", items:[
     ["rb.single","Alleinstehend / alleinerziehend (RBS 1)"],["rb.partner","Partner, je Person (RBS 2)"],["rb.u25","Kind 18–24 im Elternhaushalt (RBS 3)"],["rb.k14","Kind 14–17 (RBS 4)"],["rb.k6","Kind 6–13 (RBS 5)"],["rb.k0","Kind 0–5 (RBS 6)"]]},
+  {t:"Mehrbedarfe", src:"§ 21 SGB II, §§ 23, 30 SGB XII", items:[
+    ["mb.schw","Schwangerschaft ab 13. Woche % RB"],["mb.g","Merkzeichen G (nicht erwerbsfähig) % RB"],["mb.ww.0","Warmwasser dezentral Erwachsene/18–24 % RB"],["mb.ww.1","Warmwasser 14–17 % RB"],["mb.ww.2","Warmwasser 6–13 % RB"],["mb.ww.3","Warmwasser 0–5 % RB"]]},
   {t:"Kindergeld", src:"§ 66 EStG, ab 01.01.2026.", items:[["kindergeld","Kindergeld je Kind"]]},
   {t:"Freibeträge Erwerbstätige (§ 11b SGB II)", src:"§ 11b Abs. 2 und 3 SGB II", items:[
-    ["fb.grund","Grundfreibetrag €"],["fb.q1","Quote 100 € bis Stufe 1"],["fb.g1","Stufe 1 bis € brutto"],["fb.q2","Quote bis Stufe 2"],["fb.g2","Stufe 2 bis € brutto"],["fb.q3","Quote bis Obergrenze"],["fb.g3o","Obergrenze ohne Kind € brutto"],["fb.g3m","Obergrenze mit Kind € brutto"],["fb.pausch","Versicherungspauschale (sonstiges Einkommen) €"]]},
+    ["fb.grund","Grundfreibetrag €"],["fb.q1","Quote 100 € bis Stufe 1"],["fb.g1","Stufe 1 bis € brutto"],["fb.q2","Quote bis Stufe 2"],["fb.g2","Stufe 2 bis € brutto"],["fb.q3","Quote bis Obergrenze"],["fb.g3o","Obergrenze ohne Kind € brutto"],["fb.g3m","Obergrenze mit Kind € brutto"],["fb.pausch","Versicherungspauschale (ohne Erwerb) €"]]},
+  {t:"SGB XII und Grundrente", src:"§ 82 Abs. 3 SGB XII; Grundrentenfreibetrag § 11b Abs. 2b SGB II, § 82a SGB XII, § 17a WoGG", warn:"Grundrentenfreibetrag vereinfacht auf die gesamte Rente angewandt.", items:[
+    ["xii.erwQ","SGB XII: Absetzbetrag Erwerb (Anteil vom Brutto)"],["xii.erwCapPct","SGB XII: Höchstbetrag % RBS 1"],["grz.base","Grundrente: Sockelfreibetrag €"],["grz.q","Grundrente: Anteil darüber"],["grz.capPct","Grundrente: Höchstbetrag % RBS 1"]]},
+  {t:"Vermögensgrenzen", src:"§ 12 SGB II; § 90 SGB XII i. V. m. VO; WoGVwV 21.37; § 6a Abs. 3 BKGG", warn:"Vereinfacht: Vermögen des ganzen Haushalts gegen die Summe der Freibeträge.", items:[
+    ["verm.iiK","SGB II Karenzzeit: 1. Person €"],["verm.iiKPlus","SGB II Karenzzeit: je weitere Person €"],["verm.ii","SGB II nach Karenzzeit: je Person €"],["verm.xiiAd","SGB XII: je erwachsene Person €"],["verm.xiiKid","SGB XII: je Kind €"],["verm.wg","Wohngeld: 1. Person €"],["verm.wgPlus","Wohngeld: je weitere Person €"],["verm.kiz","Kinderzuschlag: 1. Person €"],["verm.kizPlus","Kinderzuschlag: je weitere Person €"]]},
   {t:"Angemessene Bruttokaltmiete Wolfsburg", src:"Mietobergrenzen Stadt Wolfsburg, Stand 01.01.2022.", warn:"Veraltet. Bitte aktuelle KdU-Richtlinie eintragen. 5 Personen und Mehrbetrag geschätzt.",
     items:PERS.map((p,i)=>["kdu.p."+i,p]).concat([["kdu.plus","je weitere Person (Annahme)"],["kdu.karenz","Deckel Karenzzeit (Faktor, ab 01.07.2026)"]])},
   {t:"Wohngeld – Höchstbeträge Mietstufe IV", src:"Anlage 1 WoGG ab 01.01.2025; Wolfsburg = Mietstufe IV.", items:PERS.map((p,i)=>["wg.hb."+i,p]).concat([["wg.hbPlus","je weitere Person"]])},
   {t:"Wohngeld – Klima- und Heizkostenkomponente", src:"§ 12 WoGG (Richtflächen 48/62/74/86/98 m², +12 m²).", items:
     PERS.map((p,i)=>["wg.klima."+i,"Klima "+p]).concat([["wg.klimaPlus","Klima je weitere"]],PERS.map((p,i)=>["wg.hke."+i,"Heizkostenentlastung "+p]),[["wg.hkePlus","Entlastung je weitere"]],PERS.map((p,i)=>["wg.hkk."+i,"Heizkostenkomponente "+p]),[["wg.hkkPlus","Komponente je weitere"]])},
-  {t:"Wohngeld – Einkommen", src:"§§ 14–17 WoGG, § 9a EStG", warn:"Freibetrag Alleinerziehende (§ 17 WoGG) vereinfacht je Kind unter 18 – bitte prüfen.", items:[
-    ["wg.wk","Werbungskosten-Pauschbetrag €/Jahr"],["wg.aeFrei","Freibetrag Alleinerziehende €/Jahr je Kind"],["wg.min","Mindestbetrag Wohngeld (§ 21 WoGG) €"]]},
+  {t:"Wohngeld – Einkommen", src:"§§ 14–17a WoGG, § 9a EStG", warn:"Freibetrag Alleinerziehende (§ 17 WoGG) vereinfacht je Kind unter 18 – bitte prüfen.", items:[
+    ["wg.wk","Werbungskosten-Pauschbetrag Arbeit €/Jahr"],["wgx.renteWk","Werbungskosten-Pauschbetrag Rente €/Jahr"],["wgx.rentePa","Pauschalabzug Rente (KV/PV)"],["wg.aeFrei","Freibetrag Alleinerziehende €/Jahr je Kind"],["wgx.sb","Freibetrag GdB 100 / Pflege €/Jahr"],["wg.min","Mindestbetrag Wohngeld (§ 21 WoGG) €"]]},
   {t:"Wohngeldformel – Werte a, b, c", src:"Anlage 2 WoGG ab 01.01.2025. 1,15 · (M − (a + b·M + c·Y) · Y)", abc:true},
-  {t:"Kranken-/Pflegeversicherung und Rundfunkbeitrag 2026", src:"§ 240 Abs. 4 SGB V (1/90 der Bezugsgröße 3.955 € × 30), durchschnittlicher Zusatzbeitrag 2026, § 55 SGB XI, RBStV.", warn:"Zusatzbeitrag je Krankenkasse unterschiedlich. Abschlag PV ab dem 2. Kind unter 25 je 0,25 Prozentpunkte.", items:[
-    ["sv.mindest","Mindestbemessungsgrundlage €/Monat"],["sv.kv","KV-Satz ermäßigt (ohne Krankengeld) %"],["sv.zb","Zusatzbeitrag Durchschnitt %"],["sv.pv","PV-Satz %"],["sv.pvAb","PV-Abschlag je Kind ab 2. Kind %-Punkte"],["sv.minijob","Minijob-Grenze €/Monat"],["sv.gez","Rundfunkbeitrag €/Monat"]]},
+  {t:"Kranken-/Pflegeversicherung und Rundfunkbeitrag 2026", src:"§ 240 Abs. 4 SGB V (1/90 der Bezugsgröße 3.955 € × 30), durchschnittlicher Zusatzbeitrag 2026, § 55 SGB XI, RBStV.", warn:"Zusatzbeitrag je Krankenkasse unterschiedlich.", items:[
+    ["sv.mindest","Mindestbemessungsgrundlage €/Monat"],["sv.kv","KV-Satz ermäßigt (ohne Krankengeld) %"],["sv.zb","Zusatzbeitrag Durchschnitt %"],["sv.pv","PV-Satz %"],["sv.pvAb","PV-Abschlag je Kind ab 2. Kind %-Punkte"],["sv.pvKl","PV-Zuschlag Kinderlose %-Punkte"],["sv.minijob","Minijob-Grenze €/Monat"],["sv.gez","Rundfunkbeitrag €/Monat"]]},
   {t:"Kinderzuschlag", src:"§ 6a BKGG; Merkblatt Kinderzuschlag (BA).", warn:"Wohnkostenanteile aus KiZ-Rechnern (Existenzminimumbericht), 5+ Kinder geschätzt – gegen DA-KiZ prüfen.",
     items:[["kiz.max","Höchstbetrag je Kind €"],["kiz.minPaar","Mindesteinkommen Paar € brutto"],["kiz.minAE","Mindesteinkommen alleinerziehend € brutto"],["kiz.quote","Minderungsquote Einkommen"]]
       .concat([1,2,3,4,5].map((k,i)=>["kiz.ae."+i,"Wohnkostenanteil alleinerz., "+k+(k===5?"+":"")+" Kind(er) %"]))
@@ -626,19 +792,36 @@ const GROUPS = [
 ];
 
 /* ================= Haushalt ================= */
-const EXAMPLE = {typ:"paar", verh:false, b1:1700, n1:1330, b2:0, n2:0, kv1:"auto", kv2:"auto", so:0, pa:"0.3", mi:780, hz:110, ka:false, mog:null, kids:[{age:4,uh:0},{age:9,uh:0}], step:1};
-const EMPTY = {typ:"paar", verh:false, b1:0, n1:0, b2:0, n2:0, kv1:"auto", kv2:"auto", so:0, pa:"0.3", mi:0, hz:0, ka:false, mog:null, kids:[], step:1};
-let S = clone(EXAMPLE);
-try{ const s = localStorage.getItem("vp-wob-input2"); if(s) S = Object.assign(clone(EXAMPLE), JSON.parse(s)); }catch(e){}
-const save = ()=>{ try{ localStorage.setItem("vp-wob-input2", JSON.stringify(S)); }catch(e){} };
+const AD0 = {gj:1990, ef:"ja", schw:false, merkG:false, sb:false, kv:"auto", jb:0, jn:0, rb:0, rn:0, grz:false, so:0};
+const SON0 = {azubi:false, eu:false, asyl:false, stat:false};
+const EX = {
+  fam:{mode:"fam", typ:"paar", verh:false, ad:[Object.assign({},AD0,{gj:1988,jb:1700,jn:1330}),Object.assign({},AD0,{gj:1990})], kids:[{age:4,uh:0},{age:9,uh:0}], son:clone(SON0), pa:"0.3", stabil:true, mi:780, hz:110, ww:false, ka:false, mog:null, verm:2000, step:1},
+  wg:{mode:"wg", typ:"solo", verh:false, ad:[Object.assign({},AD0,{gj:1957,ef:"ar",rb:1250,rn:1096,grz:true}),Object.assign({},AD0)], kids:[], son:clone(SON0), pa:"0.3", stabil:true, mi:520, hz:70, ww:false, ka:false, mog:null, verm:5000, step:1}
+};
+const emptyFor = mode => ({mode, typ: mode==="fam"?"paar":"solo", verh:false, ad:[Object.assign({},AD0,{gj:0}),Object.assign({},AD0,{gj:0})], kids:[], son:clone(SON0), pa:"0.3", stabil:true, mi:0, hz:0, ww:false, ka:false, mog:null, verm:0, step:1});
+let S = clone(EX.fam);
+try{ const s = localStorage.getItem("vp-wob-input3"); if(s){ const o=JSON.parse(s); S = Object.assign(clone(EX[o.mode==="wg"?"wg":"fam"]), o); } }catch(e){}
+const save = ()=>{ try{ localStorage.setItem("vp-wob-input3", JSON.stringify(S)); }catch(e){} };
 
 const $ = id => document.getElementById(id);
 const num = v => { const x = parseFloat(String(v).replace(",", ".")); return isFinite(x) ? x : 0; };
 const clamp = (x,lo,hi)=>Math.min(Math.max(x,lo),hi);
+const r2 = x => Math.round(x*100)/100;
 const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 /* ================= Rechenkern ================= */
+const NOW = new Date(), YEAR = NOW.getFullYear(), MON = NOW.getMonth()+1;
+/* Regelaltersgrenze in Monaten nach Geburtsjahr (§ 235 SGB VI) */
+function ragM(gj){ if(gj<=1946) return 780; if(gj<=1958) return 780+(gj-1946); if(gj<=1963) return 792+2*(gj-1958); return 804; }
+function person(a){
+  if(!a.gj) return {age:null, rag:false, edge:false, isEF:a.ef==="ja"};
+  const am = (YEAR-a.gj)*12 + (MON-6);            /* Geburtstag zur Jahresmitte angenommen */
+  const rag = am >= ragM(a.gj), edge = Math.abs(am-ragM(a.gj)) <= 6;
+  const age = Math.floor(am/12);
+  return {age, rag, edge, isEF: !rag && a.ef==="ja" && age>=15};
+}
 function rbKind(age){ if(age>=18) return P.rb.u25; if(age>=14) return P.rb.k14; if(age>=6) return P.rb.k6; return P.rb.k0; }
+function wwRate(age){ const r=P.mb.ww; if(age>=18) return r[0]; if(age>=14) return r[1]; if(age>=6) return r[2]; return r[3]; }
 function byN(arr, plus, n){ const i = Math.min(n,arr.length)-1; return arr[i] + Math.max(0,n-arr.length)*plus; }
 function freibetrag(brutto, mitKind){
   if(brutto<=0) return 0; const f = P.fb;
@@ -648,57 +831,99 @@ function freibetrag(brutto, mitKind){
   fb += f.q3*clamp(brutto-f.g2,0,(mitKind?f.g3m:f.g3o)-f.g2);
   return fb;
 }
+function grzFrei(rente){ if(rente<=0) return 0; return Math.min(rente, P.rb.single*P.grz.capPct/100, P.grz.base+P.grz.q*Math.max(0,rente-P.grz.base)); }
+
 function grund(H){
-  const ae = H.typ==="ae";
-  const kids = H.kids.filter(k=>k.age>=0 && k.age<25);
-  const nAd = ae?1:2, n = nAd+kids.length;
-  const earners = ae ? [{b:H.b1,n:H.n1}] : [{b:H.b1,n:H.n1},{b:H.b2,n:H.n2}];
-  const eink = earners.map(e=>{ const fb=freibetrag(e.b,kids.length>0); return {b:e.b,n:e.n,fb,ber:Math.max(0,e.n-fb)}; });
-  const sonstBer = H.so>0 ? Math.max(0,H.so-P.fb.pausch) : 0;
-  const elternEink = eink.reduce((s,e)=>s+e.ber,0)+sonstBer;
+  const nAd = H.typ==="paar" ? 2 : 1, ads = H.ad.slice(0,nAd), pers = ads.map(person);
+  const kids = H.kids.filter(k=>k.age>=0 && k.age<25), n = nAd+kids.length, mitKind = kids.length>0;
+  /* Zuständigkeit: SGB II, wenn mindestens ein Erwachsener erwerbsfähig ist (§§ 7, 8 SGB II) */
+  let regime;
+  if(H.son.asyl) regime = "asyl";
+  else if(pers.some(p=>p.isEF)) regime = H.son.eu ? "none" : "II";
+  else if(pers.every((p,i)=>p.rag || ads[i].ef==="dau")) regime = "XII4";
+  else regime = "XII3";
+  const sys = regime.indexOf("XII")===0 ? "XII" : "II";
+  const mixed = regime==="II" && pers.some(p=>!p.isEF);
+  const kid15 = !pers.some(p=>p.isEF) && kids.some(k=>k.age>=15) && regime!=="asyl";
+  const rbA = H.typ==="paar" ? P.rb.partner : P.rb.single;
+  /* Mehrbedarfe */
+  const mbList = [];
   let mbPct = 0;
-  if(ae){ const m = kids.filter(k=>k.age<18), u7=m.filter(k=>k.age<7).length, u16=m.filter(k=>k.age<16).length;
+  if(H.typ==="ae"){ const m=kids.filter(k=>k.age<18), u7=m.filter(k=>k.age<7).length, u16=m.filter(k=>k.age<16).length;
     mbPct = m.length ? Math.max((u7>=1||u16>=2)?36:0, Math.min(60,12*m.length)) : 0; }
-  const mb = Math.round(P.rb.single*mbPct)/100;
-  const rbEltern = ae ? P.rb.single : 2*P.rb.partner;
-  const grenzeTab = byN(P.kdu.p,P.kdu.plus,n);
-  const grenze = (H.mog!=null && H.mog>0) ? H.mog : grenzeTab;
+  const mbAE = r2(P.rb.single*mbPct/100); if(mbAE>0) mbList.push([t("mbAE",{p:mbPct}), mbAE]);
+  ads.forEach((a,i)=>{
+    if(a.schw) mbList.push([t("mbS",{n:i+1}), r2(rbA*P.mb.schw/100)]);
+    if(a.merkG && !pers[i].isEF) mbList.push([t("mbG",{n:i+1}), r2(rbA*P.mb.g/100)]);
+  });
+  const wwAd = H.ww ? r2(rbA*P.mb.ww[0]/100)*nAd : 0;
+  const wwKids = kids.map(k=>H.ww ? r2(rbKind(k.age)*wwRate(k.age)/100) : 0);
+  const wwSum = wwAd + wwKids.reduce((x,y)=>x+y,0);
+  if(wwSum>0) mbList.push([t("mbWW"), r2(wwSum)]);
+  const mbAdults = mbList.reduce((s,x)=>s+x[1],0) - (wwSum - wwAd);
+  const rbEltern = rbA*nAd;
+  const grenzeTab = byN(P.kdu.p,P.kdu.plus,n), grenze = (H.mog!=null && H.mog>0) ? H.mog : grenzeTab;
   const mieteAnerk = H.ka ? Math.min(H.mi,grenze*P.kdu.karenz) : Math.min(H.mi,grenze);
-  const kdu = mieteAnerk+H.hz;
-  return {ae,kids,nAd,n,eink,sonstBer,elternEink,mbPct,mb,rbEltern,grenze,grenzeTab,mieteAnerk,kdu,kopf:kdu/n};
+  const kdu = mieteAnerk + H.hz, kopf = kdu/n;
+  /* Einkommen je Erwachsenem, nach SGB II und nach SGB XII bereinigt */
+  const inc = ads.map(a=>{
+    const fbII = freibetrag(a.jb,mitKind), jobII = Math.max(0,a.jn-fbII);
+    const fbXII = a.jb>0 ? Math.min(P.xii.erwQ*a.jb, P.rb.single*P.xii.erwCapPct/100) : 0, jobXII = Math.max(0,a.jn-fbXII);
+    const gf = a.grz ? grzFrei(a.rn) : 0, rente = Math.max(0,a.rn-gf);
+    const pausch = (a.jb<=0 && (a.rn>0 || a.so>0)) ? P.fb.pausch : 0;
+    return {fbII, jobII, fbXII, jobXII, gf, rente, pausch, eII:Math.max(0,jobII+rente+a.so-pausch), eXII:Math.max(0,jobXII+rente+a.so)};
+  });
+  const eII = inc.reduce((s,x)=>s+x.eII,0), eXII = inc.reduce((s,x)=>s+x.eXII,0);
+  const need = rbEltern + mbAdults + kdu + kids.reduce((s,k,i)=>s+rbKind(k.age)+wwKids[i],0);
+  return {nAd, ads, pers, kids, n, regime, sys, mixed, kid15, rbA, mbList, mbPct, mbAdults, wwKids, rbEltern, grenze, grenzeTab, mieteAnerk, kdu, kopf, inc, eII, eXII, elternEink: sys==="XII"?eXII:eII, need, ae:H.typ==="ae"};
 }
-function sgb2(G, x){
+function sgb(G, x){
   const wgShare = (x.wg||0)/G.n; let kgSurplus=0, childGap=0;
   G.kids.forEach((k,i)=>{
-    const need = rbKind(k.age)+G.kopf, own = k.uh+(x.kiz?x.kiz[i]:0)+wgShare;
+    const need = rbKind(k.age)+G.kopf+G.wwKids[i], own = k.uh+(x.kiz?x.kiz[i]:0)+wgShare;
     if(own>=need){ kgSurplus+=P.kindergeld; }
     else { const rem=need-own, used=Math.min(P.kindergeld,rem); kgSurplus+=P.kindergeld-used; childGap+=rem-used; }
   });
-  const pGap = (G.rbEltern+G.mb+G.kopf*G.nAd+(x.kv||0)) -(G.elternEink+kgSurplus+wgShare*G.nAd);
-  return {gap: Math.max(0, Math.round((pGap+childGap)*100)/100)};
+  const pGap = (G.rbEltern+G.mbAdults+G.kopf*G.nAd+(x.kv||0)) - (G.elternEink+kgSurplus+wgShare*G.nAd);
+  return {gap: Math.max(0, r2(pGap+childGap))};
 }
-function wohngeld(G,H){
+function vermLimits(G,H){
+  const v=P.verm, n=G.n;
+  const sgbL = G.sys==="XII" ? v.xiiAd*G.nAd + v.xiiKid*G.kids.length : (H.ka ? v.iiK+v.iiKPlus*(n-1) : v.ii*n);
+  return {sgb:sgbL, wg:v.wg+v.wgPlus*(n-1), kiz:v.kiz+v.kizPlus*(n-1)};
+}
+function wohngeld(G,H,VL){
   const n=G.n, hb=byN(P.wg.hb,P.wg.hbPlus,n), kl=byN(P.wg.klima,P.wg.klimaPlus,n), hke=byN(P.wg.hke,P.wg.hkePlus,n), hkk=byN(P.wg.hkk,P.wg.hkkPlus,n);
   const cap=hb+kl, mRent=Math.min(H.mi,cap), M=mRent+hke+hkk, pa=num(H.pa);
-  let jahr=0; const rows=[];
-  G.eink.forEach((e,i)=>{ if(e.b>0){ const j=e.b*12, wk=Math.min(j,P.wg.wk), v=(j-wk)*(1-pa); jahr+=v; rows.push([t("earnY",{n:i+1}),j,wk,v]); } });
-  if(H.so>0){ const j=H.so*12; jahr+=j; rows.push([t("otherY"),j,0,j]); }
+  let jahr=0, frei=0; const rows=[];
+  G.ads.forEach((a,i)=>{
+    if(a.jb>0){ const j=a.jb*12, wk=Math.min(j,P.wg.wk), v=(j-wk)*(1-pa); jahr+=v; rows.push([t("earnY",{n:i+1}),j,wk,v]); }
+    if(a.rb>0){ const j=a.rb*12, wk=Math.min(j,P.wgx.renteWk), v=(j-wk)*(1-P.wgx.rentePa); jahr+=v; rows.push([t("wgRente",{n:i+1}),j,wk,v]);
+      if(a.grz){ const g=12*grzFrei(a.rb); frei+=g; rows.push([t("wgGrz",{n:i+1}),"","",-g]); } }
+    if(a.so>0){ const j=a.so*12; jahr+=j; rows.push([t("otherY"),j,0,j]); }
+    if(a.sb){ frei+=P.wgx.sb; rows.push([t("wgSb",{n:i+1}),"","",-P.wgx.sb]); }
+  });
   G.kids.forEach((k,i)=>{ if(k.uh>0){ const j=k.uh*12; jahr+=j; rows.push([t("maintY",{n:i+1}),j,0,j]); } });
-  const frei = G.ae ? G.kids.filter(k=>k.age<18).length*P.wg.aeFrei : 0;
+  if(G.ae){ const f=G.kids.filter(k=>k.age<18).length*P.wg.aeFrei; if(f>0){ frei+=f; rows.push([t("aeY"),"","",-f]); } }
   const Y = Math.max(0,jahr-frei)/12;
   const idx=Math.min(n,12)-1, a=P.wg.a[idx], b=P.wg.b[idx], c=P.wg.c[idx];
   const raw = 1.15*(M-(a+b*M+c*Y)*Y);
   let wg = Math.round(Math.max(0,Math.min(raw,M)));
   const unterMin = wg>0 && wg<P.wg.min; if(wg<P.wg.min) wg=0;
-  return {wg,raw,M,mRent,cap,hb,kl,hke,hkk,Y,frei,rows,a,b,c,pa,unterMin};
+  const vermEx = H.verm > VL.wg, asyl = G.regime==="asyl";
+  if(vermEx || asyl) wg = 0;
+  return {wg,raw,M,mRent,cap,hb,kl,hke,hkk,Y,rows,a,b,c,pa,unterMin,vermEx,asyl};
 }
-function kinderzuschlag(G,H,kv){
+function kinderzuschlag(G,H,kv,VL){
   const r = {kiz:0, perChild:G.kids.map(()=>0), reason:"", st:null};
+  if(H.mode!=="fam"){ r.reason=t("noKizMode"); return r; }
   if(!G.kids.length){ r.reason=t("rNoKids"); return r; }
-  const brutto = G.eink.reduce((s,e)=>s+e.b,0)+H.so, minE = G.ae?P.kiz.minAE:P.kiz.minPaar;
+  if(G.regime==="asyl"){ r.reason=t("rg_asyl"); return r; }
+  if(H.verm > VL.kiz){ r.reason=t("kizVerm",{x:eur(VL.kiz)}); return r; }
+  const brutto = G.ads.reduce((s,a)=>s+a.jb+a.rb+a.so,0), minE = G.ae?P.kiz.minAE:P.kiz.minPaar;
   if(brutto<minE){ r.reason=t("rMin",{x:eur(minE)}); return r; }
   const tab = G.ae?P.kiz.ae:P.kiz.paar, anteil = tab[Math.min(G.kids.length,tab.length)-1]/100;
-  const bedarf = G.rbEltern+G.mb+anteil*G.kdu, einkK = Math.max(0,G.elternEink-(kv||0)), excess = Math.max(0,einkK-bedarf);
+  const bedarf = G.rbEltern+G.mbAdults+anteil*G.kdu, einkK = Math.max(0,G.eII-(kv||0)), excess = Math.max(0,einkK-bedarf);
   const base = G.kids.map(k=>Math.max(0,P.kiz.max-P.kiz.quote*k.uh)), baseSum = base.reduce((s,x)=>s+x,0);
   const minderung = P.kiz.quote*excess, total = Math.max(0,Math.floor(baseSum-minderung));
   r.perChild = baseSum>0 ? base.map(x=>total*x/baseSum) : base.map(()=>0);
@@ -706,42 +931,44 @@ function kinderzuschlag(G,H,kv){
   r.st = {brutto,minE,anteil,bedarf,eink:einkK,kv:kv||0,excess,baseSum,minderung};
   return r;
 }
-/* Kranken-/Pflegeversicherung außerhalb des SGB II.
-   Im SGB II ist jede Person über das Jobcenter versichert. Ohne SGB II gilt:
-   Job über Minijob-Grenze = pflichtversichert; Ehepartner ohne eigenen Schutz = familienversichert;
-   sonst (z. B. unverheiratete Partner, Alleinerziehende mit Minijob) = freiwillige Versicherung zum Mindestbeitrag.
-   Kinder sind über einen versicherten Elternteil familienversichert. */
+/* Kranken-/Pflegeversicherung außerhalb der Grundsicherung */
 function kvCalc(G,H){
   const s=P.sv, k=G.kids.length;
-  const pv = s.pv - (k>=2 ? s.pvAb*(Math.min(k,5)-1) : 0);
+  const pv = k===0 ? s.pv+s.pvKl : s.pv-(k>=2 ? s.pvAb*(Math.min(k,5)-1) : 0);
   const rate = (s.kv+s.zb+pv)/100;
-  const ad = G.ae ? [{b:H.b1,o:H.kv1}] : [{b:H.b1,o:H.kv1},{b:H.b2,o:H.kv2}];
-  const pers = ad.map((a,i)=>{
-    let auto;
-    if(a.b>s.minijob) auto="job";
-    else if(!G.ae && H.verh && ad[1-i].b>s.minijob) auto="fam";
-    else auto="frei";
-    const st = (a.o && a.o!=="auto") ? a.o : auto;
-    const basis = Math.max(s.mindest, a.b);
-    const voll = Math.round(basis*rate*100)/100;
+  const base = (a,i)=>{
+    if(a.jb>s.minijob) return "job";
+    if(a.rb>0 && (G.pers[i].rag || a.ef!=="ja")) return "rente";
+    if(a.so>0) return "leist";
+    return null;
+  };
+  const pers = G.ads.map((a,i)=>{
+    let auto = base(a,i);
+    if(!auto){ const j=1-i; auto = (H.typ==="paar" && H.verh && G.ads[j] && base(G.ads[j],j)) ? "fam" : "frei"; }
+    const st = (a.kv && a.kv!=="auto") ? a.kv : auto;
+    const basis = Math.max(s.mindest, a.jb+a.rb+a.so);
+    const voll = r2(basis*rate);
     return {auto, st, basis, voll, beitrag: st==="frei" ? voll : 0};
   });
-  return {pers, rate, pv, total: Math.round(pers.reduce((x,p)=>x+p.beitrag,0)*100)/100};
+  return {pers, rate, pv, total: r2(pers.reduce((x,p)=>x+p.beitrag,0))};
 }
 function berechne(H){
-  const G=grund(H), W=wohngeld(G,H), KV=kvCalc(G,H), K=kinderzuschlag(G,H,KV.total);
-  const s0=sgb2(G,{}), s0kv=sgb2(G,{kv:KV.total});
+  const G=grund(H); SYS=G.sys;
+  const VL=vermLimits(G,H), W=wohngeld(G,H,VL), KV=kvCalc(G,H), K=kinderzuschlag(G,H,KV.total,VL);
+  const s0=sgb(G,{}), s0kv=sgb(G,{kv:KV.total});
+  const idx = H.mode==="fam" ? [0,1,2,3] : [0,1];
   const xs=[null,{wg:W.wg},{kiz:K.perChild},{wg:W.wg,kiz:K.perChild}];
   const has=[true,W.wg>0,K.kiz>0,(W.wg>0||K.kiz>0)];
   const V = xs.map((x,i)=>{
     if(i===0) return {gap:s0.gap, st:s0.gap>0?"gap":"ok", zus:0};
-    const g=sgb2(G,Object.assign({kv:KV.total},x)).gap, gn=sgb2(G,x).gap;
+    const g=sgb(G,Object.assign({kv:KV.total},x)).gap, gn=sgb(G,x).gap;
     const st = !has[i] ? "na" : g===0 ? "ok" : (gn===0 ? "zus" : "gap");
     return {gap:g, gapNoKv:gn, st, zus: st==="zus" ? g : 0};
   });
-  const need = G.rbEltern+G.mb+G.kdu+G.kids.reduce((s,k)=>s+rbKind(k.age),0);
-  const basis = G.eink.reduce((s,e)=>s+e.n,0)+H.so+G.kids.reduce((s,k)=>s+k.uh,0)+G.kids.length*P.kindergeld;
-  return {G,W,K,KV,s0,s0kv,V,need,basis};
+  const sgbAvail = (G.regime==="II"||G.regime==="XII3"||G.regime==="XII4") && H.verm<=VL.sgb;
+  const basis = G.ads.reduce((s,a)=>s+a.jn+a.rn+a.so,0)+G.kids.reduce((s,k)=>s+k.uh,0)+G.kids.length*P.kindergeld;
+  const top = H.mode==="fam" ? 3 : 1;
+  return {G,W,K,KV,VL,s0,s0kv,V,idx,top,sgbAvail,need:G.need,basis};
 }
 
 /* ================= Oberfläche ================= */
@@ -751,6 +978,8 @@ const ICON = {
   bad:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m8.5 8.5 7 7M15.5 8.5l-7 7"/></svg>',
   x:'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>'
 };
+const SK = ["step1","stP","step2","step3"];
+const nAdOf = ()=> S.typ==="paar" ? 2 : 1;
 
 function renderLangs(){
   $("langs").innerHTML = LANGS.map(([c,n])=>'<button type="button" lang="'+c+'" data-l="'+c+'" aria-pressed="'+(c===L)+'">'+n+'</button>').join("");
@@ -760,28 +989,29 @@ function applyStatic(){
   const root = document.documentElement;
   root.lang = L; root.dir = L==="ar" ? "rtl" : "ltr";
   document.querySelectorAll("[data-i18n]").forEach(el=>{ el.textContent = t(el.dataset.i18n); });
-  document.querySelectorAll("[data-i18n-adult]").forEach(el=>{ el.textContent = t("adult",{n:el.dataset.i18nAdult}); });
   $("limits").innerHTML = t("lim").concat(t("lim2")).map(x=>"<li>"+esc(x)+"</li>").join("");
   $("paramsDe").textContent = t("paramsDe"); $("paramsDe").hidden = !t("paramsDe");
 }
 function renderSteps(){
-  $("steps").innerHTML = [1,2,3].map(i=>'<li><button type="button" data-go="'+i+'"'+(S.step===i?' aria-current="step"':'')+(S.step>i?' class="done"':'')+'><span class="bar"></span>'+i+' · '+esc(t("step"+i))+'</button></li>').join("");
+  $("steps").style.gridTemplateColumns = "repeat(4,minmax(0,1fr))";
+  $("steps").innerHTML = SK.map((k,j)=>{ const i=j+1; return '<li><button type="button" data-go="'+i+'"'+(S.step===i?' aria-current="step"':'')+(S.step>i?' class="done"':'')+'><span class="bar"></span>'+i+' · '+esc(t(k))+'</button></li>'; }).join("");
   $("steps").querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{ S.step=+b.dataset.go; showStep(); }));
 }
 function showStep(){
   document.querySelectorAll("section[data-step]").forEach(s=>{ s.hidden = +s.dataset.step!==S.step; });
   $("backBtn").hidden = S.step===1;
-  $("nextBtn").textContent = S.step===3 ? t("toResult") : t("next");
+  $("nextBtn").textContent = S.step===4 ? t("toResult") : t("next");
   renderSteps(); save();
 }
 function renderKids(){
   const box=$("kids");
+  $("kidsTitle").textContent = S.mode==="fam" ? t("kids") : t("kidsOpt");
   box.innerHTML = S.kids.length ? "" : '<p class="hint">'+esc(t("noKids"))+'</p>';
   S.kids.forEach((k,i)=>{
     const d=document.createElement("div"); d.className="kid";
     d.innerHTML = '<span class="av" aria-hidden="true">'+(i+1)+'</span>'+
       '<label class="f"><span>'+esc(t("age"))+'</span><div class="stepper"><button type="button" data-d="-1" aria-label="−1">−</button><input id="ka'+i+'" type="number" inputmode="numeric" min="0" max="24" value="'+k.age+'"><button type="button" data-d="1" aria-label="+1">+</button></div></label>'+
-      '<label class="f money-l"><span>'+esc(t("maint"))+'</span><div class="money"><input id="ku'+i+'" type="number" inputmode="decimal" min="0" step="any" value="'+k.uh+'"><span>€</span></div></label>'+
+      '<label class="f money-l"><span>'+esc(t("maint"))+'</span><div class="money"><input id="ku'+i+'" type="number" inputmode="decimal" min="0" step="any" value="'+(k.uh||"")+'"><span>€</span></div></label>'+
       '<button type="button" class="icon-btn" data-rm="'+i+'" aria-label="'+esc(t("remove",{n:i+1}))+'">'+ICON.x+'</button>';
     box.appendChild(d);
     const ageIn = d.querySelector("#ka"+i);
@@ -792,68 +1022,134 @@ function renderKids(){
   });
   $("addKid").disabled = S.kids.length>=8;
 }
-function fillForm(){
-  ["b1","n1","b2","n2","so","mi","hz"].forEach(id=>{ $(id).value = S[id]||""; });
-  $("pa").value=S.pa; $("ka").checked=S.ka; $("verh").checked=!!S.verh;
-  $("kv1").value=S.kv1||"auto"; $("kv2").value=S.kv2||"auto";
+const money = (id,label,val)=>'<label class="f"><span>'+esc(label)+'</span><div class="money"><input id="'+id+'" type="number" inputmode="decimal" min="0" step="any" value="'+(val||"")+'"><span>€</span></div></label>';
+const ck = (id,label,on)=>'<label class="ck"><input type="checkbox" id="'+id+'"'+(on?' checked':'')+'><span>'+esc(label)+'</span></label>';
+function renderPersons(){
+  const box=$("persons"); box.innerHTML="";
+  for(let i=0;i<nAdOf();i++){
+    const a=S.ad[i], d=document.createElement("div"); d.className="person";
+    d.innerHTML = '<h4>'+esc(t("adult",{n:i+1}))+'</h4>'+
+      '<div class="pair"><label class="f"><span>'+esc(t("by"))+'</span><input class="sel" id="gj'+i+'" type="number" inputmode="numeric" min="1920" max="'+YEAR+'" value="'+(a.gj||"")+'"></label>'+
+      '<label class="f"><span>'+esc(t("ef"))+'</span><select class="sel" id="ef'+i+'">'+["ja","dau","zeit","ar"].map(v=>'<option value="'+v+'"'+(a.ef===v?' selected':'')+'>'+esc(t({ja:"efJa",dau:"efDau",zeit:"efZeit",ar:"efAR"}[v]))+'</option>').join("")+'</select></label></div>'+
+      '<p class="chipline" id="age'+i+'"></p>'+
+      '<div class="checks">'+ck("schw"+i,t("schw"),a.schw)+ck("merkG"+i,t("merkG"),a.merkG)+ck("sb"+i,t("sb100"),a.sb)+'</div>'+
+      '<label class="f"><span>'+esc(t("kvLabel"))+'</span><select class="sel kvsel" id="kv'+i+'"><option value="auto"></option>'+["job","fam","rente","leist","frei"].map(v=>'<option value="'+v+'"'+(a.kv===v?' selected':'')+'>'+esc(t({job:"kvJob",fam:"kvFam",rente:"kvRente",leist:"kvLeist",frei:"kvFrei"}[v]))+'</option>').join("")+'</select></label>';
+    box.appendChild(d);
+    d.querySelector("#gj"+i).addEventListener("input",e=>{ a.gj=Math.floor(num(e.target.value)); update(); });
+    d.querySelector("#ef"+i).addEventListener("change",e=>{ a.ef=e.target.value; update(); });
+    ["schw","merkG","sb"].forEach(f=>d.querySelector("#"+f+i).addEventListener("change",e=>{ a[f]=e.target.checked; update(); }));
+    d.querySelector("#kv"+i).addEventListener("change",e=>{ a.kv=e.target.value; update(); });
+  }
 }
+function renderIncomes(){
+  const box=$("incomes"); box.innerHTML="";
+  for(let i=0;i<nAdOf();i++){
+    const a=S.ad[i], d=document.createElement("div"); d.className="person";
+    d.innerHTML = '<h4>'+esc(t("adult",{n:i+1}))+'</h4>'+
+      '<p class="sub">'+esc(t("jobH"))+'</p><div class="pair">'+money("jb"+i,t("gross"),a.jb)+money("jn"+i,t("net"),a.jn)+'</div>'+
+      '<p class="sub">'+esc(t("renteH"))+'</p><div class="pair">'+money("rb"+i,t("renteB"),a.rb)+money("rn"+i,t("renteN"),a.rn)+'</div>'+
+      ck("grz"+i,t("grz"),a.grz)+money("so"+i,t("soP"),a.so);
+    box.appendChild(d);
+    ["jb","jn","rb","rn","so"].forEach(f=>d.querySelector("#"+f+i).addEventListener("input",e=>{ a[f]=Math.max(0,num(e.target.value)); update(); }));
+    d.querySelector("#grz"+i).addEventListener("change",e=>{ a.grz=e.target.checked; update(); });
+  }
+}
+function fillForm(){
+  ["mi","hz","verm"].forEach(id=>{ $(id).value = S[id]||""; });
+  $("pa").value=S.pa; $("ka").checked=S.ka; $("verh").checked=!!S.verh; $("ww").checked=!!S.ww; $("stabil").checked=S.stabil!==false;
+  Object.keys(SON0).forEach(k=>{ $("s_"+k).checked=!!S.son[k]; });
+  if(Object.keys(SON0).some(k=>S.son[k])) $("sonder").open = true;
+}
+function rebuild(){ renderKids(); renderPersons(); renderIncomes(); }
 function bind(){
-  ["b1","n1","b2","n2","so","mi","hz"].forEach(id=>$(id).addEventListener("input",()=>{ S[id]=Math.max(0,num($(id).value)); update(); }));
+  ["mi","hz","verm"].forEach(id=>$(id).addEventListener("input",()=>{ S[id]=Math.max(0,num($(id).value)); update(); }));
   $("pa").addEventListener("change",()=>{ S.pa=$("pa").value; update(); });
-  $("ka").addEventListener("change",()=>{ S.ka=$("ka").checked; update(); });
-  $("verh").addEventListener("change",()=>{ S.verh=$("verh").checked; update(); });
-  ["kv1","kv2"].forEach(id=>$(id).addEventListener("change",()=>{ S[id]=$(id).value; update(); }));
+  [["ka","ka"],["verh","verh"],["ww","ww"],["stabil","stabil"]].forEach(([id,k])=>$(id).addEventListener("change",()=>{ S[k]=$(id).checked; update(); }));
+  Object.keys(SON0).forEach(k=>$("s_"+k).addEventListener("change",()=>{ S.son[k]=$("s_"+k).checked; update(); }));
+  document.querySelectorAll("[data-mode]").forEach(b=>b.addEventListener("click",()=>{
+    if(S.mode===b.dataset.mode) return;
+    S.mode=b.dataset.mode; if(S.mode==="fam" && S.typ==="solo") S.typ="paar";
+    rebuild(); update();
+  }));
+  document.querySelectorAll("[data-typ]").forEach(b=>b.addEventListener("click",()=>{ S.typ=b.dataset.typ; rebuild(); update(); }));
+  $("addKid").addEventListener("click",()=>{ S.kids.push({age:6,uh:0}); renderKids(); update(); const last=$("ka"+(S.kids.length-1)); if(last) last.focus(); });
   $("mog").addEventListener("input",()=>{ const v=num($("mog").value); S.mog = v>0 ? v : null; update(); });
   $("mogReset").addEventListener("click",()=>{ S.mog=null; update(); });
-  document.querySelectorAll("[data-typ]").forEach(b=>b.addEventListener("click",()=>{ S.typ=b.dataset.typ; update(); }));
-  $("addKid").addEventListener("click",()=>{ S.kids.push({age:6,uh:0}); renderKids(); update(); const last=$("ka"+(S.kids.length-1)); if(last) last.focus(); });
   $("backBtn").addEventListener("click",()=>{ S.step=Math.max(1,S.step-1); showStep(); });
   $("nextBtn").addEventListener("click",()=>{
-    if(S.step<3){ S.step++; showStep(); const q=document.querySelector('section[data-step="'+S.step+'"] input'); if(q) q.focus(); }
+    if(S.step<4){ S.step++; showStep(); const q=document.querySelector('section[data-step="'+S.step+'"] input'); if(q) q.focus(); }
     else { $("resCard").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth", block:"start"}); }
   });
-  $("exBtn").addEventListener("click",()=>{ S=clone(EXAMPLE); fillForm(); renderKids(); showStep(); update(); });
-  $("rsBtn").addEventListener("click",()=>{ S=clone(EMPTY); fillForm(); renderKids(); showStep(); update(); });
+  $("exBtn").addEventListener("click",()=>{ S=clone(EX[S.mode]); fillForm(); rebuild(); showStep(); update(); });
+  $("rsBtn").addEventListener("click",()=>{ S=emptyFor(S.mode); fillForm(); rebuild(); showStep(); update(); });
   $("f").addEventListener("submit",e=>e.preventDefault());
 }
-
 function stName(st,p){
-  if(st==="job") return t("sJob"); if(st==="fam") return t("sFam"); if(st==="leist") return t("sLeist");
+  if(st==="job") return t("sJob"); if(st==="fam") return t("sFam"); if(st==="leist") return t("sLeist"); if(st==="rente") return t("sRente");
   return t("sFrei",{a:eur(p.voll)});
 }
+
 function update(){
   save();
+  document.querySelectorAll("[data-mode]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.mode===S.mode)));
   document.querySelectorAll("[data-typ]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.typ===S.typ)));
-  $("p2").hidden = S.typ==="ae"; $("verhRow").hidden = S.typ==="ae";
-  const R=berechne(S), {G,W,K,KV,s0,s0kv,V}=R;
-  KV.pers.forEach((p,i)=>{ const sel=$("kv"+(i+1)); if(sel) sel.options[0].textContent=t("kvAuto",{s:stName(p.auto,p)}); });
+  $("typSolo").hidden = S.mode==="fam";
+  $("verhRow").hidden = S.typ!=="paar";
+  const R=berechne(S), {G,W,K,KV,VL,s0,s0kv,V,idx,top}=R;
+  /* Personen-Infos */
+  G.pers.forEach((p,i)=>{
+    const el=$("age"+i); if(el) el.innerHTML = p.age==null ? "" : '<b>'+esc(t("ageL",{a:p.age}))+'</b> · '+esc(p.rag?t("ragYes"):t("ragNo"));
+    const sel=$("kv"+i); if(sel) sel.options[0].textContent=t("kvAuto",{s:stName(KV.pers[i].auto,KV.pers[i])});
+  });
   $("mogLabel").textContent=t("mog",{n:G.n});
-  if(document.activeElement!==$("mog")) $("mog").value = Math.round(G.grenze*100)/100;
-  $("mogReset").hidden = S.mog==null;
-  $("mogWarn").hidden = S.mog!=null;
+  if(document.activeElement!==$("mog")) $("mog").value = r2(G.grenze);
+  $("mogReset").hidden = S.mog==null; $("mogWarn").hidden = S.mog!=null;
+  /* Statischen Text mit SGB-Bezug neu setzen (SGB II oder SGB XII) */
+  document.querySelectorAll("[data-i18n]").forEach(el=>{ if(FIX.has(el.dataset.i18n)) el.textContent = t(el.dataset.i18n); });
 
-  const ok=i=>V[i].st==="ok";
-  let cls,h,tx,best=-1;
-  if(s0.gap===0){cls="warn";h=t("vNoneH");tx=t("vNoneT",{a:eur(W.wg),b:eur(K.kiz)});}
-  else if(ok(1)&&ok(2)){cls="ok";h=t("vEachH");tx=t("vEachT");best=3;}
-  else if(ok(1)){cls="ok";h=t("vWgH");tx=t("vWgT")+(K.kiz>0?" "+t("alsoKiz"):"");best=1;}
+  /* Urteil */
+  const ok=i=>idx.includes(i) && V[i].st==="ok";
+  let cls,h,tx,best=-1, law = t(G.sys==="XII" ? "lawXII" : "law");
+  if(G.regime==="asyl"){ cls="bad"; h=t("vAsylH"); tx=t("vAsylT"); law=""; }
+  else if(!R.sgbAvail){
+    cls="warn"; law="";
+    if(G.regime==="none"){ h=t("vEuH"); tx=t("vEuT"); }
+    else { h=t("vVermH"); tx=t("vVermT",{a:eur(S.verm),b:eur(VL.sgb),c:eur(VL.wg)}); }
+    tx += " "+I[L].wg+": "+eur(W.wg)+(S.mode==="fam" ? " · "+I[L].kiz+": "+eur(K.kiz) : "");
+  }
+  else if(s0.gap===0){ cls="warn"; h=t("vNoneH"); tx=S.mode==="fam" ? t("vNoneT",{a:eur(W.wg),b:eur(K.kiz)}) : I[L].wg+": "+eur(W.wg); }
+  else if(S.mode==="fam" && ok(1)&&ok(2)){cls="ok";h=t("vEachH");tx=t("vEachT");best=3;}
+  else if(ok(1)){cls="ok";h=t("vWgH");tx=t("vWgT")+(S.mode==="fam"&&K.kiz>0?" "+t("alsoKiz"):"");best=1;}
   else if(ok(2)){cls="ok";h=t("vKizH");tx=t("vKizT")+(W.wg>0?" "+t("alsoWg"):"");best=2;}
   else if(ok(3)){cls="ok";h=t("vBothH");tx=t("vBothT");best=3;}
   else {
-    const z=[1,2,3].filter(i=>V[i].st==="zus").sort((a,b)=>V[a].zus-V[b].zus)[0];
+    const z=idx.filter(i=>i>0 && V[i].st==="zus").sort((a,b)=>V[a].zus-V[b].zus)[0];
     if(z){cls="ok";h=t("vZusH",{v:t("v"+z)});tx=t("vZusT",{a:eur(KV.total),b:eur(V[z].zus)});best=z;}
-    else {cls="bad";h=t("vSgbH");tx=t("vSgbT",{a:eur(V[3].gap)});}
+    else {cls="bad";h=t("vSgbH");tx=S.mode==="fam" ? t("vSgbT",{a:eur(V[3].gap)}) : t("vSgbWgT",{a:eur(V[1].gap)});}
   }
-  $("verdict").innerHTML='<div class="verdict '+cls+'">'+ICON[cls]+'<div><b>'+esc(h)+'</b><p>'+esc(tx)+'</p><p class="law">'+esc(t("law"))+'</p></div></div>';
+  if(best>0 && G.sys==="II" && !S.stabil){ cls="warn"; tx=t("vNotStableT",{v:t("v"+best)}); h=t("vNotStableH"); }
+  $("verdict").innerHTML='<div class="verdict '+cls+'">'+ICON[cls]+'<div><b>'+esc(h)+'</b><p>'+esc(tx)+'</p>'+(law?'<p class="law">'+esc(law)+'</p>':'')+'</div></div>';
+
+  /* Hinweise */
+  const chips=[['sys',t("regimeL",{r:t("rg_"+G.regime)})]];
+  if(G.mixed) chips.push(['w',t("warnMixed")]);
+  if(G.kid15) chips.push(['w',t("warnKid15")]);
+  if(S.son.azubi) chips.push(['w',t("warnAzubi")]);
+  if(S.son.stat) chips.push(['w',t("warnStat")]);
+  if(G.pers.some(p=>p.edge)) chips.push(['w',t("warnRag")]);
+  if(W.vermEx) chips.push(['w',t("vWgVerm",{c:eur(VL.wg)})]);
+  if(S.mode==="wg" && G.kids.length) chips.push(['w',t("noKizMode")]);
+  $("chips").innerHTML = chips.map(([c,x])=>'<p class="chip '+c+'">'+esc(x)+'</p>').join("");
+
   $("kpis").innerHTML=
     '<div class="kpi"><span>'+esc(t("kGap"))+'</span><b>'+eur(s0.gap)+'</b></div>'+
     '<div class="kpi kv"><span>'+esc(t("kKv"))+'</span><b>'+eur(KV.total)+'</b></div>'+
     '<div class="kpi wg"><span>'+esc(I[L].wg)+'</span><b>'+eur(W.wg)+'</b></div>'+
-    '<div class="kpi kz"><span>'+esc(I[L].kiz)+'</span><b>'+eur(K.kiz)+'</b></div>';
-  $("legend").innerHTML='<span><i class="seg-own"></i>'+esc(t("legOwn"))+'</span><span><i class="seg-ben"></i>'+esc(t("legBen"))+'</span><span><i class="seg-zus"></i>'+esc(t("legZus"))+'</span><span><i class="seg-gap"></i>'+esc(t("legGap"))+'</span>';
+    (S.mode==="fam" ? '<div class="kpi kz"><span>'+esc(I[L].kiz)+'</span><b>'+eur(K.kiz)+'</b></div>' : '<div class="kpi"><span>'+esc(t("colNeed"))+'</span><b>'+eur(R.need)+'</b></div>');
+  $("legend").innerHTML='<span><i class="seg-own"></i>'+esc(t("legOwn"))+'</span><span><i class="seg-ben"></i>'+esc(S.mode==="fam"?t("legBen"):I[L].wg)+'</span><span><i class="seg-zus"></i>'+esc(t("legZus"))+'</span><span><i class="seg-gap"></i>'+esc(t("legGap"))+'</span>';
 
   const scale=Math.max(R.need+KV.total,1), w=x=>(100*Math.max(0,x)/scale).toFixed(2)+"%";
-  $("vrows").innerHTML=[0,1,2,3].map(i=>{
+  $("vrows").innerHTML=idx.map(i=>{
     const v=V[i]; let own,ben=0,zus=0,gap;
     if(i===0){ own=R.need-s0.gap; gap=s0.gap; }
     else { own=R.need+KV.total-s0kv.gap; ben=Math.max(0,s0kv.gap-v.gap); zus=v.zus; gap=v.gap-zus; }
@@ -861,7 +1157,7 @@ function update(){
     if(i===0) pill = v.gap>0?'<span class="pill bad">'+esc(t("pNeedy"))+'</span>':'<span class="pill ok">'+esc(t("pNot"))+'</span>';
     else pill = {ok:'<span class="pill ok">'+esc(t("pOk"))+'</span>',zus:'<span class="pill zus">'+esc(t("pZus"))+'</span>',gap:'<span class="pill bad">'+esc(t("pGap"))+'</span>',na:'<span class="pill na">'+esc(t("pNa"))+'</span>'}[v.st];
     const parts=[];
-    if(i===1) parts.push(W.wg>0?eur(W.wg):(W.unterMin?t("rBelow"):t("rNoWg")));
+    if(i===1) parts.push(W.wg>0?eur(W.wg):(W.vermEx?t("vWgVerm",{c:eur(VL.wg)}):W.unterMin?t("rBelow"):t("rNoWg")));
     if(i===2) parts.push(K.kiz>0?eur(K.kiz):K.reason);
     if(i===3) parts.push(eur(W.wg+K.kiz));
     if(zus>0) parts.push(t("legZus")+" "+eur(zus));
@@ -872,11 +1168,12 @@ function update(){
       '<span class="amt">'+esc(amt)+'</span></div>';
   }).join("");
 
-  const sgbB=R.basis+s0.gap, vorB=R.basis+W.wg+K.kiz-KV.total-P.sv.gez+V[3].zus, diff=vorB-sgbB;
-  const sub=t("bVorSub",{kv:eur(KV.total),gez:eur(P.sv.gez)})+(V[3].zus>0?" · "+t("bVorZus",{z:eur(V[3].zus)}):"");
+  const ben = W.wg + (S.mode==="fam" ? K.kiz : 0);
+  const sgbB=R.basis+s0.gap, vorB=R.basis+ben-KV.total-P.sv.gez+V[top].zus, diff=vorB-sgbB;
+  const sub=t("bVorSub",{kv:eur(KV.total),gez:eur(P.sv.gez)})+(V[top].zus>0?" · "+t("bVorZus",{z:eur(V[top].zus)}):"");
   $("budget").innerHTML='<h3>'+esc(t("budgetH"))+'</h3>'+
     '<div class="brow"><span>'+esc(t("bSgb"))+'</span><b>'+eur(sgbB)+'</b></div>'+
-    '<div class="brow"><span>'+esc(t("bVor"))+'<small>'+esc(sub)+'</small></span><b>'+eur(vorB)+'</b></div>'+
+    '<div class="brow"><span>'+esc(t(S.mode==="fam"?"bVor":"bVorWg"))+'<small>'+esc(sub)+'</small></span><b>'+eur(vorB)+'</b></div>'+
     '<div class="brow diff"><span>'+esc(t("bDiff"))+'</span><b class="'+(diff>=0?'pos':'neg')+'">'+(diff>=0?'+':'')+eur(diff)+'</b></div>';
   renderWeg(R);
 }
@@ -887,37 +1184,46 @@ function tbl(head, rows, sum){
     (sum?'<tr class="sum">'+sum.map((c,i)=>cell(c,i,"td")).join("")+'</tr>':"")+'</tbody></table></div>';
 }
 function renderWeg(R){
-  const {G,W,K,s0}=R; let h="";
+  const {G,W,K,KV,VL,s0,V,top}=R; let h="";
+  h+='<h3>'+esc(t("rw0"))+'</h3>';
+  h+='<p class="hint">'+esc(t("regimeL",{r:t("rg_"+G.regime)}))+'<br>'+esc(t("vermR",{a:eur(S.verm),b:eur(VL.sgb),c:eur(VL.wg)}))+'</p>';
   h+='<h3>'+esc(t("rw1"))+'</h3>';
-  const r1=[[t("rbP"),G.rbEltern]]; if(G.mb>0) r1.push([t("mbAE",{p:G.mbPct}),G.mb]);
+  const r1=[[t("rbP"),G.rbEltern]].concat(G.mbList.map(x=>[x[0],x[1]]));
   r1.push([t("rentR",{g:eur(S.ka?G.grenze*P.kdu.karenz:G.grenze)}),G.mieteAnerk],[t("heatR"),S.hz]);
   G.kids.forEach((k,i)=>r1.push([t("rbC",{n:i+1,a:k.age}),rbKind(k.age)]));
   h+=tbl([t("colNeed"),t("colEur")],r1,[t("totNeed"),R.need]);
-  const r2=G.eink.filter(e=>e.b>0||e.n>0).map((e,i)=>[t("earnR",{n:i+1,a:eur(e.n),b:eur(e.fb)}),e.ber]);
-  if(G.sonstBer>0) r2.push([t("otherR",{a:eur(P.fb.pausch)}),G.sonstBer]);
-  G.kids.forEach((k,i)=>{ if(k.uh>0) r2.push([t("maintR",{n:i+1}),k.uh]); });
-  r2.push([t("kgR",{n:G.kids.length,a:eur(P.kindergeld)}),G.kids.length*P.kindergeld]);
-  h+=tbl([t("colInc"),t("colEur")],r2,[t("gapR"),s0.gap]);
+  const r2r=[];
+  G.ads.forEach((a,i)=>{ const x=G.inc[i];
+    if(a.jb>0||a.jn>0){ const fb=G.sys==="XII"?x.fbXII:x.fbII; r2r.push([t("earnR",{n:i+1,a:eur(a.jn),b:eur(fb)}),Math.max(0,a.jn-fb)]); }
+    if(a.rn>0) r2r.push([t("incRente",{n:i+1,a:eur(a.rn),b:eur(x.gf)}),x.rente]);
+    if(a.so>0) r2r.push([t("incSo",{n:i+1}),a.so]);
+    if(G.sys==="II" && x.pausch>0) r2r.push([t("pauschR",{n:i+1}),-x.pausch]);
+  });
+  G.kids.forEach((k,i)=>{ if(k.uh>0) r2r.push([t("maintR",{n:i+1}),k.uh]); });
+  if(G.kids.length) r2r.push([t("kgR",{n:G.kids.length,a:eur(P.kindergeld)}),G.kids.length*P.kindergeld]);
+  h+=tbl([t("colInc"),t("colEur")],r2r,[t("gapR"),s0.gap]);
   h+='<p class="hint">'+esc(t("kopf",{a:eur(G.kopf)}))+'</p>';
   h+='<h3>'+esc(t("rw2",{n:G.n}))+'</h3>';
   h+=tbl([t("colM"),t("colEur")],[[t("hbR",{a:eur(W.hb),b:eur(W.kl)}),W.cap],[t("capR"),W.mRent],[t("hkeR"),W.hke],[t("hkkR"),W.hkk]],["M",W.M]);
-  h+=tbl([t("colY"),t("colGross"),t("colWk"),t("colAfter")],W.rows.concat(W.frei>0?[[t("aeY"),"","",-W.frei]]:[]),[t("yR",{p:pct(W.pa)}),"","",W.Y]);
-  h+='<div class="formula">1,15 · ('+W.M.toFixed(2)+' − ('+W.a+' + '+W.b+'·'+W.M.toFixed(2)+' + '+W.c+'·'+W.Y.toFixed(2)+') · '+W.Y.toFixed(2)+') = '+W.raw.toFixed(2)+' → <b>'+eur(W.wg)+'</b>'+(W.unterMin?' ('+esc(t("rBelow"))+')':'')+'</div>';
-  h+='<h3>'+esc(t("rw3"))+'</h3>';
-  if(!K.st) h+='<p class="hint">'+esc(K.reason)+'</p>';
-  else { const s=K.st;
-    h+=tbl([t("colStep"),t("colEur")],[[t("kGross",{a:eur(s.minE)}),s.brutto],[t("kNeed",{p:Math.round(s.anteil*100)}),s.bedarf],...(s.kv>0?[[t("bKv"),-s.kv]]:[]),[t("kInc"),s.eink],[t("kEx"),s.excess],[t("kBase"),s.baseSum],[t("kMinus"),s.minderung>0?-s.minderung:0]],[t("kTot"),K.kiz]); }
+  h+=tbl([t("colY"),t("colGross"),t("colWk"),t("colAfter")],W.rows,[t("yR",{p:pct(W.pa)}),"","",W.Y]);
+  h+='<div class="formula">1,15 · ('+W.M.toFixed(2)+' − ('+W.a+' + '+W.b+'·'+W.M.toFixed(2)+' + '+W.c+'·'+W.Y.toFixed(2)+') · '+W.Y.toFixed(2)+') = '+W.raw.toFixed(2)+' → <b>'+eur(W.wg)+'</b>'+(W.unterMin?' ('+esc(t("rBelow"))+')':'')+(W.vermEx?' – '+esc(t("vWgVerm",{c:eur(VL.wg)})):'')+'</div>';
+  if(S.mode==="fam"){
+    h+='<h3>'+esc(t("rw3"))+'</h3>';
+    if(!K.st) h+='<p class="hint">'+esc(K.reason)+'</p>';
+    else { const s=K.st;
+      h+=tbl([t("colStep"),t("colEur")],[[t("kGross",{a:eur(s.minE)}),s.brutto],[t("kNeed",{p:Math.round(s.anteil*100)}),s.bedarf]].concat(s.kv>0?[[t("bKv"),-s.kv]]:[],[[t("kInc"),s.eink],[t("kEx"),s.excess],[t("kBase"),s.baseSum],[t("kMinus"),s.minderung>0?-s.minderung:0]]),[t("kTot"),K.kiz]); }
+  }
   h+='<h3>'+esc(t("rw4"))+'</h3>';
-  h+=tbl([t("colVar"),t("colGap")],[0,1,2,3].map(i=>[t("v"+i)+(R.V[i].st==="zus"?" ("+t("pZus")+")":""),R.V[i].gap]));
+  h+=tbl([t("colVar"),t("colGap")],R.idx.map(i=>[t("v"+i)+(V[i].st==="zus"?" ("+t("pZus")+")":""),V[i].gap]));
   h+='<p class="hint">'+esc(t("rw4h"))+'</p>';
-  const KV=R.KV, V=R.V;
   h+='<h3>'+esc(t("rw5"))+'</h3>';
   h+=tbl([t("colItem"),t("colEur")],KV.pers.map((p,i)=>[t("kvP",{n:i+1,s:stName(p.st,p)}),p.beitrag]).concat([[t("gezRow"),P.sv.gez]]));
   h+='<p class="hint">'+esc(t("kvCalc",{a:eur(P.sv.mindest),p:pct(KV.rate)}))+'</p>';
-  const sgbB=R.basis+R.s0.gap, vorB=R.basis+W.wg+K.kiz-KV.total-P.sv.gez+V[3].zus;
-  const br=[[t("bBasis"),R.basis,R.basis],[t("bSgbL"),R.s0.gap,""],[t("bBen"),"",W.wg+K.kiz],[t("bKv"),"",-KV.total],[t("bGez"),"",-P.sv.gez]];
-  if(V[3].zus>0) br.push([t("bZus"),"",V[3].zus]);
-  h+=tbl([t("colItem"),t("v0"),t("v3")],br,[t("bTot"),sgbB,vorB]);
+  const ben = W.wg+(S.mode==="fam"?K.kiz:0);
+  const sgbB=R.basis+s0.gap, vorB=R.basis+ben-KV.total-P.sv.gez+V[top].zus;
+  const br=[[t("bBasis"),R.basis,R.basis],[t("bSgbL"),s0.gap,""],[t(S.mode==="fam"?"bBen":"bBenWg"),"",ben],[t("bKv"),"",-KV.total],[t("bGez"),"",-P.sv.gez]];
+  if(V[top].zus>0) br.push([t("bZus"),"",V[top].zus]);
+  h+=tbl([t("colItem"),t("v0"),t("v"+top)],br,[t("bTot"),sgbB,vorB]);
   $("weg").innerHTML=h;
 }
 function renderParams(){
@@ -944,7 +1250,7 @@ $("copyP").addEventListener("click",()=>{
   try{ navigator.clipboard.writeText(txt).then(()=>{ $("copyMsg").textContent=t("copied"); },fb); }catch(e){ fb(); }
 });
 
-function renderAll(){ renderLangs(); applyStatic(); renderKids(); showStep(); update(); }
+function renderAll(){ renderLangs(); applyStatic(); rebuild(); showStep(); update(); }
 bind(); fillForm(); renderParams(); renderAll();
 })();
 </script>
