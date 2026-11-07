@@ -1,7 +1,7 @@
 """Erzeugt die Excel-Fassung der Vorrangprüfung Wolfsburg (nur Formeln, keine festen Ergebnisse)."""
 import sys, datetime
 from openpyxl import Workbook
-from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+from openpyxl.styles import Font, PatternFill, Alignment, Border, Side, Protection
 from openpyxl.workbook.defined_name import DefinedName
 from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.comments import Comment
@@ -175,7 +175,7 @@ def eh(title):
 def ein(label, nm, val, lst=None, fmt=None, note=None, col=3):
     r = er[0]
     E.cell(r, 2, label).font = f_norm
-    c = E.cell(r, col, val); c.font = f_in; c.fill = fill_in; c.border = box
+    c = E.cell(r, col, val); c.font = f_in; c.fill = fill_in; c.border = box; c.protection = Protection(locked=False)
     if fmt: c.number_format = fmt
     if lst: dv(lst).add(c)
     if note: c.comment = Comment(note, "Vorrangprüfung")
@@ -221,7 +221,7 @@ for lab, key, vals, lst, fmt, note in adult_rows:
     r = er[0]
     E.cell(r, 2, lab).font = f_norm
     for i, v in enumerate(vals):
-        c = E.cell(r, 3 + i, v); c.font = f_in; c.fill = fill_in; c.border = box
+        c = E.cell(r, 3 + i, v); c.font = f_in; c.fill = fill_in; c.border = box; c.protection = Protection(locked=False)
         if fmt: c.number_format = fmt
         if lst: dv(lst).add(c)
         if note and i == 0: c.comment = Comment(note, "Vorrangprüfung")
@@ -243,7 +243,7 @@ for k in range(6):
     E.cell(r, 2, f"Kind {k+1}").font = f_norm
     a, u, t = kid_ex[k]
     for col, v, fmt, lst in ((3, a, '0', None), (4, u, EUR, None), (5, t, None, KET), (6, None, EUR, None), (7, None, EUR, None)):
-        c = E.cell(r, col, v); c.font = f_in; c.fill = fill_in; c.border = box
+        c = E.cell(r, col, v); c.font = f_in; c.fill = fill_in; c.border = box; c.protection = Protection(locked=False)
         if fmt: c.number_format = fmt
         if lst: dv(lst).add(c)
     er[0] += 1
@@ -704,10 +704,10 @@ lines = [
     ("Prototyp für einen Verbesserungsvorschlag – kein Bescheid. Rechtsstand 07.11.2026.", f_small),
     ("", f_norm),
     ("So geht's", f_h2),
-    ("1. Blatt „Eingabe“: nur die gelben Felder ausfüllen. Bei den meisten Feldern gibt es eine Auswahlliste.", f_norm),
+    ("1. Blatt „Eingabe“ (öffnet automatisch): nur die gelben Felder ausfüllen, meist per Auswahlliste. Rechts daneben erscheint sofort das Ergebnis.", f_norm),
     ("2. Blatt „Ergebnis“: Ergebnis mit Paragraf, Kennzahlen, alle Varianten, Budgetvergleich und Hinweise.", f_norm),
-    ("3. Blatt „Berechnung“: kompletter Rechenweg mit Paragrafen (nur Formeln, nicht ändern).", f_norm),
-    ("4. Blatt „Parameter“: alle Rechtswerte mit Quelle. Bei Gesetzesänderungen nur hier anpassen.", f_norm),
+    ("3. Blätter „Berechnung“ und „Szenarien“ (ausgeblendet): kompletter Rechenweg mit Paragrafen. Einblenden: Rechtsklick auf ein Blattregister → Einblenden.", f_norm),
+    ("4. Blatt „Parameter“: alle Rechtswerte mit Quelle. Bei Gesetzesänderungen nur hier anpassen. Blattschutz ohne Passwort: Überprüfen → Blattschutz aufheben.", f_norm),
     ("", f_norm),
     ("Was geprüft wird", f_h2),
     ("• Zuständigkeit (SGB II, SGB XII Kap. 3/4, AsylbLG) nach Erwerbsfähigkeit und Regelaltersgrenze", f_norm),
@@ -731,9 +731,52 @@ for ws in wb.worksheets:
         for c in row:
             if c.font is None or c.font.name != F:
                 c.font = Font(name=F, size=c.font.size if c.font else 10, bold=c.font.bold if c.font else False, color=c.font.color if c.font else None)
+# --- Live-Ergebnis in der Eingabemaske (Spalten I–L)
+E.column_dimensions["H"].width = 3
+for c, w in zip("IJKL", (36, 16, 16, 22)): E.column_dimensions[c].width = w
+fill_live = PatternFill("solid", fgColor="E0F3E8")
+E["I3"] = "ERGEBNIS (aktualisiert sich automatisch)"; E["I3"].font = Font(name=F, size=9, bold=True, color="587078")
+E["I4"] = "=Ergebnis!B4"; E["I4"].font = Font(name=F, size=13, bold=True, color="1F8A4C"); E.merge_cells("I4:L4")
+E["I5"] = "=Ergebnis!B5"; E["I5"].font = f_norm; E["I5"].alignment = Alignment(wrap_text=True, vertical="top"); E.merge_cells("I5:L8")
+E["I9"] = "=Ergebnis!B6"; E["I9"].font = f_bold; E.merge_cells("I9:L9")
+for rr in range(4, 10):
+    for cc in range(9, 13): E.cell(rr, cc).fill = fill_live
+live = [("Grundsicherungs-Lücke", "=c_s0"), ("KV/PV-Kosten ohne Grundsicherung", "=c_KV"), ("Wohngeld", "=c_WG"), ("Kinderzuschlag", "=c_KiZ"),
+        ("Kinderwohngeld", "=c_KW"), ("Mietobergrenze angewendet", "=c_grenze")]
+E["I11"] = "Kennzahlen"; E["I11"].font = f_h2
+for i, (t, f) in enumerate(live):
+    E.cell(12 + i, 9, t).font = f_norm; c = E.cell(12 + i, 10, f); c.number_format = EUR; c.font = f_link
+E["I19"] = "Varianten"; E["I19"].font = f_h2
+for j, t in enumerate(("Variante", "Leistung", "Lücke", "Status")):
+    c = E.cell(20, 9 + j, t); c.font = f_bold; c.fill = fill_head
+for i in range(4):
+    for j in range(4):
+        c = E.cell(21 + i, 9 + j, f"=Ergebnis!{L(2+j)}{19+i}"); c.font = f_norm; c.border = box
+        if j in (1, 2): c.number_format = EUR
+E["I26"] = "Was bleibt im Monat?"; E["I26"].font = f_h2
+for i, t in enumerate(("Mit Grundsicherung", "Mit Wohngeld/Kinderzuschlag", "Unterschied")):
+    E.cell(27 + i, 9, t).font = f_norm; c = E.cell(27 + i, 10, f"=Ergebnis!C{25+i}"); c.number_format = EUR; c.font = f_bold if i == 2 else f_link
+E["I31"] = "Details, Hinweise und Rechenweg: Blatt „Ergebnis“."; E["I31"].font = f_small
+E.title  # Name bleibt „Eingabe“ (wird in Formeln verwendet)
+E.sheet_properties.tabColor = "E7A525"; R.sheet_properties.tabColor = "1F8A4C"
+# Reihenfolge: Eingabe, Ergebnis, Anleitung, Parameter, Berechnung, Szenarien
+order = ["Eingabe", "Ergebnis", "Anleitung", "Parameter", "Berechnung", "Szenarien"]
+wb._sheets = [wb[n] for n in order]
+for ws in wb.worksheets: ws.sheet_view.tabSelected = False
+E.sheet_view.tabSelected = True
+# technische Blätter ausblenden (Rechtsklick auf Blattregister → Einblenden)
+B.sheet_state = "hidden"; Z.sheet_state = "hidden"
+# Blattschutz ohne Passwort: nur gelbe Felder änderbar, Formeln verborgen
+for ws in (E, R, A):
+    for row in ws.iter_rows():
+        for c in row:
+            if isinstance(c.value, str) and c.value.startswith("=") and c.protection.locked:
+                c.protection = Protection(locked=True, hidden=True)
+    ws.protection.sheet = True
+    ws.protection.formatColumns = False; ws.protection.formatRows = False
 for ws in wb.worksheets:
     ws.page_setup.orientation = "landscape"; ws.page_setup.fitToWidth = 1; ws.page_setup.fitToHeight = 0
     ws.sheet_properties.pageSetUpPr.fitToPage = True
-wb.active = 2
+wb.active = 0
 wb.save(OUT)
 print("gespeichert", OUT, "Kinder-Eingabezeilen", KR, "Kindertabelle ab", KT0)
