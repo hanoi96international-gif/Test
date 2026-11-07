@@ -290,13 +290,21 @@ footer{font-size:.8rem;color:var(--muted)}
           <label class="f"><span data-i18n="heat"></span><div class="money"><input id="hz" type="number" inputmode="decimal" min="0" step="any"><span>€</span></div></label>
         </div>
         <p class="hint" data-i18n="rentHint"></p>
+        <label class="f"><span data-i18n="hzG"></span><div class="money"><input id="hzG" type="number" inputmode="decimal" min="0" step="any"><span>€</span></div></label>
+        <p class="hint" data-i18n="hzGHint"></p>
         <label class="toggle"><input type="checkbox" id="ww"><span data-i18n="ww"></span></label>
         <div class="person">
           <label class="f"><span id="mogLabel"></span><div class="money"><input id="mog" type="number" inputmode="decimal" min="0" step="any"><span>€</span></div></label>
           <p class="warnchip" id="mogWarn" data-i18n="mogWarn"></p>
           <div><button type="button" class="btn ghost" id="mogReset" data-i18n="mogReset"></button></div>
         </div>
-        <label class="toggle"><input type="checkbox" id="ka"><span data-i18n="karenz"></span></label>
+        <label class="f"><span data-i18n="kdzL"></span>
+          <select class="sel" id="kdz">
+            <option value="normal" data-i18n="kdzN"></option>
+            <option value="karenz" data-i18n="kdzK"></option>
+            <option value="senk" data-i18n="kdzS"></option>
+          </select></label>
+        <p class="warnchip" data-i18n="kdzHint"></p>
         <label class="f"><span data-i18n="verm"></span><div class="money"><input id="verm" type="number" inputmode="decimal" min="0" step="any"><span>€</span></div></label>
         <p class="hint" data-i18n="vermHint"></p>
       </section>
@@ -541,7 +549,7 @@ const X = {
 de:{married:"Verheiratet oder eingetragene Lebenspartnerschaft",kvLabel:"Krankenversicherung ohne SGB II",kvAuto:"automatisch: {s}",kvJob:"über eigenen Job versichert",kvFam:"familienversichert über Ehepartner",kvLeist:"über ALG I oder andere Leistung versichert",kvFrei:"muss sich freiwillig versichern",
 kvHint:"Im SGB II zahlt das Jobcenter die Kranken- und Pflegeversicherung. Ohne SGB II müssen sich unverheiratete Partner ohne versicherten Job und Alleinerziehende mit Minijob selbst versichern. Das kostet mindestens rund 270 € im Monat.",
 sJob:"pflichtversichert über Job",sFam:"familienversichert",sLeist:"über Leistung versichert",sFrei:"freiwillig, {a} im Monat",
-mog:"Mietobergrenze laut Richtlinie Wolfsburg ({n} Personen)",mogWarn:"Wert laut Jobcenter Wolfsburg (Grundmiete inkl. Betriebskosten, Stand 07.11.2026). Bei Bedarf überschreiben.",mogReset:"Tabellenwert verwenden",
+mog:"Mietobergrenze laut Jobcenter Wolfsburg (Haushaltsgröße: {n})",mogWarn:"Wert laut Jobcenter Wolfsburg (Grundmiete inkl. Betriebskosten, Stand 07.11.2026). Bei Bedarf überschreiben.",mogReset:"Tabellenwert verwenden",
 kKv:"KV/PV ohne SGB II",legZus:"Zuschuss KV/PV",pZus:"reicht mit KV/PV-Zuschuss",
 vZusH:"{v} und Zuschuss zur KV/PV beantragen",vZusT:"Ohne SGB II wäre der Haushalt nur wegen der Beiträge zur Kranken- und Pflegeversicherung ({a}) hilfebedürftig. Das Jobcenter zahlt dann nur einen Zuschuss von {b} nach § 26 SGB II statt Bürgergeld.",
 budgetH:"Was bleibt im Monat?",bSgb:"Mit SGB II",bVor:"Mit {wg} + {kiz}",bVorSub:"nach {kv} KV/PV und {gez} Rundfunkbeitrag",bVorZus:"inkl. {z} Zuschuss KV/PV",bDiff:"Unterschied",
@@ -717,6 +725,27 @@ incRente:"Лицо {n}: пенсия {a} − льгота базовой пен�
 wgRente:"Пенсия лица {n}",wgGrz:"− льгота базовой пенсии лица {n}",wgSb:"− льгота инвалидность/уход лица {n}",rw0:"0 · Ответственность и имущество",vermR:"Имущество {a} · предел базового обеспечения {b} · предел {wg} {c}",bVorWg:"С {wg}",bBenWg:"+ {wg}",kizVerm:"Имущество выше предела {x}."}
 };
 for(const l in Y) Object.assign(I[l], Y[l]);
+const Z = {
+de:{kdzL:"Stand der Prüfung der Unterkunftskosten",kdzN:"nur angemessene Kosten (Regelfall)",kdzK:"Karenzzeit: erstes Jahr im Leistungsbezug",kdzS:"nach Karenzzeit: Kostensenkung läuft (höchstens 6 Monate)",
+kdzHint:"Seit 01.07.2026: In der Karenzzeit (12 Monate ab Leistungsbeginn; volle Monate ohne Leistung verlängern sie) wird die Miete höchstens bis 150 % der Mietobergrenze übernommen, auch bei bereits laufender Karenzzeit. Heizkosten sind nicht geschützt und werden ab dem ersten Monat auf Angemessenheit geprüft (§ 22 Abs. 1 SGB II). Danach werden unangemessene Kosten nach Aufforderung zur Kostensenkung in der Regel höchstens 6 Monate übernommen. SGB XII (§ 35): Karenzzeit ohne 150-%-Deckel.",
+hzG:"Grenze für angemessene Heizkosten (optional)",hzGHint:"Laut Heizspiegel bzw. Jobcenter. Leer lassen = tatsächliche Heizkosten. In der Karenzzeit sind Heizkosten nicht geschützt.",heatRg:"Heizkosten anerkannt (Grenze {g})"},
+en:{kdzL:"Housing cost status",kdzN:"appropriate costs only (standard case)",kdzK:"waiting period: first year of benefits",kdzS:"after waiting period: cost reduction running (max. 6 months)",
+kdzHint:"Since 1 Jul 2026: during the waiting period (12 months from start of benefits, extended by full months without benefits) rent is covered up to at most 150 % of the rent limit, also for waiting periods already running. Heating costs are not protected and are checked from the first month (§ 22 (1) SGB II). Afterwards, inappropriate costs are usually covered for at most 6 months after a request to reduce them. SGB XII (§ 35): waiting period without the 150 % cap.",
+hzG:"Limit for appropriate heating costs (optional)",hzGHint:"From the heating cost index or the Jobcenter. Leave empty = actual heating costs. Heating costs are not protected in the waiting period.",heatRg:"Heating recognised (limit {g})"},
+tr:{kdzL:"Konut giderleri durumu",kdzN:"yalnızca uygun giderler (normal durum)",kdzK:"bekleme süresi: yardımın ilk yılı",kdzS:"bekleme süresinden sonra: gider azaltma sürüyor (en fazla 6 ay)",
+kdzHint:"01.07.2026'dan beri: bekleme süresinde (yardım başlangıcından itibaren 12 ay; yardımsız tam aylar süreyi uzatır) kira en fazla kira üst sınırının %150'sine kadar karşılanır, devam eden bekleme sürelerinde de. Isınma giderleri korunmaz ve ilk aydan itibaren kontrol edilir (§ 22 Abs. 1 SGB II). Sonrasında uygun olmayan giderler, azaltma talebinden sonra genellikle en fazla 6 ay karşılanır. SGB XII (§ 35): %150 sınırı olmadan bekleme süresi.",
+hzG:"Uygun ısınma gideri sınırı (isteğe bağlı)",hzGHint:"Isınma endeksi veya Jobcenter'a göre. Boş bırakın = gerçek ısınma giderleri. Bekleme süresinde ısınma giderleri korunmaz.",heatRg:"Kabul edilen ısınma (sınır {g})"},
+ar:{kdzL:"وضع تكاليف السكن",kdzN:"التكاليف المناسبة فقط (الحالة العادية)",kdzK:"فترة السماح: السنة الأولى من الإعانة",kdzS:"بعد فترة السماح: خفض التكاليف جارٍ (6 أشهر كحد أقصى)",
+kdzHint:"منذ 01.07.2026: خلال فترة السماح (12 شهرًا من بداية الإعانة، وتمددها الأشهر الكاملة بدون إعانة) يُغطى الإيجار حتى 150 % من الحد الأعلى للإيجار كحد أقصى، حتى في فترات السماح الجارية. تكاليف التدفئة غير محمية وتُفحص من الشهر الأول (§ 22 Abs. 1 SGB II). بعد ذلك تُغطى التكاليف غير المناسبة عادةً لمدة 6 أشهر كحد أقصى بعد طلب خفضها. SGB XII (§ 35): فترة سماح بدون حد 150 %.",
+hzG:"حد تكاليف التدفئة المناسبة (اختياري)",hzGHint:"حسب مؤشر التدفئة أو Jobcenter. اتركه فارغًا = تكاليف التدفئة الفعلية. تكاليف التدفئة غير محمية في فترة السماح.",heatRg:"التدفئة المعترف بها (الحد {g})"},
+uk:{kdzL:"Стан витрат на житло",kdzN:"лише належні витрати (звичайний випадок)",kdzK:"пільговий період: перший рік отримання допомоги",kdzS:"після пільгового періоду: триває зниження витрат (макс. 6 місяців)",
+kdzHint:"З 01.07.2026: у пільговий період (12 місяців від початку допомоги; повні місяці без допомоги його продовжують) оренда покривається щонайбільше до 150 % межі оренди, також для вже розпочатих пільгових періодів. Опалення не захищене і перевіряється з першого місяця (§ 22 Abs. 1 SGB II). Після цього неналежні витрати після вимоги їх знизити зазвичай покриваються щонайбільше 6 місяців. SGB XII (§ 35): пільговий період без межі 150 %.",
+hzG:"Межа належних витрат на опалення (необов'язково)",hzGHint:"За індексом опалення або Jobcenter. Залиште порожнім = фактичні витрати. У пільговий період опалення не захищене.",heatRg:"Визнане опалення (межа {g})"},
+ru:{kdzL:"Статус расходов на жильё",kdzN:"только соразмерные расходы (обычный случай)",kdzK:"льготный период: первый год получения пособия",kdzS:"после льготного периода: идёт снижение расходов (макс. 6 месяцев)",
+kdzHint:"С 01.07.2026: в льготный период (12 месяцев с начала пособия; полные месяцы без пособия его продлевают) аренда покрывается не более чем до 150 % предела аренды, в том числе для уже идущих льготных периодов. Отопление не защищено и проверяется с первого месяца (§ 22 Abs. 1 SGB II). После этого несоразмерные расходы после требования их снизить обычно покрываются не более 6 месяцев. SGB XII (§ 35): льготный период без предела 150 %.",
+hzG:"Предел соразмерных расходов на отопление (необязательно)",hzGHint:"По индексу отопления или Jobcenter. Оставьте пустым = фактические расходы. В льготный период отопление не защищено.",heatRg:"Признанное отопление (предел {g})"}
+};
+for(const l in Z) Object.assign(I[l], Z[l]);
 let L = "de";
 try{ const s = localStorage.getItem("vp-wob-lang"); if(s && I[s]) L = s; }catch(e){}
 function t(k, v){
@@ -796,13 +825,13 @@ const GROUPS = [
 const AD0 = {gj:1990, ef:"ja", schw:false, merkG:false, sb:false, kv:"auto", jb:0, jn:0, rb:0, rn:0, grz:false, so:0};
 const SON0 = {azubi:false, eu:false, asyl:false, stat:false};
 const EX = {
-  fam:{mode:"fam", typ:"paar", verh:false, ad:[Object.assign({},AD0,{gj:1988,jb:1700,jn:1330}),Object.assign({},AD0,{gj:1990})], kids:[{age:4,uh:0},{age:9,uh:0}], son:clone(SON0), pa:"0.3", stabil:true, mi:780, hz:110, ww:false, ka:false, mog:null, verm:2000, step:1},
-  wg:{mode:"wg", typ:"solo", verh:false, ad:[Object.assign({},AD0,{gj:1957,ef:"ar",rb:1250,rn:1096,grz:true}),Object.assign({},AD0)], kids:[], son:clone(SON0), pa:"0.3", stabil:true, mi:520, hz:70, ww:false, ka:false, mog:null, verm:5000, step:1}
+  fam:{mode:"fam", typ:"paar", verh:false, ad:[Object.assign({},AD0,{gj:1988,jb:1700,jn:1330}),Object.assign({},AD0,{gj:1990})], kids:[{age:4,uh:0},{age:9,uh:0}], son:clone(SON0), pa:"0.3", stabil:true, mi:780, hz:110, ww:false, kdz:"normal", hzG:null, mog:null, verm:2000, step:1},
+  wg:{mode:"wg", typ:"solo", verh:false, ad:[Object.assign({},AD0,{gj:1957,ef:"ar",rb:1250,rn:1096,grz:true}),Object.assign({},AD0)], kids:[], son:clone(SON0), pa:"0.3", stabil:true, mi:520, hz:70, ww:false, kdz:"normal", hzG:null, mog:null, verm:5000, step:1}
 };
-const emptyFor = mode => ({mode, typ: mode==="fam"?"paar":"solo", verh:false, ad:[Object.assign({},AD0,{gj:0}),Object.assign({},AD0,{gj:0})], kids:[], son:clone(SON0), pa:"0.3", stabil:true, mi:0, hz:0, ww:false, ka:false, mog:null, verm:0, step:1});
+const emptyFor = mode => ({mode, typ: mode==="fam"?"paar":"solo", verh:false, ad:[Object.assign({},AD0,{gj:0}),Object.assign({},AD0,{gj:0})], kids:[], son:clone(SON0), pa:"0.3", stabil:true, mi:0, hz:0, ww:false, kdz:"normal", hzG:null, mog:null, verm:0, step:1});
 let S = clone(EX.fam);
-try{ const s = localStorage.getItem("vp-wob-input3"); if(s){ const o=JSON.parse(s); S = Object.assign(clone(EX[o.mode==="wg"?"wg":"fam"]), o); } }catch(e){}
-const save = ()=>{ try{ localStorage.setItem("vp-wob-input3", JSON.stringify(S)); }catch(e){} };
+try{ const s = localStorage.getItem("vp-wob-input4"); if(s){ const o=JSON.parse(s); S = Object.assign(clone(EX[o.mode==="wg"?"wg":"fam"]), o); } }catch(e){}
+const save = ()=>{ try{ localStorage.setItem("vp-wob-input4", JSON.stringify(S)); }catch(e){} };
 
 const $ = id => document.getElementById(id);
 const num = v => { const x = parseFloat(String(v).replace(",", ".")); return isFinite(x) ? x : 0; };
@@ -864,8 +893,13 @@ function grund(H){
   const mbAdults = mbList.reduce((s,x)=>s+x[1],0) - (wwSum - wwAd);
   const rbEltern = rbA*nAd;
   const grenzeTab = byN(P.kdu.p,P.kdu.plus,n), grenze = (H.mog!=null && H.mog>0) ? H.mog : grenzeTab;
-  const mieteAnerk = H.ka ? Math.min(H.mi,grenze*P.kdu.karenz) : Math.min(H.mi,grenze);
-  const kdu = mieteAnerk + H.hz, kopf = kdu/n;
+  /* Unterkunft: Karenzzeit seit 01.07.2026 höchstens 150 % der Grenze (§ 22 Abs. 1 SGB II); SGB XII ohne Deckel.
+     Heizkosten sind in der Karenzzeit nicht geschützt; während laufender Kostensenkung tatsächliche Kosten (max. 6 Monate). */
+  const kar = H.kdz==="karenz", senk = H.kdz==="senk";
+  const mieteCap = senk ? Infinity : kar ? (sys==="II" ? grenze*P.kdu.karenz : Infinity) : grenze;
+  const mieteAnerk = Math.min(H.mi, mieteCap);
+  const heatAnerk = (H.hzG>0 && !senk) ? Math.min(H.hz, H.hzG) : H.hz;
+  const kdu = mieteAnerk + heatAnerk, kopf = kdu/n;
   /* Einkommen je Erwachsenem, nach SGB II und nach SGB XII bereinigt */
   const inc = ads.map(a=>{
     const fbII = freibetrag(a.jb,mitKind), jobII = Math.max(0,a.jn-fbII);
@@ -876,7 +910,7 @@ function grund(H){
   });
   const eII = inc.reduce((s,x)=>s+x.eII,0), eXII = inc.reduce((s,x)=>s+x.eXII,0);
   const need = rbEltern + mbAdults + kdu + kids.reduce((s,k,i)=>s+rbKind(k.age)+wwKids[i],0);
-  return {nAd, ads, pers, kids, n, regime, sys, mixed, kid15, rbA, mbList, mbPct, mbAdults, wwKids, rbEltern, grenze, grenzeTab, mieteAnerk, kdu, kopf, inc, eII, eXII, elternEink: sys==="XII"?eXII:eII, need, ae:H.typ==="ae"};
+  return {nAd, ads, pers, kids, n, regime, sys, mixed, kid15, rbA, mbList, mbPct, mbAdults, wwKids, rbEltern, grenze, grenzeTab, mieteCap, mieteAnerk, heatAnerk, kdu, kopf, inc, eII, eXII, elternEink: sys==="XII"?eXII:eII, need, ae:H.typ==="ae"};
 }
 function sgb(G, x){
   const wgShare = (x.wg||0)/G.n; let kgSurplus=0, childGap=0;
@@ -890,7 +924,7 @@ function sgb(G, x){
 }
 function vermLimits(G,H){
   const v=P.verm, n=G.n;
-  const sgbL = G.sys==="XII" ? v.xiiAd*G.nAd + v.xiiKid*G.kids.length : (H.ka ? v.iiK+v.iiKPlus*(n-1) : v.ii*n);
+  const sgbL = G.sys==="XII" ? v.xiiAd*G.nAd + v.xiiKid*G.kids.length : (H.kdz==="karenz" ? v.iiK+v.iiKPlus*(n-1) : v.ii*n);
   return {sgb:sgbL, wg:v.wg+v.wgPlus*(n-1), kiz:v.kiz+v.kizPlus*(n-1)};
 }
 function wohngeld(G,H,VL){
@@ -1057,7 +1091,7 @@ function renderIncomes(){
 }
 function fillForm(){
   ["mi","hz","verm"].forEach(id=>{ $(id).value = S[id]||""; });
-  $("pa").value=S.pa; $("ka").checked=S.ka; $("verh").checked=!!S.verh; $("ww").checked=!!S.ww; $("stabil").checked=S.stabil!==false;
+  $("pa").value=S.pa; $("kdz").value=S.kdz||"normal"; $("hzG").value=S.hzG||""; $("verh").checked=!!S.verh; $("ww").checked=!!S.ww; $("stabil").checked=S.stabil!==false;
   Object.keys(SON0).forEach(k=>{ $("s_"+k).checked=!!S.son[k]; });
   if(Object.keys(SON0).some(k=>S.son[k])) $("sonder").open = true;
 }
@@ -1065,7 +1099,9 @@ function rebuild(){ renderKids(); renderPersons(); renderIncomes(); }
 function bind(){
   ["mi","hz","verm"].forEach(id=>$(id).addEventListener("input",()=>{ S[id]=Math.max(0,num($(id).value)); update(); }));
   $("pa").addEventListener("change",()=>{ S.pa=$("pa").value; update(); });
-  [["ka","ka"],["verh","verh"],["ww","ww"],["stabil","stabil"]].forEach(([id,k])=>$(id).addEventListener("change",()=>{ S[k]=$(id).checked; update(); }));
+  $("kdz").addEventListener("change",()=>{ S.kdz=$("kdz").value; update(); });
+  $("hzG").addEventListener("input",()=>{ const v=num($("hzG").value); S.hzG = v>0 ? v : null; update(); });
+  [["verh","verh"],["ww","ww"],["stabil","stabil"]].forEach(([id,k])=>$(id).addEventListener("change",()=>{ S[k]=$(id).checked; update(); }));
   Object.keys(SON0).forEach(k=>$("s_"+k).addEventListener("change",()=>{ S.son[k]=$("s_"+k).checked; update(); }));
   document.querySelectorAll("[data-mode]").forEach(b=>b.addEventListener("click",()=>{
     if(S.mode===b.dataset.mode) return;
@@ -1190,7 +1226,7 @@ function renderWeg(R){
   h+='<p class="hint">'+esc(t("regimeL",{r:t("rg_"+G.regime)}))+'<br>'+esc(t("vermR",{a:eur(S.verm),b:eur(VL.sgb),c:eur(VL.wg)}))+'</p>';
   h+='<h3>'+esc(t("rw1"))+'</h3>';
   const r1=[[t("rbP"),G.rbEltern]].concat(G.mbList.map(x=>[x[0],x[1]]));
-  r1.push([t("rentR",{g:eur(S.ka?G.grenze*P.kdu.karenz:G.grenze)}),G.mieteAnerk],[t("heatR"),S.hz]);
+  r1.push([t("rentR",{g:isFinite(G.mieteCap)?eur(G.mieteCap):t(S.kdz==="senk"?"kdzS":"kdzK")}),G.mieteAnerk],[S.hzG>0&&S.kdz!=="senk"?t("heatRg",{g:eur(S.hzG)}):t("heatR"),G.heatAnerk]);
   G.kids.forEach((k,i)=>r1.push([t("rbC",{n:i+1,a:k.age}),rbKind(k.age)]));
   h+=tbl([t("colNeed"),t("colEur")],r1,[t("totNeed"),R.need]);
   const r2r=[];
