@@ -1,0 +1,561 @@
+<title>Vorrangprüfung Wolfsburg</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: Arbeitsplatz-Werkzeug. Links Eingabe (Akte), rechts Ergebnis-Spalte, darunter Rechenweg und Parameter. */
+:root{
+  --bg:#f5f7f7; --surface:#ffffff; --surface-2:#eef2f2; --line:#d5dddd;
+  --fg:#16211f; --muted:#5a6866; --accent:#0e6b62; --accent-soft:#dcefec;
+  --ok:#1d7a3e; --ok-soft:#e1f3e7; --warn:#9a5b00; --warn-soft:#fbefd9; --bad:#a3322a; --bad-soft:#f8e3e0;
+  --font-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --r:8px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111816; --surface:#18211f; --surface-2:#1f2a28; --line:#2e3b39;
+  --fg:#e3ebe9; --muted:#9aaba8; --accent:#4fc2b4; --accent-soft:#163a35;
+  --ok:#5fcf86; --ok-soft:#173523; --warn:#e7b25a; --warn-soft:#3a2c12; --bad:#f08a80; --bad-soft:#3d1e1b; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111816; --surface:#18211f; --surface-2:#1f2a28; --line:#2e3b39;
+  --fg:#e3ebe9; --muted:#9aaba8; --accent:#4fc2b4; --accent-soft:#163a35;
+  --ok:#5fcf86; --ok-soft:#173523; --warn:#e7b25a; --warn-soft:#3a2c12; --bad:#f08a80; --bad-soft:#3d1e1b; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:15px;line-height:1.5;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:28px}
+header h1{font-size:1.75rem;margin:0;font-weight:700;letter-spacing:-.01em;text-wrap:balance}
+header p{margin:6px 0 0;color:var(--muted);max-width:70ch}
+.tag{display:inline-block;font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:900px){.grid{grid-template-columns:minmax(0,1fr)}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:18px;min-width:0}
+h2{font-size:1.1rem;margin:0;font-weight:600}
+h3{font-size:.8rem;margin:0;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+fieldset{border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:10px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+label{display:flex;flex-direction:column;gap:4px;font-size:.85rem;color:var(--muted);min-width:0}
+input,select{font:inherit;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:7px 9px;width:100%;font-variant-numeric:tabular-nums}
+input:focus-visible,select:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.check{flex-direction:row;align-items:center;gap:8px;color:var(--fg)}
+.check input{width:auto}
+.seg{display:flex;gap:0;border:1px solid var(--line);border-radius:6px;overflow:hidden;width:max-content;max-width:100%}
+.seg button{border:0;border-radius:0;background:transparent;padding:7px 14px;color:var(--fg)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--surface)}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--surface-2);color:var(--fg);border-radius:6px;padding:7px 12px}
+button.primary{background:var(--accent);color:var(--surface);border-color:var(--accent)}
+button.link{background:none;border:0;color:var(--accent);padding:4px 0;text-decoration:underline}
+.kids{display:flex;flex-direction:column;gap:8px}
+.kid{display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,1.4fr) auto;gap:8px;align-items:end;padding:10px;background:var(--surface-2);border-radius:6px}
+.kid .n{font-family:var(--font-mono);font-size:.8rem;color:var(--muted);padding-bottom:9px}
+.hint{font-size:.8rem;color:var(--muted);margin:0}
+.example{font-size:.8rem;background:var(--warn-soft);color:var(--warn);padding:6px 10px;border-radius:6px;margin:0}
+/* Ergebnis */
+.verdict{border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:6px;border:1px solid transparent}
+.verdict strong{font-size:1.1rem}
+.verdict.ok{background:var(--ok-soft);border-color:var(--ok);color:var(--fg)}
+.verdict.warn{background:var(--warn-soft);border-color:var(--warn)}
+.verdict.bad{background:var(--bad-soft);border-color:var(--bad)}
+.verdict .law{font-family:var(--font-mono);font-size:.78rem;color:var(--muted)}
+.scen{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.sc{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:12px 14px;border-top:1px solid var(--line)}
+.sc:first-child{border-top:0}
+.sc.best{background:var(--accent-soft)}
+.sc .t{font-weight:600}
+.sc .s{font-size:.8rem;color:var(--muted)}
+.num{font-family:var(--font-mono);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.pill{font-size:.72rem;font-weight:600;padding:3px 8px;border-radius:999px;white-space:nowrap;letter-spacing:.02em}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.na{background:var(--surface-2);color:var(--muted)}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:520px){.kpis{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.kpi{background:var(--surface-2);border-radius:6px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.kpi span{font-size:.75rem;color:var(--muted)}
+.kpi b{font-family:var(--font-mono);font-weight:500;font-size:1.05rem}
+/* Rechenweg & Parameter */
+details{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+summary{cursor:pointer;padding:14px 20px;font-weight:600;list-style-position:inside}
+.dbody{padding:0 20px 20px;display:flex;flex-direction:column;gap:18px}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600}
+td.num{text-align:right}
+tr.sum td{font-weight:600;border-top:2px solid var(--line)}
+.params{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px}
+.pg{border:1px solid var(--line);border-radius:6px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.pg .src{font-size:.75rem;color:var(--muted)}
+.pg .warnline{font-size:.78rem;color:var(--warn);background:var(--warn-soft);padding:4px 8px;border-radius:4px}
+.pr{display:grid;grid-template-columns:minmax(0,1fr) 110px;gap:8px;align-items:center;font-size:.85rem}
+.pr input{padding:4px 6px;font-family:var(--font-mono);font-size:.82rem;text-align:right}
+.pr.changed input{border-color:var(--warn)}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+ul.notes{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;max-width:80ch}
+footer{font-size:.8rem;color:var(--muted)}
+@media (prefers-reduced-motion:no-preference){.verdict,.sc{transition:background-color .2s}}
+</style>
+
+<div class="wrap">
+<header>
+  <span class="tag">Prototyp · Ideenmanagement</span>
+  <h1>Vorrangprüfung Wolfsburg</h1>
+  <p>Vergleicht für eine Bedarfsgemeinschaft vier Varianten: nur SGB II, Wohngeld allein, Kinderzuschlag allein und <b>Wohngeld und Kinderzuschlag zusammen</b>. Grundlage ist § 12a SGB II: Ein Verweis ist nur zulässig, wenn die Hilfebedürftigkeit der ganzen Bedarfsgemeinschaft überwunden wird. Alle Werte stehen unten in der Parametertabelle und lassen sich dort ändern.</p>
+</header>
+
+<div class="grid">
+  <!-- Eingabe -->
+  <form class="panel" id="f" autocomplete="off">
+    <h2>Angaben zur Bedarfsgemeinschaft</h2>
+    <p class="example">Vorbelegt ist ein erfundener Beispielhaushalt, keine echten Kundendaten.</p>
+
+    <fieldset>
+      <h3>Haushalt</h3>
+      <div class="seg" role="group" aria-label="Haushaltsform">
+        <button type="button" id="t-paar" data-typ="paar">Paar</button>
+        <button type="button" id="t-ae" data-typ="ae">Alleinerziehend</button>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <h3>Einkommen der Eltern (monatlich)</h3>
+      <div class="row">
+        <label>Erwachsene/r 1 – brutto €<input id="b1" type="number" step="any" min="0"></label>
+        <label>Erwachsene/r 1 – netto €<input id="n1" type="number" step="any" min="0"></label>
+      </div>
+      <div class="row" id="p2row">
+        <label>Erwachsene/r 2 – brutto €<input id="b2" type="number" step="any" min="0"></label>
+        <label>Erwachsene/r 2 – netto €<input id="n2" type="number" step="any" min="0"></label>
+      </div>
+      <div class="row">
+        <label>Sonstiges Einkommen Eltern €<input id="so" type="number" step="any" min="0"></label>
+        <label>Pauschalabzug Wohngeld (§ 16 WoGG)
+          <select id="pa">
+            <option value="0.3">Steuern + KV/PV + RV (30 %)</option>
+            <option value="0.2">zwei davon (20 %)</option>
+            <option value="0.1">eins davon (10 %)</option>
+            <option value="0">keine (0 %)</option>
+          </select></label>
+      </div>
+      <p class="hint">Sonstiges Einkommen meint z. B. Arbeitslosengeld oder Krankengeld. Kindergeld, Unterhalt und Unterhaltsvorschuss bitte nicht hier eintragen, sondern beim jeweiligen Kind.</p>
+    </fieldset>
+
+    <fieldset>
+      <h3>Kinder im Haushalt</h3>
+      <div class="kids" id="kids"></div>
+      <div><button type="button" id="addKid">+ Kind hinzufügen</button></div>
+    </fieldset>
+
+    <fieldset>
+      <h3>Wohnung (monatlich)</h3>
+      <div class="row">
+        <label>Bruttokaltmiete € <input id="mi" type="number" step="any" min="0"></label>
+        <label>Heizkosten € <input id="hz" type="number" step="any" min="0"></label>
+      </div>
+      <label class="check"><input type="checkbox" id="ka"> Karenzzeit (erste 12 Monate Leistungsbezug)</label>
+      <p class="hint">Die Bruttokaltmiete ist die Kaltmiete plus kalte Nebenkosten. Warmwasser, das über die Heizung erzeugt wird, gehört zu den Heizkosten.</p>
+    </fieldset>
+  </form>
+
+  <!-- Ergebnis -->
+  <section class="panel" id="res" aria-live="polite">
+    <h2>Ergebnis</h2>
+    <div id="verdict"></div>
+    <div class="kpis" id="kpis"></div>
+    <div>
+      <h3 style="margin-bottom:8px">Varianten im Vergleich</h3>
+      <div class="scen" id="scen"></div>
+    </div>
+    <p class="hint" id="budgetHint"></p>
+  </section>
+</div>
+
+<details id="dWeg" open>
+  <summary>Rechenweg</summary>
+  <div class="dbody" id="weg"></div>
+</details>
+
+<details id="dPar">
+  <summary>Parameter und Quellen (Stand 07.11.2026)</summary>
+  <div class="dbody">
+    <div class="toolbar">
+      <button type="button" id="resetP">Auf Standardwerte zurücksetzen</button>
+      <button type="button" id="copyP">Parameter als JSON kopieren</button>
+      <span class="hint" id="copyMsg"></span>
+    </div>
+    <p class="hint">Geänderte Werte sind gelb umrandet. Sie werden nur in diesem Browser gespeichert.</p>
+    <div class="params" id="params"></div>
+    <textarea id="copyBox" hidden readonly style="width:100%;height:120px;font-family:var(--font-mono);font-size:.75rem"></textarea>
+  </div>
+</details>
+
+<details>
+  <summary>Vereinfachungen und Grenzen des Prototyps</summary>
+  <div class="dbody">
+    <ul class="notes">
+      <li><b>Kein Bescheid-Ersatz.</b> Der Prototyp liefert eine Vorprüfung. Verbindlich entscheiden Wohngeldstelle und Familienkasse.</li>
+      <li><b>Prognose über 3 Monate:</b> Gerechnet wird mit gleichbleibendem Einkommen. § 12a Satz 2 Nr. 2 SGB II verlangt, dass die Hilfebedürftigkeit mindestens drei Monate am Stück überwunden wird.</li>
+      <li><b>SGB II:</b> Die Kosten der Unterkunft werden nach Köpfen aufgeteilt. Überschüssiges Kindergeld wird den Eltern zugerechnet. Nicht berücksichtigt sind Mehrbedarfe außer dem für Alleinerziehende, Bildung und Teilhabe, Absetzbeträge über die Freibeträge hinaus sowie eine Angemessenheitsprüfung der Heizkosten.</li>
+      <li><b>Neue Grundsicherung:</b> Seit dem 01.07.2026 gilt die Karenzzeit-Miete nur bis 150 % der Angemessenheitsgrenze. Weitere Reformdetails sind bitte gegen den aktuellen Gesetzesstand zu prüfen.</li>
+      <li><b>Kosten der Unterkunft Wolfsburg:</b> Hinterlegt sind die zuletzt öffentlich auffindbaren Werte mit Stand 01.01.2022, und der Wert für 5 Personen ist geschätzt. Bitte die aktuelle Richtlinie der Stadt Wolfsburg eintragen.</li>
+      <li><b>Wohngeld:</b> Gerechnet wird mit der Formel aus § 19 WoGG und den Werten ab 01.01.2025, die nach der Fortschreibung alle zwei Jahre bis 31.12.2026 gelten. Ab 01.01.2027 sind neue Werte zu erwarten. Vereinfacht sind die Werbungskosten (Pauschbetrag), der Freibetrag für Alleinerziehende (§ 17 WoGG, Wert prüfen) und das Kinderwohngeld (nicht abgebildet).</li>
+      <li><b>Kinderzuschlag:</b> Das Einkommen der Eltern oberhalb ihres Bedarfs mindert den Kinderzuschlag zu 45 %. Das gilt eigentlich nur für Erwerbseinkommen, sonstiges Einkommen mindert zu 100 %. Hier wird beides vereinfacht mit 45 % gerechnet. Einkommen des Kindes mindert ebenfalls zu 45 %. Die Wohnkostenanteile stammen aus dem Existenzminimumbericht und sind gegen die aktuelle DA-KiZ zu prüfen.</li>
+      <li><b>Datenschutz:</b> Die Seite rechnet nur im Browser und überträgt keine Daten.</li>
+    </ul>
+  </div>
+</details>
+
+<footer>Prototyp für einen Verbesserungsvorschlag. Er zeigt, wie eine gemeinsame Prüfung von Wohngeld und Kinderzuschlag auf Grundlage der SGB-II-Daten aussehen kann. Kein offizielles Angebot der Bundesagentur für Arbeit oder der Stadt Wolfsburg.</footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+/* ---------- Standard-Parameter (Stand 07.11.2026) ---------- */
+const DEFAULTS = {
+  rb:{single:563, partner:506, u25:451, k14:471, k6:390, k0:357},
+  kindergeld:259,
+  fb:{grund:100, g1:520, q1:0.2, g2:1000, q2:0.3, g3o:1200, g3m:1500, q3:0.1, pausch:30},
+  kdu:{p:[540.10,654.50,778.80,907.50,1030.00], plus:120, karenz:1.5},
+  wg:{hb:[511,619,737,858,982], hbPlus:119,
+      klima:[19.20,24.80,29.60,34.40,39.20], klimaPlus:4.80,
+      hke:[14.40,18.60,22.20,25.80,29.40], hkePlus:3.60,
+      hkk:[96,124,148,172,196], hkkPlus:24,
+      a:[4.000e-2,3.000e-2,2.000e-2,1.000e-2,0,-1.000e-2,-2.000e-2,-3.000e-2,-4.000e-2,-6.000e-2,-9.000e-2,-1.200e-1],
+      b:[4.797e-4,3.571e-4,2.917e-4,2.163e-4,1.907e-4,1.722e-4,1.592e-4,1.583e-4,1.376e-4,1.249e-4,1.141e-4,1.107e-4],
+      c:[4.080e-5,3.040e-5,2.450e-5,1.760e-5,1.720e-5,1.660e-5,1.650e-5,1.650e-5,1.660e-5,1.660e-5,1.960e-5,2.210e-5],
+      wk:1230, aeFrei:1320, min:10},
+  kiz:{max:297, minPaar:900, minAE:600, quote:0.45,
+       ae:[77,63,53,46,41], paar:[83,71,62,55,50]}
+};
+const clone = o => JSON.parse(JSON.stringify(o));
+let P = clone(DEFAULTS);
+try{ const s = localStorage.getItem("vp-wob-params"); if(s){ P = deepMerge(clone(DEFAULTS), JSON.parse(s)); } }catch(e){}
+function deepMerge(t,s){ for(const k in s){ if(s[k] && typeof s[k]==="object" && !Array.isArray(s[k])) t[k]=deepMerge(t[k]||{},s[k]); else t[k]=s[k]; } return t; }
+const getP = (o,path)=>path.split(".").reduce((x,k)=>x==null?x:x[k],o);
+const setP = (o,path,v)=>{ const ks=path.split("."); const last=ks.pop(); ks.reduce((x,k)=>x[k],o)[last]=v; };
+
+/* ---------- Parameter-Schema für die Tabelle ---------- */
+const PERS = ["1 Person","2 Personen","3 Personen","4 Personen","5 Personen"];
+const GROUPS = [
+  {t:"Regelbedarfe 2026 (SGB II)", src:"Bundesregierung: Nullrunde zum 01.01.2026, Regelsätze unverändert.", items:[
+    ["rb.single","Alleinstehend / alleinerziehend (RBS 1)"],["rb.partner","Partner, je Person (RBS 2)"],
+    ["rb.u25","Kind 18–24 im Elternhaushalt (RBS 3)"],["rb.k14","Kind 14–17 (RBS 4)"],["rb.k6","Kind 6–13 (RBS 5)"],["rb.k0","Kind 0–5 (RBS 6)"]]},
+  {t:"Kindergeld", src:"§ 66 EStG, ab 01.01.2026: 259 € je Kind.", items:[["kindergeld","Kindergeld je Kind"]]},
+  {t:"Freibeträge Erwerbstätige (§ 11b SGB II)", src:"§ 11b Abs. 2 und 3 SGB II", items:[
+    ["fb.grund","Grundfreibetrag €"],["fb.q1","Quote 100 € bis Stufe 1"],["fb.g1","Stufe 1 bis € brutto"],
+    ["fb.q2","Quote bis Stufe 2"],["fb.g2","Stufe 2 bis € brutto"],["fb.q3","Quote bis Obergrenze"],
+    ["fb.g3o","Obergrenze ohne Kind € brutto"],["fb.g3m","Obergrenze mit Kind € brutto"],["fb.pausch","Versicherungspauschale (sonstiges Einkommen) €"]]},
+  {t:"Angemessene Bruttokaltmiete Wolfsburg", src:"Mietobergrenzen der Stadt Wolfsburg, Stand 01.01.2022 (zuletzt öffentlich gefundener Wert).", warn:"Veraltet. Bitte aktuelle KdU-Richtlinie eintragen. Der Wert für 5 Personen und der Mehrbetrag sind geschätzt.",
+    items: PERS.map((p,i)=>["kdu.p."+i, p]).concat([["kdu.plus","je weitere Person (Annahme)"],["kdu.karenz","Deckel Karenzzeit (Faktor, ab 01.07.2026)"]])},
+  {t:"Wohngeld – Höchstbeträge Mietstufe IV (Wolfsburg)", src:"Anlage 1 WoGG ab 01.01.2025; Wolfsburg laut Wohngeldverordnung in Mietstufe IV.", items:
+    PERS.map((p,i)=>["wg.hb."+i,p]).concat([["wg.hbPlus","je weitere Person"]])},
+  {t:"Wohngeld – Klima- und Heizkostenkomponente", src:"§ 12 Abs. 6 und 7 WoGG (Richtflächen 48/62/74/86/98 m², +12 m² je weitere Person).", items:
+    PERS.map((p,i)=>["wg.klima."+i,"Klimakomponente "+p]).concat([["wg.klimaPlus","Klima je weitere Person"]],
+    PERS.map((p,i)=>["wg.hke."+i,"Heizkostenentlastung "+p]),[["wg.hkePlus","Heizkostenentlastung je weitere"]],
+    PERS.map((p,i)=>["wg.hkk."+i,"Heizkostenkomponente "+p]),[["wg.hkkPlus","Heizkostenkomponente je weitere"]])},
+  {t:"Wohngeld – Einkommen", src:"§§ 14–17 WoGG, § 9a EStG", warn:"Der Freibetrag für Alleinerziehende (§ 17 WoGG) ist vereinfacht: je Kind unter 18. Bitte prüfen.", items:[
+    ["wg.wk","Werbungskosten-Pauschbetrag €/Jahr"],["wg.aeFrei","Freibetrag Alleinerziehende €/Jahr je Kind"],["wg.min","Mindestbetrag Wohngeld (§ 21 WoGG) €"]]},
+  {t:"Wohngeldformel – Werte a, b, c", src:"Anlage 2 WoGG ab 01.01.2025. Formel: 1,15 · (M − (a + b·M + c·Y) · Y)", abc:true},
+  {t:"Kinderzuschlag", src:"§ 6a BKGG; Merkblatt Kinderzuschlag (BA).", warn:"Die Wohnkostenanteile stammen aus Kinderzuschlag-Rechnern, die den Existenzminimumbericht wiedergeben. Der Wert für 5+ Kinder ist geschätzt. Bitte gegen die DA-KiZ (Stand 20.02.2026) prüfen.",
+    items:[["kiz.max","Höchstbetrag je Kind €"],["kiz.minPaar","Mindesteinkommen Paar € brutto"],["kiz.minAE","Mindesteinkommen alleinerziehend € brutto"],["kiz.quote","Minderungsquote Einkommen"]]
+      .concat([1,2,3,4,5].map((k,i)=>["kiz.ae."+i,"Wohnkostenanteil alleinerziehend, "+k+(k===5?"+":"")+" Kind(er) %"]))
+      .concat([1,2,3,4,5].map((k,i)=>["kiz.paar."+i,"Wohnkostenanteil Paar, "+k+(k===5?"+":"")+" Kind(er) %"]))}
+];
+
+/* ---------- Haushalt (Beispiel) ---------- */
+const S = {typ:"paar", b1:2300, n1:1720, b2:0, n2:0, so:0, pa:"0.3", mi:780, hz:110, ka:false,
+  kids:[{age:4,uh:0},{age:9,uh:0}]};
+try{ const s = localStorage.getItem("vp-wob-input"); if(s) Object.assign(S, JSON.parse(s)); }catch(e){}
+
+const $ = id => document.getElementById(id);
+const eur = v => (Math.round(v*100)/100).toLocaleString("de-DE",{style:"currency",currency:"EUR"});
+const pct = v => (v*100).toLocaleString("de-DE",{maximumFractionDigits:1})+" %";
+const num = v => { const x = parseFloat(String(v).replace(",", ".")); return isFinite(x) ? x : 0; };
+const clamp = (x,lo,hi)=>Math.min(Math.max(x,lo),hi);
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ---------- Rechenkern ---------- */
+function rbKind(age){ if(age>=18) return P.rb.u25; if(age>=14) return P.rb.k14; if(age>=6) return P.rb.k6; return P.rb.k0; }
+function byN(arr, plus, n){ const i = Math.min(n,arr.length)-1; return arr[i] + Math.max(0,n-arr.length)*plus; }
+
+function freibetrag(brutto, mitKind){
+  if(brutto<=0) return 0;
+  const f = P.fb;
+  let fb = Math.min(brutto, f.grund);
+  fb += f.q1 * clamp(brutto - f.grund, 0, f.g1 - f.grund);
+  fb += f.q2 * clamp(brutto - f.g1, 0, f.g2 - f.g1);
+  fb += f.q3 * clamp(brutto - f.g2, 0, (mitKind ? f.g3m : f.g3o) - f.g2);
+  return fb;
+}
+
+function grund(H){
+  const ae = H.typ==="ae";
+  const kids = H.kids.filter(k=>k.age>=0 && k.age<25);
+  const nAd = ae?1:2, n = nAd + kids.length;
+  const earners = ae ? [{b:H.b1,n:H.n1}] : [{b:H.b1,n:H.n1},{b:H.b2,n:H.n2}];
+  const mitKind = kids.length>0;
+  const eink = earners.map(e=>{ const fb=freibetrag(e.b,mitKind); return {b:e.b, n:e.n, fb, ber:Math.max(0,e.n-fb)}; });
+  const sonstBer = H.so>0 ? Math.max(0, H.so - P.fb.pausch) : 0;
+  const elternEink = eink.reduce((s,e)=>s+e.ber,0) + sonstBer;
+  // Mehrbedarf Alleinerziehende § 21 Abs. 3
+  let mbPct = 0;
+  if(ae){
+    const minors = kids.filter(k=>k.age<18);
+    const u7 = minors.filter(k=>k.age<7).length, u16 = minors.filter(k=>k.age<16).length;
+    mbPct = Math.max((u7>=1 || u16>=2) ? 36 : 0, Math.min(60, 12*minors.length));
+    if(minors.length===0) mbPct = 0;
+  }
+  const mb = Math.round(P.rb.single*mbPct)/100;
+  const rbEltern = ae ? P.rb.single : 2*P.rb.partner;
+  const grenze = byN(P.kdu.p, P.kdu.plus, n);
+  const mieteAnerk = H.ka ? Math.min(H.mi, grenze*P.kdu.karenz) : Math.min(H.mi, grenze);
+  const kdu = mieteAnerk + H.hz;
+  const kopf = kdu / n;
+  return {ae, kids, nAd, n, eink, sonstBer, elternEink, mbPct, mb, rbEltern, grenze, mieteAnerk, kdu, kopf};
+}
+
+function sgb2(G, extra){
+  const wgShare = (extra.wg||0) / G.n;
+  let kgSurplus = 0, childGap = 0;
+  const kids = G.kids.map((k,i)=>{
+    const need = rbKind(k.age) + G.kopf;
+    const own = k.uh + (extra.kiz ? extra.kiz[i] : 0) + wgShare;
+    let gap = 0, kgUsed = 0;
+    if(own >= need){ kgSurplus += P.kindergeld; }
+    else { const rem = need-own; kgUsed = Math.min(P.kindergeld, rem); kgSurplus += P.kindergeld-kgUsed; gap = rem-kgUsed; }
+    childGap += gap;
+    return {need, own, kgUsed, gap};
+  });
+  const pNeed = G.rbEltern + G.mb + G.kopf*G.nAd;
+  const pInc = G.elternEink + kgSurplus + wgShare*G.nAd;
+  const pGap = pNeed - pInc;
+  const gap = Math.max(0, Math.round((pGap + childGap)*100)/100);
+  return {gap, pNeed, pInc, pGap, kids, kgSurplus, childGap, wgShare};
+}
+
+function wohngeld(G, H){
+  const n = G.n;
+  const hb = byN(P.wg.hb,P.wg.hbPlus,n), kl = byN(P.wg.klima,P.wg.klimaPlus,n);
+  const hke = byN(P.wg.hke,P.wg.hkePlus,n), hkk = byN(P.wg.hkk,P.wg.hkkPlus,n);
+  const cap = hb + kl;
+  const mRent = Math.min(H.mi, cap);
+  const M = mRent + hke + hkk;
+  const pa = num(H.pa);
+  let jahr = 0; const rows = [];
+  G.eink.forEach((e,i)=>{ if(e.b>0){ const j=e.b*12, wk=Math.min(j,P.wg.wk), v=(j-wk)*(1-pa); jahr+=v; rows.push(["Erwerbseinkommen Erw. "+(i+1), j, wk, v]); } });
+  if(H.so>0){ const j=H.so*12; jahr+=j; rows.push(["Sonstiges Einkommen", j, 0, j]); }
+  G.kids.forEach((k,i)=>{ if(k.uh>0){ const j=k.uh*12; jahr+=j; rows.push(["Unterhalt / UVG Kind "+(i+1), j, 0, j]); } });
+  let frei = 0;
+  if(G.ae){ frei = G.kids.filter(k=>k.age<18).length * P.wg.aeFrei; }
+  const yJahr = Math.max(0, jahr - frei);
+  const Y = yJahr/12;
+  const idx = Math.min(n,12)-1, a=P.wg.a[idx], b=P.wg.b[idx], c=P.wg.c[idx];
+  let raw = 1.15*(M - (a + b*M + c*Y)*Y);
+  let wg = Math.round(Math.max(0, Math.min(raw, M)));
+  const unterMin = wg>0 && wg<P.wg.min;
+  if(wg < P.wg.min) wg = 0;
+  return {wg, raw, M, mRent, cap, hb, kl, hke, hkk, Y, yJahr, frei, rows, a, b, c, pa, unterMin};
+}
+
+function kinderzuschlag(G, H){
+  const nK = G.kids.length;
+  const res = {kiz:0, perChild:G.kids.map(()=>0), ok:false, reason:"", steps:{}};
+  if(nK===0){ res.reason="Keine Kinder im Haushalt."; return res; }
+  const brutto = G.eink.reduce((s,e)=>s+e.b,0) + H.so;
+  const minE = G.ae ? P.kiz.minAE : P.kiz.minPaar;
+  res.steps.brutto = brutto; res.steps.minE = minE;
+  if(brutto < minE){ res.reason = "Mindesteinkommen von "+eur(minE)+" brutto nicht erreicht."; return res; }
+  const tab = G.ae ? P.kiz.ae : P.kiz.paar;
+  const anteil = tab[Math.min(nK,tab.length)-1]/100;
+  const bedarf = G.rbEltern + G.mb + anteil*G.kdu;
+  const eink = G.elternEink;
+  const excess = Math.max(0, eink - bedarf);
+  const base = G.kids.map(k=>Math.max(0, P.kiz.max - P.kiz.quote*k.uh));
+  const baseSum = base.reduce((s,x)=>s+x,0);
+  const minderung = P.kiz.quote*excess;
+  const total = Math.max(0, Math.floor(baseSum - minderung));
+  res.perChild = baseSum>0 ? base.map(x=>total*x/baseSum) : base.map(()=>0);
+  res.kiz = total; res.ok = total>0;
+  if(!res.ok) res.reason = "Das Einkommen der Eltern liegt so weit über ihrem Bedarf, dass der Kinderzuschlag auf 0 € sinkt.";
+  res.steps = {brutto, minE, anteil, bedarf, eink, excess, base, baseSum, minderung};
+  return res;
+}
+
+function berechne(H){
+  const G = grund(H);
+  const W = wohngeld(G,H);
+  const K = kinderzuschlag(G,H);
+  const s0 = sgb2(G,{});
+  const s1 = sgb2(G,{wg:W.wg});
+  const s2 = sgb2(G,{kiz:K.perChild});
+  const s3 = sgb2(G,{wg:W.wg, kiz:K.perChild});
+  const basis = G.eink.reduce((s,e)=>s+e.n,0) + H.so + G.kids.reduce((s,k)=>s+k.uh,0) + G.kids.length*P.kindergeld;
+  return {G,W,K,s0,s1,s2,s3,basis};
+}
+
+/* ---------- Oberfläche: Eingabe ---------- */
+function save(){ try{ localStorage.setItem("vp-wob-input", JSON.stringify(S)); }catch(e){} }
+function renderKids(){
+  const box = $("kids"); box.innerHTML = "";
+  if(S.kids.length===0){ box.innerHTML = '<p class="hint">Keine Kinder erfasst. Ohne Kinder gibt es keinen Kinderzuschlag.</p>'; }
+  S.kids.forEach((k,i)=>{
+    const d = document.createElement("div"); d.className="kid";
+    d.innerHTML = '<span class="n">K'+(i+1)+'</span>'+
+      '<label>Alter<input type="number" min="0" max="24" step="1" id="ka'+i+'" value="'+k.age+'"></label>'+
+      '<label>Unterhalt / UVG € mtl.<input type="number" min="0" step="any" id="ku'+i+'" value="'+k.uh+'"></label>'+
+      '<button type="button" class="link" aria-label="Kind '+(i+1)+' entfernen" data-rm="'+i+'">entfernen</button>';
+    box.appendChild(d);
+  });
+  box.querySelectorAll("input").forEach(inp=>inp.addEventListener("input",()=>{
+    const i = +inp.id.slice(2); const key = inp.id[1]==="a" ? "age" : "uh";
+    S.kids[i][key] = key==="age" ? clamp(Math.floor(num(inp.value)),0,24) : Math.max(0,num(inp.value));
+    update();
+  }));
+  box.querySelectorAll("[data-rm]").forEach(b=>b.addEventListener("click",()=>{ S.kids.splice(+b.dataset.rm,1); renderKids(); update(); }));
+  $("addKid").disabled = S.kids.length>=8;
+}
+function bindForm(){
+  ["b1","n1","b2","n2","so","mi","hz"].forEach(id=>{ $(id).value = S[id]; $(id).addEventListener("input",()=>{ S[id]=Math.max(0,num($(id).value)); update(); }); });
+  $("pa").value = S.pa; $("pa").addEventListener("change",()=>{ S.pa=$("pa").value; update(); });
+  $("ka").checked = S.ka; $("ka").addEventListener("change",()=>{ S.ka=$("ka").checked; update(); });
+  document.querySelectorAll("[data-typ]").forEach(b=>b.addEventListener("click",()=>{ S.typ=b.dataset.typ; update(); }));
+  $("addKid").addEventListener("click",()=>{ S.kids.push({age:6,uh:0}); renderKids(); update(); });
+  $("f").addEventListener("submit",e=>e.preventDefault());
+}
+
+/* ---------- Oberfläche: Ergebnis ---------- */
+function update(){
+  save();
+  document.querySelectorAll("[data-typ]").forEach(b=>b.setAttribute("aria-pressed", String(b.dataset.typ===S.typ)));
+  $("p2row").hidden = S.typ==="ae";
+  const R = berechne(S);
+  const {G,W,K,s0,s1,s2,s3} = R;
+
+  // Urteil
+  let cls, head, text;
+  const wgOk = W.wg>0 && s1.gap===0, kizOk = K.kiz>0 && s2.gap===0, bothOk = (W.wg>0 || K.kiz>0) && s3.gap===0;
+  if(s0.gap===0){ cls="warn"; head="Kein SGB-II-Anspruch nach dieser Berechnung";
+    text="Das Einkommen deckt den Bedarf. Wohngeld ("+eur(W.wg)+") und Kinderzuschlag ("+eur(K.kiz)+") direkt bei Wohngeldstelle und Familienkasse beantragen."; }
+  else if(wgOk && kizOk){ cls="ok"; head="Wohngeld oder Kinderzuschlag reicht schon einzeln";
+    text="Jede der beiden Leistungen beendet allein die Hilfebedürftigkeit. Zusammen ist das Budget am höchsten. Verweis nach § 12a SGB II ist zulässig."; }
+  else if(wgOk){ cls="ok"; head="Wohngeld allein beendet die Hilfebedürftigkeit"; text="Verweis auf Wohngeld nach § 12a SGB II ist zulässig."+(K.kiz>0?" Zusätzlich Kinderzuschlag beantragen.":""); }
+  else if(kizOk){ cls="ok"; head="Kinderzuschlag allein beendet die Hilfebedürftigkeit"; text="Verweis auf Kinderzuschlag nach § 12a SGB II ist zulässig."+(W.wg>0?" Zusätzlich Wohngeld beantragen.":""); }
+  else if(bothOk){ cls="ok"; head="Nur zusammen: Wohngeld und Kinderzuschlag beantragen";
+    text="Keine Leistung reicht allein, zusammen wird die Hilfebedürftigkeit überwunden. Bei einer Einzelprüfung wäre dieser Fall vermutlich falsch eingeordnet worden."; }
+  else { cls="bad"; head="SGB II bleibt vorrangig zu zahlen";
+    text="Auch Wohngeld und Kinderzuschlag zusammen überwinden die Hilfebedürftigkeit nicht (Restlücke "+eur(s3.gap)+"). Kein Verweis nach § 12a Satz 2 Nr. 2 SGB II."; }
+  $("verdict").innerHTML = '<div class="verdict '+cls+'"><strong>'+esc(head)+'</strong><span>'+esc(text)+'</span><span class="law">Voraussetzung: Überwindung für mindestens 3 Monate (§ 12a S. 2 Nr. 2 SGB II)</span></div>';
+
+  $("kpis").innerHTML =
+    kpi("SGB-II-Lücke ohne Vorrang", eur(s0.gap)) +
+    kpi("Wohngeld (Mietstufe IV)", eur(W.wg)) +
+    kpi("Kinderzuschlag gesamt", eur(K.kiz));
+
+  const best = s0.gap===0 ? -1 : (bothOk && !wgOk && !kizOk) ? 3 : wgOk ? 1 : kizOk ? 2 : 0;
+  const sc = [
+    ["Nur SGB II", "Bedarf minus Einkommen der Bedarfsgemeinschaft", s0.gap, null, 0],
+    ["Wohngeld allein", W.wg>0 ? "Wohngeld "+eur(W.wg) : (W.unterMin?"unter Mindestbetrag 10 €":"kein Wohngeld"), s1.gap, W.wg>0, 1],
+    ["Kinderzuschlag allein", K.kiz>0 ? "KiZ "+eur(K.kiz) : K.reason, s2.gap, K.kiz>0, 2],
+    ["Wohngeld + Kinderzuschlag", "zusammen "+eur(W.wg+K.kiz), s3.gap, (W.wg>0||K.kiz>0), 3]
+  ];
+  $("scen").innerHTML = sc.map(([t,s,gap,has,i])=>{
+    let pill;
+    if(i===0) pill = gap>0 ? '<span class="pill bad">hilfebedürftig</span>' : '<span class="pill ok">nicht hilfebedürftig</span>';
+    else if(!has) pill = '<span class="pill na">entfällt</span>';
+    else pill = gap===0 ? '<span class="pill ok">überwunden</span>' : '<span class="pill bad">Lücke bleibt</span>';
+    return '<div class="sc'+(i===best?' best':'')+'"><div><div class="t">'+esc(t)+'</div><div class="s">'+esc(s)+'</div></div>'+
+      '<div class="num" title="verbleibende SGB-II-Lücke">'+(i===0?"":"Lücke ")+eur(gap)+'</div>'+pill+'</div>';
+  }).join("");
+
+  const mitSGB = R.basis + s0.gap;
+  const mitVor = R.basis + W.wg + K.kiz;
+  $("budgetHint").innerHTML = "Verfügbares Haushaltsbudget, einschließlich Kindergeld und Unterhalt: mit SGB II etwa <b class='num'>"+eur(mitSGB)+"</b>, mit Wohngeld und Kinderzuschlag etwa <b class='num'>"+eur(mitVor)+"</b>. Leistungen für Bildung und Teilhabe gibt es in beiden Fällen.";
+
+  renderWeg(R);
+}
+function kpi(l,v){ return '<div class="kpi"><span>'+esc(l)+'</span><b>'+v+'</b></div>'; }
+
+function tbl(head, rows, sumRow){
+  return '<div class="tbl"><table><thead><tr>'+head.map((h,i)=>'<th'+(i>0?' class="num"':'')+'>'+esc(h)+'</th>').join("")+'</tr></thead><tbody>'+
+    rows.map(r=>'<tr>'+r.map((c,i)=>'<td'+(i>0?' class="num"':'')+'>'+(typeof c==="number"?eur(c):esc(c))+'</td>').join("")+'</tr>').join("")+
+    (sumRow?'<tr class="sum">'+sumRow.map((c,i)=>'<td'+(i>0?' class="num"':'')+'>'+(typeof c==="number"?eur(c):esc(c))+'</td>').join("")+'</tr>':"")+
+    '</tbody></table></div>';
+}
+function renderWeg(R){
+  const {G,W,K,s0} = R; let h = "";
+  // SGB II
+  h += '<h3>1 · SGB-II-Bedarf und Einkommen (ohne vorrangige Leistungen)</h3>';
+  const rows = [["Regelbedarf Eltern", G.rbEltern]];
+  if(G.mb>0) rows.push(["Mehrbedarf Alleinerziehende ("+G.mbPct+" %)", G.mb]);
+  rows.push(["Bruttokaltmiete anerkannt (Grenze "+eur(G.grenze)+(S.ka?", Karenzzeit max. "+eur(G.grenze*P.kdu.karenz):"")+")", G.mieteAnerk]);
+  rows.push(["Heizkosten", S.hz]);
+  G.kids.forEach((k,i)=>rows.push(["Regelbedarf Kind "+(i+1)+" ("+k.age+" J.)", rbKind(k.age)]));
+  const sumBed = G.rbEltern + G.mb + G.kdu + G.kids.reduce((s,k)=>s+rbKind(k.age),0);
+  h += tbl(["Bedarf","€ mtl."], rows, ["Gesamtbedarf", sumBed]);
+  const er = G.eink.filter(e=>e.b>0||e.n>0).map((e,i)=>["Erw. "+(i+1)+": netto "+eur(e.n)+" − Freibetrag "+eur(e.fb), e.ber]);
+  if(G.sonstBer>0) er.push(["Sonstiges Einkommen − "+eur(P.fb.pausch)+" Pauschale", G.sonstBer]);
+  G.kids.forEach((k,i)=>{ if(k.uh>0) er.push(["Unterhalt / UVG Kind "+(i+1), k.uh]); });
+  er.push(["Kindergeld ("+G.kids.length+" × "+eur(P.kindergeld)+")", G.kids.length*P.kindergeld]);
+  h += tbl(["Einkommen (bereinigt)","€ mtl."], er, ["Ungedeckter Bedarf (Lücke)", s0.gap]);
+  h += '<p class="hint">Die Kosten der Unterkunft werden nach Köpfen verteilt ('+eur(G.kopf)+' je Person). Kindergeld deckt zuerst den Bedarf des Kindes, was übrig bleibt, wird den Eltern zugerechnet.</p>';
+  // Wohngeld
+  h += '<h3>2 · Wohngeld (§ 19 WoGG, Mietstufe IV, '+G.n+' Haushaltsmitglieder)</h3>';
+  h += tbl(["Zu berücksichtigende Miete M","€ mtl."],[
+    ["Höchstbetrag "+eur(W.hb)+" + Klimakomponente "+eur(W.kl)+" = "+eur(W.cap), W.cap],
+    ["Bruttokaltmiete, höchstens bis zum Höchstbetrag", W.mRent],
+    ["+ Heizkostenentlastung", W.hke],["+ Heizkostenkomponente", W.hkk]],["M", W.M]);
+  h += tbl(["Jahreseinkommen","brutto €/J","Werbungsk. €","nach Abzügen €"],
+    W.rows.map(r=>[r[0], r[1], r[2], r[3]]).concat(W.frei>0?[["− Freibetrag Alleinerziehende","","",-W.frei]]:[]),
+    ["Y (monatlich) = Jahreswert / 12 · Pauschalabzug "+pct(W.pa)+" bei Erwerb","","",W.Y]);
+  h += '<p class="hint" style="font-family:var(--font-mono)">1,15 · ('+W.M.toFixed(2)+' − ('+W.a+' + '+W.b+'·'+W.M.toFixed(2)+' + '+W.c+'·'+W.Y.toFixed(2)+') · '+W.Y.toFixed(2)+') = '+W.raw.toFixed(2)+' → <b>'+eur(W.wg)+'</b>'+(W.unterMin?' (unter Mindestbetrag, daher 0 €)':'')+'</p>';
+  // KiZ
+  h += '<h3>3 · Kinderzuschlag (§ 6a BKGG)</h3>';
+  if(K.steps.anteil===undefined){ h += '<p class="hint">'+esc(K.reason || "Nicht berechnet.")+'</p>'; }
+  else {
+    const st = K.steps;
+    h += tbl(["Schritt","€ mtl."],[
+      ["Bruttoeinkommen Eltern (Mindesteinkommen "+eur(st.minE)+")", st.brutto],
+      ["Elternbedarf: Regelbedarf"+(G.mb>0?" + Mehrbedarf":"")+" + "+Math.round(st.anteil*100)+" % von "+eur(G.kdu)+" Wohnkosten", st.bedarf],
+      ["Einkommen Eltern bereinigt (wie SGB II)", st.eink],
+      ["Einkommen über Elternbedarf", st.excess],
+      ["Höchstbetrag abzüglich 45 % des Kindeseinkommens, Summe aller Kinder", st.baseSum],
+      ["− "+pct(P.kiz.quote)+" des Einkommens über dem Elternbedarf", st.minderung>0 ? -st.minderung : 0]
+    ],["Kinderzuschlag (abgerundet)", K.kiz]);
+  }
+  h += '<h3>4 · Prüfung mit vorrangigen Leistungen</h3>';
+  h += tbl(["Variante","Lücke € mtl."],[["Nur SGB II",R.s0.gap],["mit Wohngeld",R.s1.gap],["mit Kinderzuschlag",R.s2.gap],["mit Wohngeld + Kinderzuschlag",R.s3.gap]]);
+  h += '<p class="hint">Kinderzuschlag zählt im SGB II als Einkommen des Kindes, Wohngeld wird nach Köpfen verteilt. Bei der Wohngeldberechnung zählen Kindergeld und Kinderzuschlag nicht als Einkommen, beim Kinderzuschlag zählt Wohngeld nicht. Deshalb lassen sich beide Leistungen unabhängig berechnen und dann gemeinsam prüfen.</p>';
+  $("weg").innerHTML = h;
+}
+
+/* ---------- Parameter-Tabelle ---------- */
+function renderParams(){
+  const box = $("params"); box.innerHTML = "";
+  GROUPS.forEach(g=>{
+    const d = document.createElement("div"); d.className="pg";
+    let h = '<h3>'+esc(g.t)+'</h3><div class="src">Quelle: '+esc(g.src)+'</div>'+(g.warn?'<div class="warnline">'+esc(g.warn)+'</div>':"");
+    let items = g.items || [];
+    if(g.abc){ items = []; for(let i=0;i<12;i++){ ["a","b","c"].forEach(x=>items.push(["wg."+x+"."+i, x+" · "+(i+1)+" Pers."])); } }
+    h += items.map(([p,l])=>{
+      const v = getP(P,p), dv = getP(DEFAULTS,p);
+      return '<div class="pr'+(v!==dv?' changed':'')+'"><label for="p_'+p+'" style="color:var(--fg)">'+esc(l)+'</label><input id="p_'+p+'" data-p="'+p+'" type="text" inputmode="decimal" value="'+String(v).replace(".",",")+'"></div>';
+    }).join("");
+    d.innerHTML = h; box.appendChild(d);
+  });
+  box.querySelectorAll("input[data-p]").forEach(inp=>inp.addEventListener("change",()=>{
+    const p = inp.dataset.p; const v = num(inp.value); setP(P,p,v);
+    inp.parentElement.classList.toggle("changed", v!==getP(DEFAULTS,p));
+    try{ localStorage.setItem("vp-wob-params", JSON.stringify(P)); }catch(e){}
+    update();
+  }));
+}
+$("resetP").addEventListener("click",()=>{ P = clone(DEFAULTS); try{ localStorage.removeItem("vp-wob-params"); }catch(e){} renderParams(); update(); });
+$("copyP").addEventListener("click",()=>{
+  const txt = JSON.stringify(P,null,2);
+  const fallback = ()=>{ const t=$("copyBox"); t.hidden=false; t.value=txt; t.select(); $("copyMsg").textContent="Text markiert. Mit Strg+C kopieren."; };
+  try{ navigator.clipboard.writeText(txt).then(()=>{ $("copyMsg").textContent="Kopiert."; }, fallback); }catch(e){ fallback(); }
+});
+
+bindForm(); renderKids(); renderParams(); update();
+})();
+</script>
