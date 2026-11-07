@@ -2,6 +2,8 @@
 
 Prototyp für einen Verbesserungsvorschlag: gemeinsame Prüfung von **Wohngeld und Kinderzuschlag** gegenüber dem SGB II (§ 12a SGB II), mit Daten, die im Jobcenter ohnehin erfasst sind.
 
+Bedienung in drei Schritten, Sprachen: Deutsch, English, Türkçe, العربية, Українська, Русский.
+
 - `Vorrangpruefung_Wolfsburg.html`: per Doppelklick unter Windows im Browser öffnen. Keine Installation nötig, keine Datenübertragung.
 - `vorrangpruefung.html`: Quelldatei der Artifact-Seite.
 
