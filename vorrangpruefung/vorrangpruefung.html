@@ -72,6 +72,7 @@ section[data-step]{display:flex;flex-direction:column;gap:18px}
 
 .sub{font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0}
 .kids{display:flex;flex-direction:column;gap:10px}
+.kid .kx{grid-column:1 / -1;display:flex;flex-direction:column;gap:10px}
 .kid{display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,1.2fr) auto;gap:12px;align-items:end;background:var(--surface-2);border-radius:12px;padding:12px}
 @media (max-width:560px){.kid{grid-template-columns:auto minmax(0,1fr) auto}.kid .money-l{grid-column:1 / -1}}
 .kid .av{width:38px;height:38px;border-radius:50%;background:var(--accent);color:var(--surface);display:grid;place-items:center;font-weight:800;align-self:center}
@@ -447,7 +448,7 @@ rw1:"1 · Bedarf und Einkommen nach SGB II",colNeed:"Bedarf",colEur:"€ / Monat
 rw2:"2 · {wg} (Mietstufe IV, {n} Personen)",colM:"Miete M",hbR:"Höchstbetrag {a} + Klimakomponente {b}",capR:"Miete bis zum Höchstbetrag",hkeR:"+ Heizkostenentlastung",hkkR:"+ Heizkostenkomponente",colY:"Jahreseinkommen",colGross:"brutto / Jahr",colWk:"Werbungskosten",colAfter:"nach Abzügen",earnY:"Erwerb Person {n}",otherY:"Weitere Einnahmen",maintY:"Unterhalt Kind {n}",aeY:"− Freibetrag Alleinerziehende",yR:"Y pro Monat (Abzug {p} bei Erwerb)",
 rw3:"3 · {kiz}",colStep:"Schritt",kGross:"Brutto Eltern (Minimum {a})",kNeed:"Bedarf Eltern inkl. {p} % der Wohnkosten",kInc:"Einkommen Eltern bereinigt",kEx:"Einkommen über Bedarf",kBase:"Höchstbetrag abzüglich 45 % Kindeseinkommen",kMinus:"− 45 % vom Einkommen über Bedarf",kTot:"{kiz} gesamt",
 rw4:"4 · Prüfung mit vorrangigen Leistungen",colVar:"Variante",colGap:"Lücke",rw4h:"{kiz} zählt im SGB II als Einkommen des Kindes, {wg} wird nach Köpfen verteilt. Die beiden Leistungen rechnen sich gegenseitig nicht an.",
-lim:["Vorprüfung, kein Bescheid. Verbindlich entscheiden Wohngeldstelle und Familienkasse.","Gerechnet wird mit gleichbleibendem Einkommen. § 12a SGB II verlangt mindestens 3 Monate.","Die Mietobergrenzen stammen von der Website des Jobcenters Wolfsburg (abgerufen am 07.11.2026). Die Wohngeldwerte gelten bis 31.12.2026.","Nicht abgebildet: Leistungen für Bildung und Teilhabe, eigenes Erwerbseinkommen von Kindern, Einkommen aus Selbstständigkeit.","Alle Daten bleiben im Browser. Es wird nichts übertragen."],
+lim:["Vorprüfung, kein Bescheid. Verbindlich entscheiden Wohngeldstelle und Familienkasse.","Gerechnet wird mit gleichbleibendem Einkommen. § 12a SGB II verlangt mindestens 3 Monate.","Die Mietobergrenzen stammen von der Website des Jobcenters Wolfsburg (abgerufen am 07.11.2026). Die Wohngeldwerte gelten bis 31.12.2026.","Bildung und Teilhabe wird nicht berechnet: Sie bleibt bei der Prüfung außer Betracht (§ 6a Abs. 1 Nr. 3 BKGG) und wird mit Wohngeld oder Kinderzuschlag ebenso gewährt (§ 6b BKGG).","Alle Daten bleiben im Browser. Es wird nichts übertragen."],
 footer:"Prototyp für einen Verbesserungsvorschlag. Kein offizielles Angebot der Bundesagentur für Arbeit oder der Stadt Wolfsburg."},
 
 en:{wg:"Housing benefit",kiz:"Child supplement",tag:"Prototype · Idea management",title:"Priority Check Wolfsburg",
@@ -477,7 +478,7 @@ rw1:"1 · Need and income under SGB II",colNeed:"Need",colEur:"€ / month",rbP:
 rw2:"2 · {wg} (rent level IV, {n} persons)",colM:"Rent M",hbR:"Maximum {a} + climate component {b}",capR:"Rent up to the maximum",hkeR:"+ heating relief",hkkR:"+ heating component",colY:"Annual income",colGross:"gross / year",colWk:"Work expenses",colAfter:"after deductions",earnY:"Earnings person {n}",otherY:"Other income",maintY:"Maintenance child {n}",aeY:"− single-parent allowance",yR:"Y per month (deduction {p} on earnings)",
 rw3:"3 · {kiz}",colStep:"Step",kGross:"Parents' gross (minimum {a})",kNeed:"Parents' need incl. {p} % of housing costs",kInc:"Parents' adjusted income",kEx:"Income above need",kBase:"Maximum minus 45 % of child income",kMinus:"− 45 % of income above need",kTot:"{kiz} total",
 rw4:"4 · Check with priority benefits",colVar:"Option",colGap:"Shortfall",rw4h:"In SGB II, {kiz} counts as the child's income and {wg} is split per head. The two benefits do not count against each other.",
-lim:["Pre-check only, not a decision. The housing benefit office and the Familienkasse decide.","Income is assumed to stay the same. § 12a SGB II requires at least 3 months.","Rent limits are taken from the Jobcenter Wolfsburg website (retrieved 07 Nov 2026). Housing benefit values apply until 31 Dec 2026.","Not included: education and participation benefits, children's own earned income, self-employed income.","All data stays in the browser. Nothing is sent."],
+lim:["Pre-check only, not a decision. The housing benefit office and the Familienkasse decide.","Income is assumed to stay the same. § 12a SGB II requires at least 3 months.","Rent limits are taken from the Jobcenter Wolfsburg website (retrieved 07 Nov 2026). Housing benefit values apply until 31 Dec 2026.","Education and participation benefits are not calculated: they are disregarded in the check (§ 6a (1) no. 3 BKGG) and are also granted with housing benefit or child supplement (§ 6b BKGG).","All data stays in the browser. Nothing is sent."],
 footer:"Prototype for an improvement proposal. Not an official service of the Federal Employment Agency or the City of Wolfsburg."},
 
 tr:{wg:"Konut yardımı",kiz:"Çocuk ek ödeneği",tag:"Prototip · Fikir yönetimi",title:"Öncelik Kontrolü Wolfsburg",
@@ -507,7 +508,7 @@ rw1:"1 · SGB II'ye göre ihtiyaç ve gelir",colNeed:"İhtiyaç",colEur:"€ / a
 rw2:"2 · {wg} (kira seviyesi IV, {n} kişi)",colM:"Kira M",hbR:"Azami tutar {a} + iklim bileşeni {b}",capR:"Azami tutara kadar kira",hkeR:"+ ısınma indirimi",hkkR:"+ ısınma bileşeni",colY:"Yıllık gelir",colGross:"brüt / yıl",colWk:"İş giderleri",colAfter:"kesintiler sonrası",earnY:"Kazanç kişi {n}",otherY:"Diğer gelir",maintY:"Nafaka çocuk {n}",aeY:"− tek ebeveyn muafiyeti",yR:"Aylık Y (kazançta {p} kesinti)",
 rw3:"3 · {kiz}",colStep:"Adım",kGross:"Ebeveyn brüt geliri (asgari {a})",kNeed:"Konut giderlerinin {p} %'si dahil ebeveyn ihtiyacı",kInc:"Ebeveynlerin düzeltilmiş geliri",kEx:"İhtiyacın üzerindeki gelir",kBase:"Azami tutar eksi çocuk gelirinin %45'i",kMinus:"− ihtiyaç üstü gelirin %45'i",kTot:"Toplam {kiz}",
 rw4:"4 · Öncelikli yardımlarla kontrol",colVar:"Seçenek",colGap:"Açık",rw4h:"SGB II'de {kiz} çocuğun geliri sayılır, {wg} kişi başına bölünür. İki yardım birbirinden düşülmez.",
-lim:["Yalnızca ön kontrol, karar değildir. Konut yardımı dairesi ve Familienkasse karar verir.","Gelirin değişmediği varsayılır. § 12a SGB II en az 3 ay şartı arar.","Kira üst sınırları Jobcenter Wolfsburg web sitesinden alınmıştır (07.11.2026). Konut yardımı değerleri 31.12.2026'ya kadar geçerlidir.","Dahil değil: eğitim ve katılım yardımları, çocukların kendi kazanç geliri, serbest meslek geliri.","Tüm veriler tarayıcıda kalır. Hiçbir şey gönderilmez."],
+lim:["Yalnızca ön kontrol, karar değildir. Konut yardımı dairesi ve Familienkasse karar verir.","Gelirin değişmediği varsayılır. § 12a SGB II en az 3 ay şartı arar.","Kira üst sınırları Jobcenter Wolfsburg web sitesinden alınmıştır (07.11.2026). Konut yardımı değerleri 31.12.2026'ya kadar geçerlidir.","Eğitim ve katılım yardımları hesaplanmaz: kontrolde dikkate alınmaz (§ 6a Abs. 1 Nr. 3 BKGG) ve konut yardımı veya çocuk ek ödeneğiyle de verilir (§ 6b BKGG).","Tüm veriler tarayıcıda kalır. Hiçbir şey gönderilmez."],
 footer:"İyileştirme önerisi için prototip. Federal İş Ajansı'nın veya Wolfsburg Belediyesi'nin resmi hizmeti değildir."},
 
 ar:{wg:"بدل السكن",kiz:"إعانة الأطفال الإضافية",tag:"نموذج أولي · إدارة الأفكار",title:"فحص الأولوية – فولفسبورغ",
@@ -537,7 +538,7 @@ rw1:"1 · الحاجة والدخل وفق SGB II",colNeed:"الحاجة",colEur
 rw2:"2 · {wg} (مستوى الإيجار IV، {n} أفراد)",colM:"الإيجار M",hbR:"الحد الأقصى {a} + عنصر المناخ {b}",capR:"الإيجار حتى الحد الأقصى",hkeR:"+ تخفيف تكاليف التدفئة",hkkR:"+ عنصر التدفئة",colY:"الدخل السنوي",colGross:"الإجمالي / سنة",colWk:"نفقات العمل",colAfter:"بعد الخصومات",earnY:"دخل العمل للشخص {n}",otherY:"دخل آخر",maintY:"نفقة الطفل {n}",aeY:"− إعفاء الوالد المنفرد",yR:"Y شهريًا (خصم {p} على دخل العمل)",
 rw3:"3 · {kiz}",colStep:"الخطوة",kGross:"الدخل الإجمالي للوالدين (الحد الأدنى {a})",kNeed:"حاجة الوالدين مع {p} % من تكاليف السكن",kInc:"دخل الوالدين بعد الخصم",kEx:"الدخل فوق الحاجة",kBase:"الحد الأقصى ناقص 45 % من دخل الطفل",kMinus:"− 45 % من الدخل فوق الحاجة",kTot:"إجمالي {kiz}",
 rw4:"4 · الفحص مع الإعانات ذات الأولوية",colVar:"الخيار",colGap:"العجز",rw4h:"في SGB II تُحتسب {kiz} دخلًا للطفل، ويُوزع {wg} على الأفراد. لا تُخصم الإعانتان من بعضهما.",
-lim:["فحص أولي فقط وليس قرارًا. القرار لمكتب بدل السكن وFamilienkasse.","يُفترض أن الدخل ثابت. يشترط § 12a SGB II مدة 3 أشهر على الأقل.","حدود الإيجار مأخوذة من موقع Jobcenter Wolfsburg (بتاريخ 07.11.2026). قيم بدل السكن سارية حتى 31.12.2026.","غير مشمول: إعانات التعليم والمشاركة، دخل العمل الخاص بالأطفال، دخل العمل الحر.","تبقى جميع البيانات في المتصفح. لا يتم إرسال أي شيء."],
+lim:["فحص أولي فقط وليس قرارًا. القرار لمكتب بدل السكن وFamilienkasse.","يُفترض أن الدخل ثابت. يشترط § 12a SGB II مدة 3 أشهر على الأقل.","حدود الإيجار مأخوذة من موقع Jobcenter Wolfsburg (بتاريخ 07.11.2026). قيم بدل السكن سارية حتى 31.12.2026.","لا تُحسب إعانات التعليم والمشاركة: لا تؤخذ في الاعتبار في الفحص (§ 6a Abs. 1 Nr. 3 BKGG) وتُمنح أيضًا مع بدل السكن أو إعانة الأطفال الإضافية (§ 6b BKGG).","تبقى جميع البيانات في المتصفح. لا يتم إرسال أي شيء."],
 footer:"نموذج أولي لاقتراح تحسين. ليس خدمة رسمية من الوكالة الاتحادية للعمل أو مدينة فولفسبورغ."},
 
 uk:{wg:"Житлова допомога",kiz:"Доплата на дитину",tag:"Прототип · Управління ідеями",title:"Перевірка пріоритету Вольфсбург",
@@ -567,7 +568,7 @@ rw1:"1 · Потреба та дохід за SGB II",colNeed:"Потреба",c
 rw2:"2 · {wg} (рівень оренди IV, осіб: {n})",colM:"Оренда M",hbR:"Максимум {a} + кліматичний компонент {b}",capR:"Оренда до максимуму",hkeR:"+ знижка на опалення",hkkR:"+ компонент опалення",colY:"Річний дохід",colGross:"брутто / рік",colWk:"Витрати на роботу",colAfter:"після відрахувань",earnY:"Заробіток особи {n}",otherY:"Інші доходи",maintY:"Аліменти дитина {n}",aeY:"− пільга для одиноких батьків",yR:"Y на місяць (відрахування {p} із заробітку)",
 rw3:"3 · {kiz}",colStep:"Крок",kGross:"Брутто батьків (мінімум {a})",kNeed:"Потреба батьків з {p} % витрат на житло",kInc:"Скоригований дохід батьків",kEx:"Дохід понад потребу",kBase:"Максимум мінус 45 % доходу дитини",kMinus:"− 45 % доходу понад потребу",kTot:"{kiz} разом",
 rw4:"4 · Перевірка з пріоритетними виплатами",colVar:"Варіант",colGap:"Дефіцит",rw4h:"У SGB II {kiz} вважається доходом дитини, {wg} ділиться на осіб. Ці дві виплати не зараховуються одна проти одної.",
-lim:["Лише попередня перевірка, не рішення. Рішення ухвалюють Wohngeldstelle та Familienkasse.","Припускається незмінний дохід. § 12a SGB II вимагає щонайменше 3 місяці.","Ліміти оренди взято з сайту Jobcenter Wolfsburg (станом на 07.11.2026). Значення житлової допомоги діють до 31.12.2026.","Не враховано: виплати на освіту та участь, власний трудовий дохід дітей, дохід від самозайнятості.","Усі дані залишаються в браузері. Нічого не передається."],
+lim:["Лише попередня перевірка, не рішення. Рішення ухвалюють Wohngeldstelle та Familienkasse.","Припускається незмінний дохід. § 12a SGB II вимагає щонайменше 3 місяці.","Ліміти оренди взято з сайту Jobcenter Wolfsburg (станом на 07.11.2026). Значення житлової допомоги діють до 31.12.2026.","Виплати на освіту та участь не розраховуються: вони не враховуються при перевірці (§ 6a Abs. 1 Nr. 3 BKGG) і надаються також із житловою допомогою чи доплатою на дитину (§ 6b BKGG).","Усі дані залишаються в браузері. Нічого не передається."],
 footer:"Прототип пропозиції щодо вдосконалення. Не є офіційною послугою Федерального агентства з праці чи міста Вольфсбург."},
 
 ru:{wg:"Жилищное пособие",kiz:"Детская надбавка",tag:"Прототип · Управление идеями",title:"Проверка приоритета Вольфсбург",
@@ -597,7 +598,7 @@ rw1:"1 · Потребность и доход по SGB II",colNeed:"Потре�
 rw2:"2 · {wg} (уровень аренды IV, человек: {n})",colM:"Аренда M",hbR:"Максимум {a} + климатический компонент {b}",capR:"Аренда до максимума",hkeR:"+ скидка на отопление",hkkR:"+ компонент отопления",colY:"Годовой доход",colGross:"брутто / год",colWk:"Расходы на работу",colAfter:"после вычетов",earnY:"Заработок лица {n}",otherY:"Другие доходы",maintY:"Алименты ребёнок {n}",aeY:"− льгота для одиноких родителей",yR:"Y в месяц (вычет {p} с заработка)",
 rw3:"3 · {kiz}",colStep:"Шаг",kGross:"Брутто родителей (минимум {a})",kNeed:"Потребность родителей с {p} % расходов на жильё",kInc:"Скорректированный доход родителей",kEx:"Доход сверх потребности",kBase:"Максимум минус 45 % дохода ребёнка",kMinus:"− 45 % дохода сверх потребности",kTot:"{kiz} всего",
 rw4:"4 · Проверка с приоритетными пособиями",colVar:"Вариант",colGap:"Дефицит",rw4h:"В SGB II {kiz} считается доходом ребёнка, {wg} делится на всех. Эти два пособия не засчитываются друг против друга.",
-lim:["Только предварительная проверка, не решение. Решают Wohngeldstelle и Familienkasse.","Предполагается неизменный доход. § 12a SGB II требует не менее 3 месяцев.","Лимиты аренды взяты с сайта Jobcenter Wolfsburg (на 07.11.2026). Значения жилищного пособия действуют до 31.12.2026.","Не учтено: выплаты на образование и участие, собственный трудовой доход детей, доход от самозанятости.","Все данные остаются в браузере. Ничего не передаётся."],
+lim:["Только предварительная проверка, не решение. Решают Wohngeldstelle и Familienkasse.","Предполагается неизменный доход. § 12a SGB II требует не менее 3 месяцев.","Лимиты аренды взяты с сайта Jobcenter Wolfsburg (на 07.11.2026). Значения жилищного пособия действуют до 31.12.2026.","Выплаты на образование и участие не рассчитываются: они не учитываются при проверке (§ 6a Abs. 1 Nr. 3 BKGG) и предоставляются также с жилищным пособием или детской надбавкой (§ 6b BKGG).","Все данные остаются в браузере. Ничего не передаётся."],
 footer:"Прототип предложения по улучшению. Не является официальной услугой Федерального агентства по труду или города Вольфсбург."}
 };
 /* Ergänzung: Kranken-/Pflegeversicherung, § 26 SGB II, Rundfunkbeitrag, Mietobergrenze */
@@ -1038,6 +1039,27 @@ uk:{mpb:"Оренда перевищує гальмо орендної плат�
 ru:{mpb:"Аренда превышает «тормоз аренды» или установленный предел за квадратный метр (тогда льготный период не действует)",mpbInfo:"Льготного периода нет: аренда превышает «тормоз аренды» или предел за кв. м (§ 22 Abs. 1 Satz 8 SGB II, § 35 Abs. 1 Satz 9 SGB XII). Действует обычный предел аренды.",pWahl:"право выбора",vWahlH:"Право выбора: {v} вместо SGB II возможно",vWahlT:"Не хватает не более 100 € ({a}). По § 6a Abs. 1a BKGG право на детскую надбавку всё равно есть, если не подано заявление на SGB II. Направление по § 12a SGB II недопустимо – решает семья."}
 };
 for(const l in NW) Object.assign(I[l], NW[l]);
+const ER = {
+de:{sgH:"Selbstständigkeit",sgP:"Gewinn pro Monat (Ø Einnahmen minus Betriebsausgaben)",sgSt:"Steuern auf den Gewinn pro Monat",kEt:"Eigenes Einkommen des Kindes",etNone:"keins",etAzubi:"Ausbildung, Schule mit Nebenjob oder Freiwilligendienst",etFerien:"Ferienjob (Schüler/in)",etJob:"sonstige Arbeit",
+sgR:"Person {n}: Gewinn aus Selbstständigkeit {a} − Steuern {b} (§ 3 Bürgergeld-V)",kidEarnR:"Erwerbseinkommen Kind {n}: netto {a} − Freibetrag {b}",wgSg:"Selbstständigkeit Person {n}",wgKidY:"Erwerb Kind {n}",wgKidFrei:"− Freibetrag Erwerbseinkommen Kind {n} (§ 17 Nr. 4 WoGG)",
+butInfo:"Bildung und Teilhabe spielt für die Vorrangprüfung keine Rolle (§ 6a Abs. 1 Nr. 3 BKGG). Mit Wohngeld oder Kinderzuschlag gibt es diese Leistungen ebenfalls (§ 6b BKGG)."},
+en:{sgH:"Self-employment",sgP:"Profit per month (avg. income minus business expenses)",sgSt:"Tax on the profit per month",kEt:"Child's own income",etNone:"none",etAzubi:"Apprenticeship, school with side job or voluntary service",etFerien:"Holiday job (pupil)",etJob:"other work",
+sgR:"Person {n}: self-employed profit {a} − tax {b} (§ 3 Bürgergeld-V)",kidEarnR:"Earned income child {n}: net {a} − allowance {b}",wgSg:"Self-employment person {n}",wgKidY:"Earnings child {n}",wgKidFrei:"− allowance earned income child {n} (§ 17 no. 4 WoGG)",
+butInfo:"Education and participation benefits do not affect the priority check (§ 6a (1) no. 3 BKGG). They are also available with housing benefit or child supplement (§ 6b BKGG)."},
+tr:{sgH:"Serbest meslek",sgP:"Aylık kâr (ort. gelir eksi işletme giderleri)",sgSt:"Kâr üzerinden aylık vergi",kEt:"Çocuğun kendi geliri",etNone:"yok",etAzubi:"Meslek eğitimi, yan işli okul veya gönüllü hizmet",etFerien:"Tatil işi (öğrenci)",etJob:"diğer iş",
+sgR:"Kişi {n}: serbest meslek kârı {a} − vergi {b} (§ 3 Bürgergeld-V)",kidEarnR:"Çocuk {n} kazanç geliri: net {a} − muafiyet {b}",wgSg:"Serbest meslek kişi {n}",wgKidY:"Kazanç çocuk {n}",wgKidFrei:"− kazanç geliri muafiyeti çocuk {n} (§ 17 Nr. 4 WoGG)",
+butInfo:"Eğitim ve katılım yardımları öncelik kontrolünü etkilemez (§ 6a Abs. 1 Nr. 3 BKGG). Konut yardımı veya çocuk ek ödeneğiyle de verilir (§ 6b BKGG)."},
+ar:{sgH:"العمل الحر",sgP:"الربح الشهري (متوسط الإيرادات ناقص نفقات العمل)",sgSt:"الضرائب على الربح شهريًا",kEt:"دخل الطفل الخاص",etNone:"لا يوجد",etAzubi:"تدريب مهني أو مدرسة مع عمل جانبي أو خدمة تطوعية",etFerien:"عمل في العطلة (طالب)",etJob:"عمل آخر",
+sgR:"الشخص {n}: ربح العمل الحر {a} − ضرائب {b} (§ 3 Bürgergeld-V)",kidEarnR:"دخل عمل الطفل {n}: صافي {a} − إعفاء {b}",wgSg:"العمل الحر للشخص {n}",wgKidY:"دخل عمل الطفل {n}",wgKidFrei:"− إعفاء دخل عمل الطفل {n} (§ 17 Nr. 4 WoGG)",
+butInfo:"إعانات التعليم والمشاركة لا تؤثر على فحص الأولوية (§ 6a Abs. 1 Nr. 3 BKGG). وتُمنح أيضًا مع بدل السكن أو إعانة الأطفال الإضافية (§ 6b BKGG)."},
+uk:{sgH:"Самозайнятість",sgP:"Прибуток на місяць (сер. доходи мінус витрати)",sgSt:"Податки на прибуток на місяць",kEt:"Власний дохід дитини",etNone:"немає",etAzubi:"Навчання/профнавчання з підробітком або волонтерська служба",etFerien:"Робота на канікулах (учень)",etJob:"інша робота",
+sgR:"Особа {n}: прибуток від самозайнятості {a} − податки {b} (§ 3 Bürgergeld-V)",kidEarnR:"Трудовий дохід дитини {n}: нетто {a} − пільга {b}",wgSg:"Самозайнятість особа {n}",wgKidY:"Заробіток дитини {n}",wgKidFrei:"− пільга на трудовий дохід дитини {n} (§ 17 Nr. 4 WoGG)",
+butInfo:"Виплати на освіту та участь не впливають на перевірку пріоритету (§ 6a Abs. 1 Nr. 3 BKGG). Їх також надають із житловою допомогою чи доплатою на дитину (§ 6b BKGG)."},
+ru:{sgH:"Самозанятость",sgP:"Прибыль в месяц (ср. доходы минус расходы)",sgSt:"Налоги на прибыль в месяц",kEt:"Собственный доход ребёнка",etNone:"нет",etAzubi:"Профобучение, школа с подработкой или волонтёрская служба",etFerien:"Работа на каникулах (школьник)",etJob:"другая работа",
+sgR:"Лицо {n}: прибыль от самозанятости {a} − налоги {b} (§ 3 Bürgergeld-V)",kidEarnR:"Трудовой доход ребёнка {n}: нетто {a} − льгота {b}",wgSg:"Самозанятость лицо {n}",wgKidY:"Заработок ребёнка {n}",wgKidFrei:"− льгота на трудовой доход ребёнка {n} (§ 17 Nr. 4 WoGG)",
+butInfo:"Выплаты на образование и участие не влияют на проверку приоритета (§ 6a Abs. 1 Nr. 3 BKGG). Их также предоставляют с жилищным пособием или детской надбавкой (§ 6b BKGG)."}
+};
+for(const l in ER) Object.assign(I[l], ER[l]);
 let L = "de";
 try{ const s = localStorage.getItem("vp-wob-lang"); if(s && I[s]) L = s; }catch(e){}
 function t(k, v){
@@ -1119,7 +1141,7 @@ const GROUPS = [
 ];
 
 /* ================= Haushalt ================= */
-const AD0 = {gj:1990, ef:"ja", ssw:0, avB:0, avN:0, uhP:0, merkG:false, sb:false, kv:"auto", jb:0, jn:0, rb:0, rn:0, grz:false, so:0};
+const AD0 = {gj:1990, ef:"ja", ssw:0, avB:0, avN:0, uhP:0, sg:0, sgSt:0, merkG:false, sb:false, kv:"auto", jb:0, jn:0, rb:0, rn:0, grz:false, so:0};
 const SON0 = {azubi:false, eu:false, asyl:false, stat:false};
 const EX = {
   fam:{mode:"fam", typ:"paar", verh:false, ad:[Object.assign({},AD0,{gj:1988,jb:1700,jn:1330}),Object.assign({},AD0,{gj:1990})], kids:[{age:4,uh:0},{age:9,uh:0}], son:clone(SON0), pa:"0.3", stabil:true, mi:780, hz:110, ww:false, kdz:"normal", hzG:null, kzStart:"", kzPrev:"", kzGap:0, kzUsed:null, mpb:false, umgCnt:0, umgAge:8, umgNights:0, umgArt:"temp", ext25:0, mog:null, verm:2000, step:1},
@@ -1128,7 +1150,8 @@ const EX = {
 const emptyFor = mode => ({mode, typ: mode==="fam"?"paar":"solo", verh:false, ad:[Object.assign({},AD0,{gj:0}),Object.assign({},AD0,{gj:0})], kids:[], son:clone(SON0), pa:"0.3", stabil:true, mi:0, hz:0, ww:false, kdz:"normal", hzG:null, kzStart:"", kzPrev:"", kzGap:0, kzUsed:null, mpb:false, umgCnt:0, umgAge:8, umgNights:0, umgArt:"temp", ext25:0, mog:null, verm:0, step:1});
 let S = clone(EX.fam);
 try{ const s = localStorage.getItem("vp-wob-input4"); if(s){ const o=JSON.parse(s); S = Object.assign(clone(EX[o.mode==="wg"?"wg":"fam"]), o); } }catch(e){}
-S.ad.forEach(a=>{ if(a.ssw==null) a.ssw = a.schw ? 13 : 0; ["avB","avN","uhP"].forEach(k=>{ if(a[k]==null) a[k]=0; }); });
+S.ad.forEach(a=>{ if(a.ssw==null) a.ssw = a.schw ? 13 : 0; ["avB","avN","uhP","sg","sgSt"].forEach(k=>{ if(a[k]==null) a[k]=0; }); });
+S.kids.forEach(k=>{ if(!k.et) k.et="none"; if(k.eb==null) k.eb=0; if(k.en==null) k.en=0; });
 const save = ()=>{ try{ localStorage.setItem("vp-wob-input4", JSON.stringify(S)); }catch(e){} };
 
 const $ = id => document.getElementById(id);
@@ -1160,6 +1183,17 @@ function freibetrag(brutto, mitKind){
   fb += f.q2*clamp(brutto-f.g1,0,f.g2-f.g1);
   fb += f.q3*clamp(brutto-f.g2,0,(mitKind?f.g3m:f.g3o)-f.g2);
   return fb;
+}
+/* Erwerbseinkommen eines Kindes nach SGB II:
+   Ferienjob von Schülern bleibt frei (§ 11a Abs. 7); Ausbildung/Schule/Freiwilligendienst unter 25: Freibetrag in Höhe der
+   Minijob-Grenze statt 100 € und Abs. 3 ohne Nr. 1 (§ 11b Abs. 2b); sonst normale Freibeträge (§ 11b Abs. 2, 3). */
+function kidEarn(k){
+  if(!k.et || k.et==="none" || k.et==="ferien" || !(k.en>0)) return {fb:0, ber:0};
+  let fb;
+  if(k.et==="azubi" && k.age<25){ const b=k.eb||0, f=P.fb;
+    fb = Math.min(b, P.sv.minijob) + f.q2*clamp(b-f.g1,0,f.g2-f.g1) + f.q3*clamp(b-f.g2,0,f.g3o-f.g2); }
+  else fb = freibetrag(k.eb||0,false);
+  return {fb, ber: Math.max(0,(k.en||0)-fb)};
 }
 function grzFrei(rente){ if(rente<=0) return 0; return Math.min(rente, P.rb.single*P.grz.capPct/100, P.grz.base+P.grz.q*Math.max(0,rente-P.grz.base)); }
 
@@ -1219,15 +1253,18 @@ function grund(H){
   const inc = ads.map((a,i)=>{
     /* Person mit Anspruch nach SGB XII Kap. 4 in einer SGB-II-Gemeinschaft (§ 5 Abs. 2 SGB II): Einkommen nach SGB XII bereinigen */
     const xii = sys==="XII" || (regime==="II" && !pers[i].isEF && (pers[i].rag || a.ef==="dau"));
-    const fbII = freibetrag(a.jb,mitKind), jobII = Math.max(0,a.jn-fbII);
+    /* Selbstständigkeit: Gewinn = Betriebseinnahmen − Betriebsausgaben (§ 3 Bürgergeld-V); Steuern darauf absetzbar (§ 11b Abs. 1 Nr. 1);
+       Freibeträge nach § 11b Abs. 2, 3 auf das gesamte Erwerbseinkommen */
+    const sg = a.sg||0, sgN = Math.max(0, sg-(a.sgSt||0)), erwB = a.jb+sg;
+    const fbII = freibetrag(erwB,mitKind), jobII = Math.max(0,a.jn+sgN-fbII);
     /* Kinderzuschlag: Durchschnitt der letzten 6 Monate, falls angegeben */
-    const kB = a.avB>0 ? a.avB : a.jb, kN = a.avN>0 ? a.avN : a.jn, jobKiz = Math.max(0, kN-freibetrag(kB,mitKind));
-    const fbXII = a.jb>0 ? Math.min(P.xii.erwQ*a.jb, P.rb.single*P.xii.erwCapPct/100) : 0, jobXII = Math.max(0,a.jn-fbXII);
+    const kB = (a.avB>0 ? a.avB : a.jb)+sg, kN = (a.avN>0 ? a.avN : a.jn)+sgN, jobKiz = Math.max(0, kN-freibetrag(kB,mitKind));
+    const fbXII = erwB>0 ? Math.min(P.xii.erwQ*erwB, P.rb.single*P.xii.erwCapPct/100) : 0, jobXII = Math.max(0,a.jn+sgN-fbXII);
     const gf = a.grz ? grzFrei(a.rn) : 0, rente = Math.max(0,a.rn-gf);
-    const pausch = (a.jb<=0 && (a.rn>0 || a.so>0)) ? P.fb.pausch : 0;
+    const pausch = (erwB<=0 && (a.rn>0 || a.so>0)) ? P.fb.pausch : 0;
     const uhP = a.uhP||0;   /* titulierter Unterhalt: absetzbar nach § 11b Abs. 1 Nr. 7 SGB II (nicht im SGB XII) */
     const eII = Math.max(0,jobII+rente+a.so-pausch-uhP), eXII = Math.max(0,jobXII+rente+a.so);
-    return {xii, fbII, jobII, fbXII, jobXII, jobKiz, kB, gf, rente, pausch, uhP, eII, eXII, e: xii ? eXII : eII};
+    return {xii, sg, sgN, erwB, fbII, jobII, fbXII, jobXII, jobKiz, kB, gf, rente, pausch, uhP, eII, eXII, e: xii ? eXII : eII};
   });
   const eII = inc.reduce((s,x)=>s+x.eII,0), eXII = inc.reduce((s,x)=>s+x.eXII,0), eMix = inc.reduce((s,x)=>s+x.e,0);
   const need = rbEltern + mbAdults + umgNeed + kdu + kids.reduce((s,k,i)=>s+rbKind(k.age)+wwKids[i],0);
@@ -1236,7 +1273,7 @@ function grund(H){
 function sgb(G, x){
   const wgShare = (x.wg||0)/G.n; let kgSurplus=0, childGap=0;
   G.kids.forEach((k,i)=>{
-    const need = rbKind(k.age)+G.kopf+G.wwKids[i], own = k.uh+(x.kiz?x.kiz[i]:0)+(x.kwg?x.kwg[i]:0)+wgShare;
+    const need = rbKind(k.age)+G.kopf+G.wwKids[i], own = k.uh+kidEarn(k).ber+(x.kiz?x.kiz[i]:0)+(x.kwg?x.kwg[i]:0)+wgShare;
     if(own>=need || (G.sys==="XII" && k.age>=18)){ kgSurplus+=P.kindergeld; if(own<need) childGap+=need-own; return; }
     else { const rem=need-own, used=Math.min(P.kindergeld,rem); kgSurplus+=P.kindergeld-used; childGap+=rem-used; }
   });
@@ -1258,13 +1295,16 @@ function wohngeld(G,H,VL){
   let jahr=0, frei=0; const rows=[];
   G.ads.forEach((a,i)=>{
     if(a.jb>0){ const j=a.jb*12, wk=Math.min(j,P.wg.wk), v=(j-wk)*(1-pa); jahr+=v; rows.push([t("earnY",{n:i+1}),j,wk,v]); }
+    if(a.sg>0){ const j=a.sg*12, pS=(a.sgSt>0?0.1:0)+0.1, v=j*(1-pS); jahr+=v; rows.push([t("wgSg",{n:i+1}),j,0,v]); }   /* § 14 Gewinn; § 16: Steuern und (freiwillige) KV/PV */
     if(a.rb>0){ const j=a.rb*12, wk=Math.min(j,P.wgx.renteWk), v=(j-wk)*(1-P.wgx.rentePa); jahr+=v; rows.push([t("wgRente",{n:i+1}),j,wk,v]);
       if(a.grz){ const g=12*grzFrei(a.rb); frei+=g; rows.push([t("wgGrz",{n:i+1}),"","",-g]); } }
     if(a.so>0){ const j=a.so*12; jahr+=j; rows.push([t("otherY"),j,0,j]); }
     if(a.sb){ frei+=P.wgx.sb; rows.push([t("wgSb",{n:i+1}),"","",-P.wgx.sb]); }
     if(a.uhP>0){ const u=Math.min(a.uhP*12, P.wgx.uhMax); frei+=u; rows.push([t("wgUhR",{n:i+1}),"","",-u]); }
   });
-  G.kids.forEach((k,i)=>{ if(k.uh>0){ const j=k.uh*12; jahr+=j; rows.push([t("maintY",{n:i+1}),j,0,j]); } });
+  G.kids.forEach((k,i)=>{ if(k.uh>0){ const j=k.uh*12; jahr+=j; rows.push([t("maintY",{n:i+1}),j,0,j]); }
+    if(k.et && k.et!=="none" && k.eb>0){ const j=k.eb*12, wk=Math.min(j,P.wg.wk), pK=k.et==="ferien"?0:0.2, v=(j-wk)*(1-pK); jahr+=v; rows.push([t("wgKidY",{n:i+1}),j,wk,v]);
+      const f=Math.min(j,1200); if(k.age<25){ frei+=f; rows.push([t("wgKidFrei",{n:i+1}),"","",-f]); } } });   /* § 17 Nr. 4 WoGG */
   if(G.ae && G.kids.some(k=>k.age<18)){ const f=P.wg.aeFrei; frei+=f; rows.push([t("aeY"),"","",-f]); }   /* § 17 Nr. 3 WoGG: einmal je Haushalt */
   const Yroh = Math.max(0,jahr-frei)/12, Mroh = M;
   const mi6=Math.min(n,12)-1, Ymin=P.wg.yMin[mi6], Mmin=P.wg.mMin[mi6];   /* Anlage 3 Nr. 1 WoGG */
@@ -1295,7 +1335,7 @@ function kinderzuschlag(G,H,kv,VL){
   const dO = Math.min(oth,kvRest); oth -= dO; kvRest -= dO; erw = Math.max(0, erw-kvRest);
   const einkK = erw+oth;
   const exOth = Math.max(0, oth-bedarf), exErw = Math.max(0, erw-Math.max(0,bedarf-oth)), excess = exOth+exErw;
-  const base = G.kids.map(k=>Math.max(0,P.kiz.max-P.kiz.quote*k.uh)), baseSum = base.reduce((s,x)=>s+x,0);
+  const base = G.kids.map(k=>Math.max(0,P.kiz.max-P.kiz.quote*(k.uh+kidEarn(k).ber))), baseSum = base.reduce((s,x)=>s+x,0);
   const minderung = P.kiz.quote*exErw + exOth, total = Math.max(0,Math.floor(baseSum-minderung));
   r.perChild = baseSum>0 ? base.map(x=>total*x/baseSum) : base.map(()=>0);
   r.kiz = total; if(!total) r.reason = t("rExcess");
@@ -1310,14 +1350,15 @@ function kinderWG(G,H,VL){
   if(G.regime==="asyl" || G.regime==="none" || H.verm>VL.wg) return res;
   const nT=G.n+G.ext, hb=byN(P.wg.hb,P.wg.hbPlus,nT), kl=byN(P.wg.klima,P.wg.klimaPlus,nT), hke=byN(P.wg.hke,P.wg.hkePlus,nT), hkk=byN(P.wg.hkk,P.wg.hkkPlus,nT);
   const mAll=Math.min(H.mi,hb+kl)+hke+hkk;
-  let set=G.kids.map((k,i)=>i).filter(i=>G.kids[i].uh>0);
+  const kidY = k => k.uh + ((k.et && k.et!=="none" && k.eb>0) ? Math.max(0,((k.eb*12-Math.min(k.eb*12,P.wg.wk))*(k.et==="ferien"?1:0.8) - Math.min(k.eb*12,1200))/12) : 0);
+  let set=G.kids.map((k,i)=>i).filter(i=>kidY(G.kids[i])>0);
   for(let it=0; it<6 && set.length; it++){
     const k=set.length, mi6=Math.min(k,12)-1;
-    const M=Math.max(mAll*k/nT, P.wg.mMin[mi6]), Y=Math.max(set.reduce((s,i)=>s+G.kids[i].uh,0), P.wg.yMin[mi6]);   /* Anlage 3 WoGG */
+    const M=Math.max(mAll*k/nT, P.wg.mMin[mi6]), Y=Math.max(set.reduce((s,i)=>s+kidY(G.kids[i]),0), P.wg.yMin[mi6]);   /* Anlage 3 WoGG */
     const idx=Math.min(k,12)-1, a=P.wg.a[idx], b=P.wg.b[idx], c=P.wg.c[idx];
     let wg=Math.round(Math.max(0,Math.min(1.15*(M-(a+b*M+c*Y)*Y),M))); if(wg<P.wg.min) wg=0;
     const per=wg/k;
-    const keep=set.filter(i=>{ const kd=G.kids[i]; return kd.uh+P.kindergeld+per >= rbKind(kd.age)+G.kopf+G.wwKids[i]; });
+    const keep=set.filter(i=>{ const kd=G.kids[i]; return kd.uh+kidEarn(kd).ber+P.kindergeld+per >= rbKind(kd.age)+G.kopf+G.wwKids[i]; });
     if(keep.length===set.length){ if(wg>0){ res.total=wg; set.forEach(i=>res.per[i]=per); res.set=set.slice(); } return res; }
     set=keep;
   }
@@ -1329,6 +1370,7 @@ function kvCalc(G,H){
   const pv = k===0 ? s.pv+s.pvKl : s.pv-(k>=2 ? s.pvAb*(Math.min(k,5)-1) : 0);
   const rate = (s.kv+s.zb+pv)/100;
   const base = (a,i)=>{
+    if((a.sg||0)>0 && (a.sg||0)>=a.jb) return null;   /* hauptberuflich selbstständig: keine Versicherungspflicht durch Nebenjob */
     if(a.jb>s.minijob) return "job";
     if(a.rb>0 && (G.pers[i].rag || a.ef!=="ja")) return "rente";
     if(a.so>0) return "leist";
@@ -1338,7 +1380,7 @@ function kvCalc(G,H){
     let auto = base(a,i);
     if(!auto){ const j=1-i; auto = (H.typ==="paar" && H.verh && G.ads[j] && base(G.ads[j],j)) ? "fam" : "frei"; }
     const st = (a.kv && a.kv!=="auto") ? a.kv : auto;
-    const basis = Math.max(s.mindest, a.jb+a.rb+a.so);
+    const basis = Math.max(s.mindest, a.jb+a.rb+a.so+(a.sg||0));
     const voll = r2(basis*rate);
     return {auto, st, basis, voll, beitrag: st==="frei" ? voll : 0};
   });
@@ -1400,7 +1442,7 @@ function berechne(H){
     return {gap:g, gapNoKv:gn, st, zus: st==="zus" ? g : 0};
   });
   const sgbAvail = (G.regime==="II"||G.regime==="XII3"||G.regime==="XII4") && H.verm<=VL.sgb;
-  const basis = G.ads.reduce((s,a)=>s+a.jn+a.rn+a.so,0)+G.kids.reduce((s,k)=>s+k.uh,0)+G.kids.length*P.kindergeld;
+  const basis = G.ads.reduce((s,a)=>s+a.jn+Math.max(0,(a.sg||0)-(a.sgSt||0))+a.rn+a.so,0)+G.kids.reduce((s,k)=>s+(k.et&&k.et!=="none"?k.en||0:0),0)+G.kids.reduce((s,k)=>s+k.uh,0)+G.kids.length*P.kindergeld;
   const top = famEff(H) ? 3 : 1;
   return {G,W,K,KV,KW,VL,s0,s0kv,V,idx,top,sgbAvail,need:G.need,basis};
 }
@@ -1446,12 +1488,17 @@ function renderKids(){
     d.innerHTML = '<span class="av" aria-hidden="true">'+(i+1)+'</span>'+
       '<label class="f"><span>'+esc(t("age"))+'</span><div class="stepper"><button type="button" data-d="-1" aria-label="−1">−</button><input id="ka'+i+'" type="number" inputmode="numeric" min="0" max="24" value="'+k.age+'"><button type="button" data-d="1" aria-label="+1">+</button></div></label>'+
       '<label class="f money-l"><span>'+esc(t("maint"))+'</span><div class="money"><input id="ku'+i+'" type="number" inputmode="decimal" min="0" step="any" value="'+(k.uh||"")+'"><span>€</span></div></label>'+
-      '<button type="button" class="icon-btn" data-rm="'+i+'" aria-label="'+esc(t("remove",{n:i+1}))+'">'+ICON.x+'</button>';
+      '<button type="button" class="icon-btn" data-rm="'+i+'" aria-label="'+esc(t("remove",{n:i+1}))+'">'+ICON.x+'</button>'+
+      '<div class="kx"><label class="f"><span>'+esc(t("kEt"))+'</span><select class="sel" id="ket'+i+'">'+["none","azubi","ferien","job"].map(v=>'<option value="'+v+'"'+((k.et||"none")===v?' selected':'')+'>'+esc(t({none:"etNone",azubi:"etAzubi",ferien:"etFerien",job:"etJob"}[v]))+'</option>').join("")+'</select></label>'+
+      '<div class="pair"'+((k.et||"none")==="none"?' hidden':'')+' id="kep'+i+'">'+money("keb"+i,t("gross"),k.eb)+money("ken"+i,t("net"),k.en)+'</div></div>';
     box.appendChild(d);
     const ageIn = d.querySelector("#ka"+i);
     d.querySelectorAll("[data-d]").forEach(b=>b.addEventListener("click",()=>{ k.age=clamp(k.age+(+b.dataset.d),0,24); ageIn.value=k.age; update(); }));
     ageIn.addEventListener("input",()=>{ k.age=clamp(Math.floor(num(ageIn.value)),0,24); update(); });
     d.querySelector("#ku"+i).addEventListener("input",e=>{ k.uh=Math.max(0,num(e.target.value)); update(); });
+    d.querySelector("#ket"+i).addEventListener("change",e=>{ k.et=e.target.value; d.querySelector("#kep"+i).hidden = k.et==="none"; update(); });
+    d.querySelector("#keb"+i).addEventListener("input",e=>{ k.eb=Math.max(0,num(e.target.value)); update(); });
+    d.querySelector("#ken"+i).addEventListener("input",e=>{ k.en=Math.max(0,num(e.target.value)); update(); });
     d.querySelector("[data-rm]").addEventListener("click",()=>{ S.kids.splice(i,1); renderKids(); update(); });
   });
   $("addKid").disabled = S.kids.length>=8;
@@ -1485,10 +1532,12 @@ function renderIncomes(){
     d.innerHTML = '<h4>'+esc(t("adult",{n:i+1}))+'</h4>'+
       '<p class="sub">'+esc(t("jobH"))+'</p><div class="pair">'+money("jb"+i,t("gross"),a.jb)+money("jn"+i,t("net"),a.jn)+'</div>'+
       '<p class="sub">'+esc(t("renteH"))+'</p><div class="pair">'+money("rb"+i,t("renteB"),a.rb)+money("rn"+i,t("renteN"),a.rn)+'</div>'+
-      ck("grz"+i,t("grz"),a.grz)+money("so"+i,t("soP"),a.so)+money("uhP"+i,t("uhP"),a.uhP)+
+      ck("grz"+i,t("grz"),a.grz)+money("so"+i,t("soP"),a.so)+
+      '<p class="sub">'+esc(t("sgH"))+'</p><div class="pair">'+money("sg"+i,t("sgP"),a.sg)+money("sgSt"+i,t("sgSt"),a.sgSt)+'</div>'+
+      money("uhP"+i,t("uhP"),a.uhP)+
       '<details class="more"'+(a.avB||a.avN?' open':'')+'><summary>'+esc(t("avH"))+'</summary><div class="checks"><div class="pair">'+money("avB"+i,t("avB"),a.avB)+money("avN"+i,t("avN"),a.avN)+'</div><p class="chipline">'+esc(t("avHint"))+'</p></div></details>';
     box.appendChild(d);
-    ["jb","jn","rb","rn","so","uhP","avB","avN"].forEach(f=>d.querySelector("#"+f+i).addEventListener("input",e=>{ a[f]=Math.max(0,num(e.target.value)); update(); }));
+    ["jb","jn","rb","rn","so","sg","sgSt","uhP","avB","avN"].forEach(f=>d.querySelector("#"+f+i).addEventListener("input",e=>{ a[f]=Math.max(0,num(e.target.value)); update(); }));
     d.querySelector("#grz"+i).addEventListener("change",e=>{ a.grz=e.target.checked; update(); });
   }
 }
@@ -1523,7 +1572,7 @@ function bind(){
     rebuild(); update();
   }));
   document.querySelectorAll("[data-typ]").forEach(b=>b.addEventListener("click",()=>{ S.typ=b.dataset.typ; rebuild(); update(); }));
-  $("addKid").addEventListener("click",()=>{ S.kids.push({age:6,uh:0}); renderKids(); update(); const last=$("ka"+(S.kids.length-1)); if(last) last.focus(); });
+  $("addKid").addEventListener("click",()=>{ S.kids.push({age:6,uh:0,et:"none",eb:0,en:0}); renderKids(); update(); const last=$("ka"+(S.kids.length-1)); if(last) last.focus(); });
   $("mog").addEventListener("input",()=>{ const v=num($("mog").value); S.mog = v>0 ? v : null; update(); });
   $("mogReset").addEventListener("click",()=>{ S.mog=null; update(); });
   $("backBtn").addEventListener("click",()=>{ S.step=Math.max(1,S.step-1); showStep(); });
@@ -1590,6 +1639,7 @@ function update(){
   const chips=[['sys',t("regimeL",{r:t("rg_"+G.regime)})]];
   if(G.mixed) chips.push(['w',t("warnMixed")]);
   if(S.mpb && S.kdz==="karenz") chips.push(['w',t("mpbInfo")]);
+  if(G.kids.length) chips.push(['sys',t("butInfo")]);
   if(G.kid15) chips.push(['w',t("warnKid15")]);
   if(G.umgCnt>0) chips.push(['w', G.wechsel ? t("umgInfoW",{b:G.nKdU,c:eur(G.grenzeTab),d:Math.round(G.umgDays)}) : t("umgInfoT",{a:G.nBase,e:eur(G.mogBase),b:G.nKdU,f:eur(G.mogFull),c:eur(G.grenzeTab),d:Math.round(G.umgDays)})]);
   if(W.umgWg>0) chips.push(['w',t("umgWg",{x:P.kids.wgUmgMin})]);
@@ -1666,14 +1716,14 @@ function renderWeg(R){
   h+=tbl([t("colNeed"),t("colEur")],r1,[t("totNeed"),R.need]);
   const r2r=[];
   G.ads.forEach((a,i)=>{ const x=G.inc[i];
-    if(a.jb>0||a.jn>0){ const fb=x.xii?x.fbXII:x.fbII; r2r.push([t("earnR",{n:i+1,a:eur(a.jn),b:eur(fb)}),Math.max(0,a.jn-fb)]); }
+    if(a.jb>0||a.jn>0||x.sg>0){ const fb=x.xii?x.fbXII:x.fbII; if(x.sg>0) r2r.push([t("sgR",{n:i+1,a:eur(x.sg),b:eur(a.sgSt||0)}),""]); r2r.push([t("earnR",{n:i+1,a:eur(a.jn+x.sgN),b:eur(fb)}),x.xii?x.jobXII:x.jobII]); }
     if(a.rn>0) r2r.push([t("incRente",{n:i+1,a:eur(a.rn),b:eur(x.gf)}),x.rente]);
     if(a.so>0) r2r.push([t("incSo",{n:i+1}),a.so]);
     if(!x.xii && x.pausch>0) r2r.push([t("pauschR",{n:i+1}),-x.pausch]);
     if(!x.xii && x.uhP>0) r2r.push([t("uhPR",{n:i+1}),-x.uhP]);
     if(x.xii && G.sys==="II") r2r.push([t("xiiPers",{n:i+1}),""]);
   });
-  G.kids.forEach((k,i)=>{ if(k.uh>0) r2r.push([t("maintR",{n:i+1}),k.uh]); });
+  G.kids.forEach((k,i)=>{ if(k.uh>0) r2r.push([t("maintR",{n:i+1}),k.uh]); const ke=kidEarn(k); if(k.et&&k.et!=="none"&&k.en>0) r2r.push([t("kidEarnR",{n:i+1,a:eur(k.en),b:eur(ke.fb)})+(k.et==="ferien"?" (§ 11a Abs. 7)":""),ke.ber]); });
   if(G.kids.length) r2r.push([t("kgR",{n:G.kids.length,a:eur(P.kindergeld)}),G.kids.length*P.kindergeld]);
   if(KW.total>0) r2r.push([t("kwgRow"),KW.total]);
   h+=tbl([t("colInc"),t("colEur")],r2r,[t("gapR"),s0.gap]);

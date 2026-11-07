@@ -15,6 +15,9 @@ Legende: ✅ stimmte bereits · 🔧 korrigiert · ℹ️ Annahme bzw. Vorgabe a
 | § 7 | Leistungsberechtigung (15 bis Altersgrenze, erwerbsfähig), Ausschlüsse (Ausländer, AsylbLG, Altersrente, stationär, Azubis) | ✅ |
 | § 9, § 11 | Bedarfsgemeinschaft, Kindergeld und Kinderzuschlag als Einkommen des Kindes | ✅ |
 | § 11b | Grundfreibetrag 100 €, 20 % / 30 % / 10 % bis 1.200 € bzw. 1.500 € mit Kind, Unterhalt (Nr. 7), KV-Beiträge (Nr. 3a) | ✅ |
+| § 11b Abs. 2b | Kinder in Ausbildung, Schule oder Freiwilligendienst unter 25: Freibetrag 603 € (Minijob-Grenze) statt 100 €, Abs. 3 ohne Nr. 1 | 🔧 ergänzt (Einkommen von Kindern) |
+| § 11a Abs. 7 | Ferienjobs von Schülerinnen und Schülern unter 25 bleiben anrechnungsfrei | 🔧 ergänzt |
+| § 3 Bürgergeld-V | Selbstständigkeit: Betriebseinnahmen − notwendige Betriebsausgaben, danach § 11b | 🔧 ergänzt |
 | § 11b Abs. 2a i. V. m. § 82a SGB XII | Grundrentenfreibetrag auf die gesetzliche Rente | ✅ |
 | § 12 Abs. 2 | Vermögensfreibetrag je Person nach Alter: 5.000 € / 10.000 € / 12.500 € / 20.000 €, übertragbar | 🔧 vorher Karenzzeit 40.000 € + 15.000 € (alte Rechtslage) |
 | § 12a | Verweis nur, wenn die Hilfebedürftigkeit aller ≥ 3 Monate beseitigt wird | ✅ |
@@ -57,6 +60,8 @@ Legende: ✅ stimmte bereits · 🔧 korrigiert · ℹ️ Annahme bzw. Vorgabe a
 | § 17 Nr. 1, 3 | 1.800 € GdB 100 / Pflege; 1.320 € einmal je Haushalt (Kind < 18) | ✅ |
 | § 17a | Grundrentenfreibetrag | ✅ |
 | § 18 | Unterhaltszahlungen bis 3.000 € | ✅ |
+| § 14 | Gewinn aus Selbstständigkeit als positive Einkünfte; Erwerbseinkommen von Kindern | 🔧 ergänzt |
+| § 17 Nr. 4 | Freibetrag für eigenes Erwerbseinkommen von Kindern unter 25, höchstens 1.200 € | 🔧 ergänzt |
 | § 19 Abs. 1 | Formel, Anlage 2 (a, b, c) | ✅ |
 | § 19 Abs. 3 | ab 13 Mitgliedern +65 € je weiterem Mitglied | 🔧 ergänzt |
 | Anlage 3 | Mindestwerte M und Y für 1–12 Mitglieder, kaufmännische Rundung | 🔧 vorher nur bis 6 Mitglieder |
@@ -69,7 +74,8 @@ Legende: ✅ stimmte bereits · 🔧 korrigiert · ℹ️ Annahme bzw. Vorgabe a
 | § 6a Abs. 1 | Mindesteinkommen 900 / 600 € (ohne Absetzbeträge); keine Hilfebedürftigkeit mit Kinderzuschlag und Wohngeld | ✅ |
 | § 6a Abs. 1a | erweiterter Zugang: höchstens 100 € Lücke, Erwerbsabsetzbeträge ≥ 100 € → Wahlrecht | 🔧 ergänzt |
 | § 6a Abs. 2 | Höchstbetrag einschließlich Sofortzuschlag 25 € = 297 € | ✅ |
-| § 6a Abs. 3 | Kindeseinkommen mindert zu 45 %; Vermögen 40.000 € + 15.000 € | ✅ |
+| § 6a Abs. 3 | Kindeseinkommen (Unterhalt, Unterhaltsvorschuss, bereinigtes Erwerbseinkommen) mindert zu 45 %; Vermögen 40.000 € + 15.000 € | ✅ / 🔧 Erwerbseinkommen ergänzt |
+| § 6b BKGG, § 6a Abs. 1 Nr. 3 | Bildung und Teilhabe bleibt bei der Prüfung außer Betracht und wird mit Wohngeld/Kinderzuschlag ebenfalls gewährt | ✅ (Hinweis, keine Berechnung nötig) |
 | § 6a Abs. 5 + DA-KiZ C.3.1.2 | Wohnanteile Eltern (Alleinerziehende 77 / 63 / 53 / 46 / 40 / 36 / 33 / 30 / 27 / 25 %, Paare 83 / 71 / 62 / 55 / 50 / 45 / 41 / 38 / 35 / 33 %) | 🔧 ab 5 Kindern vorher geschätzt |
 | § 6a Abs. 6 | Erwerbseinkommen 45 %, anderes Einkommen 100 %, Reihenfolge der Anrechnung | ✅ |
 | § 6a Abs. 8 | Durchschnitt der letzten 6 Monate | ✅ (optional) |
@@ -89,5 +95,7 @@ Legende: ✅ stimmte bereits · 🔧 korrigiert · ℹ️ Annahme bzw. Vorgabe a
 | Mietobergrenzen ab 01.04.2026: 484,00 / 592,20 / 706,50 / 825,35 / 1.026,00 / 1.134,00 / 1.242,00 / 1.350,00 / 1.458,00 / 1.566,00 / 1.675,00 / 1.782,00 €, +108 € je weitere Person | 🔧 6 Personen 1.134,00 € (vorher 1.135,00 € von einer anderen Seite der Website) |
 | Schwangerschaft ab 12. Woche zählt bei der Mietobergrenze; Wechselmodell volle Anerkennung; temporärer Umgang halbe Differenz | ℹ️ Vorgabe aus der Praxis, auf der Website nicht veröffentlicht |
 
-## Bewusst nicht abgebildet
-Bildung und Teilhabe, Einkommen aus Selbstständigkeit, eigenes Erwerbseinkommen von Kindern (§ 17 Nr. 4 WoGG, § 11b Abs. 2b SGB II), Heizkostengrenze (Eingabefeld, da kein Wolfsburger Wert veröffentlicht), Reformen 2027 (noch nicht verkündet).
+## Bewusst nicht berechnet
+- Bildung und Teilhabe: rechtlich ohne Einfluss auf die Vorrangprüfung (§ 6a Abs. 1 Nr. 3 BKGG, § 6b BKGG).
+- Heizkostengrenze: Eingabefeld, da kein Wolfsburger Wert veröffentlicht ist.
+- Reformen 2027: noch nicht verkündet.
