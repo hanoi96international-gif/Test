@@ -19,3 +19,8 @@ Alle Rechenregeln sind gegen die Gesetzestexte (Stand 07.11.2026), die DA-KiZ un
   Blätter: Anleitung, Eingabe (gelbe Felder mit Auswahllisten), Ergebnis, Berechnung (Rechenweg mit Paragrafen), Szenarien, Parameter (alle Rechtswerte mit Quelle).
 - Abgleich: 54 Testfälle (14 feste, 40 zufällige) liefern in Excel und Web-Rechner identische Ergebnisse (`werkzeuge/`).
 - Neu erzeugen: `python3 werkzeuge/build_xlsx.py Vorrangpruefung_Wolfsburg.xlsx`
+
+## Windows-Programm (.exe)
+- `Vorrangpruefung_Wolfsburg.exe`: Doppelklick öffnet den Rechner im Standardbrowser. Keine Installation, keine Administratorrechte, keine Datenübertragung. Die Seite wird nach `%LOCALAPPDATA%\Vorrangpruefung` geschrieben, damit Eingaben gespeichert bleiben.
+- Die Datei ist nicht digital signiert; Windows SmartScreen bzw. die IT-Richtlinie kann sie blockieren.
+- Neu bauen: `werkzeuge/exe` – vorher `Vorrangpruefung_Wolfsburg.html` als `rechner.html` hineinkopieren, dann `GOOS=windows GOARCH=amd64 go build -ldflags "-H windowsgui -s -w" -o Vorrangpruefung_Wolfsburg.exe .`
