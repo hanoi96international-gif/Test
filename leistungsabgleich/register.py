@@ -1,4 +1,4 @@
-"""Fachlicher Kern: Fallregister, Abfrage mit Zweckbindung, Erstattungsansprüche, Protokoll."""
+"""Speicher und Ablauf: Fälle melden, Erstattungen automatisch anlegen, Arbeitskorb, Protokoll."""
 
 import datetime as dt
 import hashlib
@@ -8,32 +8,38 @@ import re
 import sqlite3
 import unicodedata
 
-ARTEN = {"jobcenter": "Jobcenter (SGB II)", "wohngeld": "Wohngeldstelle (WoGG)"}
+from . import erstattung as er
+
 STATUS = ("beantragt", "bewilligt", "abgelehnt", "eingestellt")
-ANSPRUCH_STATUS = ("angemeldet", "anerkannt", "teilweise_anerkannt", "abgelehnt", "erledigt")
+PSEUDONYM_RE = re.compile(r"[0-9a-f]{64}")
+MONAT_RE = re.compile(r"\d{4}-(0[1-9]|1[0-2])")
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS faelle (
-    behoerde TEXT NOT NULL, aktenzeichen TEXT NOT NULL, art TEXT NOT NULL,
-    person TEXT NOT NULL, status TEXT NOT NULL, antrag_am TEXT,
-    von TEXT, bis TEXT, monatsbetrag REAL, kontakt TEXT, geaendert TEXT NOT NULL,
+    behoerde TEXT NOT NULL, aktenzeichen TEXT NOT NULL, art TEXT NOT NULL, person TEXT NOT NULL,
+    haushalt TEXT NOT NULL, status TEXT NOT NULL, antrag_am TEXT, bescheid_am TEXT, von TEXT, bis TEXT,
+    monate TEXT NOT NULL, kontakt TEXT, geaendert TEXT NOT NULL,
     PRIMARY KEY (behoerde, aktenzeichen));
-CREATE INDEX IF NOT EXISTS faelle_person ON faelle(person);
-CREATE TABLE IF NOT EXISTS ansprueche (
+CREATE TABLE IF NOT EXISTS mitglieder (
+    behoerde TEXT NOT NULL, aktenzeichen TEXT NOT NULL, person TEXT NOT NULL,
+    PRIMARY KEY (behoerde, aktenzeichen, person));
+CREATE INDEX IF NOT EXISTS mitglieder_person ON mitglieder(person);
+CREATE TABLE IF NOT EXISTS erstattungen (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    von_behoerde TEXT NOT NULL, von_aktenzeichen TEXT NOT NULL,
-    an_behoerde TEXT NOT NULL, an_aktenzeichen TEXT NOT NULL,
-    zeitraum_von TEXT NOT NULL, zeitraum_bis TEXT NOT NULL, betrag REAL,
-    rechtsgrundlage TEXT NOT NULL, begruendung TEXT, status TEXT NOT NULL,
-    antwort TEXT, anerkannter_betrag REAL, erstellt TEXT NOT NULL, geaendert TEXT NOT NULL);
+    berechtigt TEXT NOT NULL, berechtigt_az TEXT NOT NULL, berechtigt_art TEXT NOT NULL,
+    verpflichtet TEXT NOT NULL, verpflichtet_az TEXT NOT NULL, rechtsgrundlage TEXT NOT NULL,
+    status TEXT NOT NULL, positionen TEXT NOT NULL, pruefhinweise TEXT NOT NULL DEFAULT '[]',
+    korrektur TEXT NOT NULL DEFAULT '[]', anerkannt_cent INTEGER, begruendung TEXT,
+    automatisch INTEGER NOT NULL DEFAULT 0, angemeldet TEXT NOT NULL, geaendert TEXT NOT NULL);
+CREATE INDEX IF NOT EXISTS erstattungen_v ON erstattungen(verpflichtet, verpflichtet_az);
+CREATE INDEX IF NOT EXISTS erstattungen_b ON erstattungen(berechtigt, berechtigt_az);
 CREATE TABLE IF NOT EXISTS protokoll (
-    zeit TEXT NOT NULL, behoerde TEXT NOT NULL, aktion TEXT NOT NULL,
-    aktenzeichen TEXT, details TEXT);
+    zeit TEXT NOT NULL, behoerde TEXT NOT NULL, aktion TEXT NOT NULL, aktenzeichen TEXT, details TEXT);
 """
 
 
 class Fehler(Exception):
-    """Fachlicher Fehler, wird von der API als 4xx zurückgegeben."""
+    """Fachlicher Fehler, die API gibt ihn mit passendem HTTP-Status zurück."""
 
     def __init__(self, text: str, code: int = 400):
         super().__init__(text)
@@ -49,216 +55,389 @@ def _norm(text: str) -> str:
 
 
 def pseudonym(schluessel: bytes, nachname: str, vorname: str, geburtsdatum: str) -> str:
-    """Gleiches Pseudonym bei beiden Behörden, ohne dass Klardaten das Register erreichen.
+    """Gleiches Pseudonym bei beiden Behörden, ohne dass Namen das Register erreichen.
 
-    Der Schlüssel liegt nur bei den beteiligten Behörden. Schreibweisen wie
-    „Müller“/„Mueller“ oder „Anna-Lena“/„Anna Lena“ ergeben dasselbe Pseudonym.
+    Der Schlüssel liegt nur bei den Fachverfahren der Behörden, nicht beim Register.
+    „Müller“/„Mueller“ und „Anna-Lena“/„Anna Lena“ ergeben dasselbe Pseudonym.
     """
-    dt.date.fromisoformat(geburtsdatum)  # wirft bei falschem Format
+    dt.date.fromisoformat(geburtsdatum)
     nachricht = f"{_norm(nachname)}|{_norm(vorname)}|{geburtsdatum}".encode()
     return hmac.new(schluessel, nachricht, hashlib.sha256).hexdigest()
 
 
-def _datum(wert, feld, pflicht=False):
+def _datum(wert, feld):
     if wert in (None, ""):
-        if pflicht:
-            raise Fehler(f"Feld '{feld}' fehlt")
         return None
     try:
         return dt.date.fromisoformat(wert).isoformat()
     except (TypeError, ValueError):
-        raise Fehler(f"Feld '{feld}' muss ein Datum JJJJ-MM-TT sein") from None
+        raise Fehler(f"'{feld}' muss ein Datum JJJJ-MM-TT sein") from None
+
+
+def _cent(wert, feld):
+    if isinstance(wert, bool) or not isinstance(wert, int) or wert < 0:
+        raise Fehler(f"'{feld}' muss ein ganzzahliger Cent-Betrag ≥ 0 sein")
+    return wert
 
 
 def _jetzt():
     return dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
 
 
-def laeuft(fall: dict, stichtag: dt.date) -> bool:
-    if fall["status"] != "bewilligt" or not fall["von"]:
-        return False
-    return dt.date.fromisoformat(fall["von"]) <= stichtag and (
-        not fall["bis"] or stichtag <= dt.date.fromisoformat(fall["bis"]))
-
-
-def hinweise(eigene_art: str, fremde: list[dict], stichtag: dt.date) -> list[str]:
-    """Kurze Entscheidungshilfe für Eilfälle. Ersetzt keine Prüfung im Einzelfall."""
-    texte = []
-    for f in fremde:
-        if f["art"] == "wohngeld" and eigene_art == "jobcenter":
-            if laeuft(f, stichtag):
-                texte.append(
-                    f"Wohngeld läuft ({f['von']} bis {f['bis'] or 'offen'}, {f['behoerde']}). Bei Bewilligung "
-                    "von Bürgergeld entfällt der Wohngeldanspruch (§ 7 Abs. 1 WoGG): Wohngeldstelle "
-                    "informieren und für Überschneidungsmonate Erstattung nach § 104 SGB X anmelden.")
-            elif f["status"] == "beantragt":
-                texte.append(
-                    f"Wohngeld ist seit {f['antrag_am'] or 'unbekannt'} beantragt ({f['behoerde']}). Vorrang prüfen "
-                    "(§ 12a SGB II): Reicht Wohngeld (ggf. mit Kinderzuschlag) zur Deckung, kann "
-                    "Bürgergeld vorläufig bzw. bis zur Entscheidung gezahlt und Erstattung angemeldet werden.")
-        if f["art"] == "jobcenter" and eigene_art == "wohngeld":
-            if laeuft(f, stichtag):
-                texte.append(
-                    f"Bürgergeld läuft ({f['von']} bis {f['bis'] or 'offen'}, {f['behoerde']}). Wohngeld ist für "
-                    "diesen Zeitraum in der Regel ausgeschlossen (§ 7 Abs. 1 Nr. 1 WoGG).")
-            elif f["status"] == "beantragt":
-                texte.append(
-                    f"Bürgergeld ist seit {f['antrag_am'] or 'unbekannt'} beantragt ({f['behoerde']}). Mit dem "
-                    "Jobcenter abstimmen; bei späterer Bewilligung Erstattung nach § 104 SGB X anmelden.")
-            elif f["status"] == "eingestellt" and f["bis"]:
-                texte.append(
-                    f"Bürgergeld endete am {f['bis']}. Wohngeld ab dem Folgemonat möglich; "
-                    "§ 7 Abs. 1 WoGG prüfen.")
-    return texte
+def _monate_zurueck(tag: dt.date, n: int) -> str:
+    j, m = divmod(tag.year * 12 + tag.month - 1 - n, 12)
+    return dt.date(j, m + 1, 1).isoformat()
 
 
 class Register:
-    def __init__(self, pfad: str = ":memory:"):
+    def __init__(self, pfad: str = ":memory:", behoerden: dict | None = None):
+        """behoerden: {id: {"art", "name", "auto_anerkennung_bis_cent"}}"""
+        self.behoerden = behoerden or {}
         self.db = sqlite3.connect(pfad, check_same_thread=False)
         self.db.row_factory = sqlite3.Row
+        self.db.execute("PRAGMA foreign_keys = ON")
         self.db.executescript(SCHEMA)
+
+    def name(self, behoerde: str) -> str:
+        return self.behoerden.get(behoerde, {}).get("name", behoerde)
 
     def _log(self, behoerde, aktion, aktenzeichen=None, **details):
         self.db.execute("INSERT INTO protokoll VALUES (?,?,?,?,?)",
                         (_jetzt(), behoerde, aktion, aktenzeichen, json.dumps(details, ensure_ascii=False)))
 
-    def _eigener_fall(self, behoerde, aktenzeichen):
-        row = self.db.execute("SELECT * FROM faelle WHERE behoerde=? AND aktenzeichen=?",
-                              (behoerde, aktenzeichen)).fetchone()
-        if not row:
-            raise Fehler(f"Kein eigener Fall mit Aktenzeichen '{aktenzeichen}' gemeldet", 404)
-        return dict(row)
+    # --- Laden --------------------------------------------------------------------------------
+
+    @staticmethod
+    def _zu_fall(row):
+        f = dict(row)
+        f["monate"], f["haushalt"] = json.loads(f["monate"]), json.loads(f["haushalt"])
+        return f
+
+    @staticmethod
+    def _zu_erstattung(row):
+        e = dict(row)
+        for k in ("positionen", "pruefhinweise", "korrektur"):
+            e[k] = json.loads(e[k])
+        e["automatisch"] = bool(e["automatisch"])
+        return e
+
+    def _fall(self, behoerde, az):
+        row = self.db.execute("SELECT * FROM faelle WHERE behoerde=? AND aktenzeichen=?", (behoerde, az)).fetchone()
+        return self._zu_fall(row) if row else None
+
+    def _eigener_fall(self, behoerde, az):
+        fall = self._fall(behoerde, str(az or ""))
+        if not fall:
+            raise Fehler(f"Kein eigener Fall mit Aktenzeichen '{az}' gemeldet", 404)
+        return fall
+
+    def _partner(self, fall):
+        """Fälle der anderen Behördenart, die mindestens eine Person mit diesem Fall teilen."""
+        platz = ",".join("?" * len(fall["haushalt"]))
+        rows = self.db.execute(
+            f"SELECT DISTINCT f.* FROM faelle f JOIN mitglieder m ON m.behoerde=f.behoerde AND "
+            f"m.aktenzeichen=f.aktenzeichen WHERE m.person IN ({platz}) AND f.art<>? ORDER BY f.geaendert DESC",
+            [*fall["haushalt"], fall["art"]])
+        return [self._zu_fall(r) for r in rows]
+
+    def _erstattungen_paar(self, jc, wg):
+        rows = self.db.execute(
+            "SELECT * FROM erstattungen WHERE (berechtigt=? AND berechtigt_az=? AND verpflichtet=? AND "
+            "verpflichtet_az=?) OR (berechtigt=? AND berechtigt_az=? AND verpflichtet=? AND verpflichtet_az=?) "
+            "ORDER BY id", (jc["behoerde"], jc["aktenzeichen"], wg["behoerde"], wg["aktenzeichen"],
+                            wg["behoerde"], wg["aktenzeichen"], jc["behoerde"], jc["aktenzeichen"]))
+        return [self._zu_erstattung(r) for r in rows]
+
+    def _aussen(self, e):
+        """Erstattung für die Ausgabe: mit Summe, Zeitraum und Behördennamen."""
+        return e | {"summe_cent": er.summe(e["positionen"]), "zeitraum": er.zeitraum(e["positionen"]),
+                    "hoechstens_cent": sum(p["hoechstens"] for p in e["positionen"].values()),
+                    "berechtigt_name": self.name(e["berechtigt"]), "verpflichtet_name": self.name(e["verpflichtet"])}
 
     # --- Fälle melden -------------------------------------------------------------------------
 
     def melden(self, behoerde: str, art: str, daten: dict) -> dict:
-        """Legt einen Fall an oder aktualisiert ihn (gleiche Behörde + Aktenzeichen)."""
-        if art not in ARTEN:
+        """Legt einen Fall an oder ersetzt ihn vollständig (gleiche Behörde + Aktenzeichen).
+
+        Das Fachverfahren schickt bei jeder Änderung den aktuellen Stand, inklusive Monatsbeträgen.
+        Die Antwort sagt sofort, was vor der Auszahlung einzubehalten ist.
+        """
+        if art not in er.ARTEN:
             raise Fehler(f"Unbekannte Behördenart '{art}'")
         az = str(daten.get("aktenzeichen") or "").strip()
-        person = str(daten.get("person") or "")
-        if not az:
-            raise Fehler("Feld 'aktenzeichen' fehlt")
-        if not re.fullmatch(r"[0-9a-f]{64}", person):
-            raise Fehler("Feld 'person' muss das Pseudonym (64 Hex-Zeichen) sein")
+        if not az or len(az) > 64:
+            raise Fehler("'aktenzeichen' fehlt oder ist zu lang")
+        person = daten.get("person")
+        haushalt = daten.get("haushalt") or []
+        if not isinstance(haushalt, list):
+            raise Fehler("'haushalt' muss eine Liste von Pseudonymen sein")
+        for p in [person, *haushalt]:
+            if not isinstance(p, str) or not PSEUDONYM_RE.fullmatch(p):
+                raise Fehler("'person' und 'haushalt' müssen Pseudonyme (64 Hex-Zeichen) sein")
         status = daten.get("status")
         if status not in STATUS:
-            raise Fehler(f"Feld 'status' muss einer von {', '.join(STATUS)} sein")
+            raise Fehler(f"'status' muss einer von {', '.join(STATUS)} sein")
         von, bis = _datum(daten.get("von"), "von"), _datum(daten.get("bis"), "bis")
         if status == "bewilligt" and not von:
             raise Fehler("Bei 'bewilligt' ist 'von' Pflicht")
         if von and bis and bis < von:
             raise Fehler("'bis' liegt vor 'von'")
-        betrag = daten.get("monatsbetrag")
-        if betrag is not None and (not isinstance(betrag, (int, float)) or betrag < 0):
-            raise Fehler("'monatsbetrag' muss eine Zahl ≥ 0 sein")
-        fall = dict(behoerde=behoerde, aktenzeichen=az, art=art, person=person, status=status,
-                    antrag_am=_datum(daten.get("antrag_am"), "antrag_am"), von=von, bis=bis,
-                    monatsbetrag=betrag, kontakt=daten.get("kontakt"), geaendert=_jetzt())
+        monate = {}
+        eintraege = daten.get("monate") or []
+        if not isinstance(eintraege, list) or len(eintraege) > 120:
+            raise Fehler("'monate' muss eine Liste mit höchstens 120 Einträgen sein")
+        for e in eintraege:
+            if not isinstance(e, dict) or not MONAT_RE.fullmatch(str(e.get("monat", ""))):
+                raise Fehler("Jeder Eintrag in 'monate' braucht 'monat' im Format JJJJ-MM")
+            if e["monat"] in monate:
+                raise Fehler(f"Monat {e['monat']} ist doppelt gemeldet")
+            monate[e["monat"]] = {"anspruch": _cent(e.get("anspruch_cent", 0), "anspruch_cent"),
+                                  "gezahlt": _cent(e.get("gezahlt_cent", 0), "gezahlt_cent")}
+        fall = dict(behoerde=behoerde, aktenzeichen=az, art=art, person=person, haushalt=sorted({person, *haushalt}),
+                    status=status, antrag_am=_datum(daten.get("antrag_am"), "antrag_am"),
+                    bescheid_am=_datum(daten.get("bescheid_am"), "bescheid_am"), von=von, bis=bis,
+                    monate=dict(sorted(monate.items())), kontakt=str(daten.get("kontakt") or "")[:200] or None,
+                    geaendert=_jetzt())
+        alt = self._fall(behoerde, az)
+        if alt and alt["art"] != art:
+            raise Fehler("Aktenzeichen gehört zu einer anderen Behördenart", 409)
         with self.db:
             self.db.execute(
-                "INSERT INTO faelle VALUES (:behoerde,:aktenzeichen,:art,:person,:status,:antrag_am,"
-                ":von,:bis,:monatsbetrag,:kontakt,:geaendert) ON CONFLICT(behoerde,aktenzeichen) DO UPDATE SET "
-                "person=excluded.person,status=excluded.status,antrag_am=excluded.antrag_am,von=excluded.von,"
-                "bis=excluded.bis,monatsbetrag=excluded.monatsbetrag,kontakt=excluded.kontakt,"
-                "geaendert=excluded.geaendert", fall)
-            self._log(behoerde, "melden", az, status=status)
-        return fall
+                "INSERT OR REPLACE INTO faelle VALUES (:behoerde,:aktenzeichen,:art,:person,:haushalt,:status,"
+                ":antrag_am,:bescheid_am,:von,:bis,:monate,:kontakt,:geaendert)",
+                fall | {"haushalt": json.dumps(fall["haushalt"]), "monate": json.dumps(fall["monate"])})
+            self.db.execute("DELETE FROM mitglieder WHERE behoerde=? AND aktenzeichen=?", (behoerde, az))
+            self.db.executemany("INSERT INTO mitglieder VALUES (?,?,?)", [(behoerde, az, p) for p in fall["haushalt"]])
+            self._log(behoerde, "melden", az, status=status, monate=len(monate))
+            self._neu_berechnen(fall)
+        return {"aktenzeichen": az, "einbehalten": self.einbehalten(behoerde, az),
+                "aufgaben": self.arbeitskorb(behoerde, az, protokollieren=False)}
 
-    # --- Abfrage ------------------------------------------------------------------------------
+    def _neu_berechnen(self, fall):
+        schluessel = (fall["behoerde"], fall["aktenzeichen"])
+        partner = set()
+        for p in self._partner(fall):
+            partner.add((p["behoerde"], p["aktenzeichen"]))
+            self._paar_berechnen(*((fall, p) if fall["art"] == er.JC else (p, fall)))
+        # Betrifft ein Partnerfall nach einer Korrektur nicht mehr dieselben Personen, entfällt die offene Forderung
+        rows = self.db.execute("SELECT * FROM erstattungen WHERE (berechtigt=? AND berechtigt_az=?) OR "
+                               "(verpflichtet=? AND verpflichtet_az=?)", schluessel * 2).fetchall()
+        for e in map(self._zu_erstattung, rows):
+            gegen = {(e["berechtigt"], e["berechtigt_az"]), (e["verpflichtet"], e["verpflichtet_az"])} - {schluessel}
+            if e["status"] in er.OFFEN and not gegen & partner:
+                self.db.execute("DELETE FROM erstattungen WHERE id=?", (e["id"],))
+                self._log(e["berechtigt"], "erstattung_entfallen", e["berechtigt_az"], erstattung=e["id"])
 
-    def abfragen(self, behoerde: str, aktenzeichen: str, stichtag: str | None = None) -> dict:
-        """Zeigt Fälle anderer Behörden zur Person des eigenen Falls.
+    def _paar_berechnen(self, jc, wg):
+        bestehend = self._erstattungen_paar(jc, wg)
+        erg = er.auswerten({er.JC: jc, er.WG: wg}, bestehend)
+        hinweise_paar = []
+        if set(jc["haushalt"]) != set(wg["haushalt"]):
+            hinweise_paar.append("Wohngeld-Haushalt und Bedarfsgemeinschaft sind nicht deckungsgleich, "
+                                 "deshalb Beträge von Hand nachrechnen.")
+        jetzt = _jetzt()
+        for d in (er.JC, er.WG):
+            x, y = (jc, wg) if d == er.JC else (wg, jc)
+            pos = erg["soll"][d]
+            offen = next((e for e in bestehend if e["berechtigt_art"] == d and e["status"] in er.OFFEN), None)
+            if not pos:
+                if offen:
+                    self.db.execute("DELETE FROM erstattungen WHERE id=?", (offen["id"],))
+                    self._log(x["behoerde"], "erstattung_entfallen", x["aktenzeichen"], erstattung=offen["id"])
+                continue
+            hinweise = list(hinweise_paar)
+            unklar = [m for m in erg["unklar"] if m in pos]
+            if unklar:
+                hinweise.append(f"In {er.zeitraum(unklar)} haben beide Stellen gezahlt und haben noch offene "
+                                "Beträge, deshalb die Richtung der Erstattung klären.")
+            betrag, auto = er.summe(pos), False
+            if any(p["betrag"] is None for p in pos.values()):
+                status = "angemeldet"
+            elif hinweise:
+                status = "pruefung"
+            else:
+                status = "beziffert"
+                grenze = self.behoerden.get(y["behoerde"], {}).get("auto_anerkennung_bis_cent")
+                if grenze is not None and betrag <= grenze:
+                    status, auto = "anerkannt", True
+            werte = {"status": status, "positionen": json.dumps(pos, sort_keys=True),
+                     "pruefhinweise": json.dumps(hinweise, ensure_ascii=False),
+                     "anerkannt_cent": betrag if auto else None, "automatisch": int(auto)}
+            if offen:
+                vorher = {"status": offen["status"], "positionen": json.dumps(offen["positionen"], sort_keys=True),
+                          "pruefhinweise": json.dumps(offen["pruefhinweise"], ensure_ascii=False),
+                          "anerkannt_cent": offen["anerkannt_cent"], "automatisch": int(offen["automatisch"])}
+                if vorher != werte:
+                    self.db.execute(f"UPDATE erstattungen SET {', '.join(k + '=?' for k in werte)}, geaendert=? "
+                                    "WHERE id=?", [*werte.values(), jetzt, offen["id"]])
+                    self._log(x["behoerde"], "erstattung_" + status, x["aktenzeichen"], erstattung=offen["id"],
+                              betrag_cent=betrag, automatisch=auto)
+            else:
+                cur = self.db.execute(
+                    "INSERT INTO erstattungen (berechtigt,berechtigt_az,berechtigt_art,verpflichtet,verpflichtet_az,"
+                    "rechtsgrundlage,status,positionen,pruefhinweise,anerkannt_cent,automatisch,angemeldet,geaendert) "
+                    "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                    (x["behoerde"], x["aktenzeichen"], d, y["behoerde"], y["aktenzeichen"], er.RECHTSGRUNDLAGE[d],
+                     *werte.values(), jetzt, jetzt))
+                self._log(x["behoerde"], "erstattung_" + status, x["aktenzeichen"], erstattung=cur.lastrowid,
+                          betrag_cent=betrag, automatisch=auto)
+        for e in bestehend:
+            if e["status"] in er.BINDEND and erg["korrektur"].get(e["id"], []) != e["korrektur"]:
+                self.db.execute("UPDATE erstattungen SET korrektur=? WHERE id=?",
+                                (json.dumps(erg["korrektur"].get(e["id"], [])), e["id"]))
 
-        Zweckbindung: Abfragen geht nur über ein eigenes, gemeldetes Aktenzeichen. Damit kann
-        niemand „einfach mal nachsehen“, und jede Abfrage steht mit Aktenzeichen im Protokoll.
+    # --- Lesen --------------------------------------------------------------------------------
+
+    def einbehalten(self, behoerde: str, az: str) -> list[dict]:
+        """Was das Fachverfahren vor der Auszahlung an den Bürger zurückhalten muss."""
+        rows = self.db.execute("SELECT * FROM erstattungen WHERE verpflichtet=? AND verpflichtet_az=? AND "
+                               "status<>'abgelehnt' ORDER BY id", (behoerde, az))
+        return [{"monat": m, "betrag_cent": p["betrag"], "hoechstens_cent": p["hoechstens"], "an": e["berechtigt"],
+                 "erstattung": e["id"], "status": e["status"]}
+                for e in map(self._zu_erstattung, rows) for m, p in sorted(e["positionen"].items())]
+
+    def abfragen(self, behoerde: str, az: str, stichtag: str | None = None) -> dict:
+        """Was läuft bei der anderen Stelle zu den Personen dieses Falls?
+
+        Zweckbindung: nur über ein eigenes, gemeldetes Aktenzeichen. Jede Abfrage wird protokolliert,
+        auch abgelehnte.
         """
         try:
-            eigen = self._eigener_fall(behoerde, aktenzeichen)
+            eigen = self._eigener_fall(behoerde, az)
         except Fehler:
             with self.db:
-                self._log(behoerde, "abfrage_abgelehnt", aktenzeichen)
+                self._log(behoerde, "abfrage_abgelehnt", az)
             raise
         tag = dt.date.fromisoformat(_datum(stichtag, "stichtag") or dt.date.today().isoformat())
-        rows = self.db.execute(
-            "SELECT behoerde,aktenzeichen,art,status,antrag_am,von,bis,monatsbetrag,kontakt,geaendert "
-            "FROM faelle WHERE person=? AND art<>? ORDER BY geaendert DESC",
-            (eigen["person"], eigen["art"])).fetchall()
-        fremde = [dict(r) | {"laeuft": laeuft(dict(r), tag)} for r in rows]
+        monat, faelle, hinweise = tag.isoformat()[:7], [], []
+        for p in self._partner(eigen):
+            laeuft = p["status"] == "bewilligt" and p["von"] <= tag.isoformat() and (not p["bis"] or tag.isoformat() <= p["bis"])
+            faelle.append({k: p[k] for k in ("behoerde", "aktenzeichen", "art", "status", "antrag_am", "bescheid_am",
+                                             "von", "bis", "kontakt")}
+                          | {"name": self.name(p["behoerde"]), "laeuft": laeuft,
+                             "anspruch_aktuell_cent": p["monate"].get(monat, er.LEER)["anspruch"],
+                             "gemeinsame_personen": len(set(p["haushalt"]) & set(eigen["haushalt"]))})
+            if p["status"] == "beantragt" and eigen["art"] == er.JC:
+                hinweise.append(f"Wohngeld ist seit {p['antrag_am'] or '?'} beantragt ({self.name(p['behoerde'])}). "
+                                "Bürgergeld kann bis zur Entscheidung gezahlt werden. Der Erstattungsanspruch wird "
+                                "automatisch angemeldet (§§ 104, 111 SGB X).")
+            elif p["status"] == "beantragt":
+                hinweise.append(f"Bürgergeld ist seit {p['antrag_am'] or '?'} beantragt ({self.name(p['behoerde'])}). "
+                                "Bei Bewilligung entfällt das Wohngeld (§ 7 WoGG). Bereits gezahltes Wohngeld wird "
+                                "automatisch zur Erstattung angemeldet (§ 103 SGB X).")
         with self.db:
-            self._log(behoerde, "abfragen", aktenzeichen, treffer=len(fremde))
-        return {"stichtag": tag.isoformat(), "faelle": fremde, "hinweise": hinweise(eigen["art"], fremde, tag)}
+            self._log(behoerde, "abfragen", az, treffer=len(faelle))
+        return {"stichtag": tag.isoformat(), "faelle": faelle, "hinweise": hinweise,
+                "aufgaben": self.arbeitskorb(behoerde, az, protokollieren=False)}
 
-    # --- Erstattungsansprüche -----------------------------------------------------------------
+    def arbeitskorb(self, behoerde: str, az: str | None = None, protokollieren: bool = True) -> list[dict]:
+        """Alle offenen Aufgaben der Behörde, dringende zuerst. Erledigt sich durch neue Meldungen von selbst."""
+        sql, args = "SELECT * FROM faelle WHERE behoerde=?", [behoerde]
+        if az is not None:
+            sql, args = sql + " AND aktenzeichen=?", args + [az]
+        aufgaben = []
+        for fall in map(self._zu_fall, self.db.execute(sql, args).fetchall()):
+            for p in self._partner(fall):
+                jc, wg = (fall, p) if fall["art"] == er.JC else (p, fall)
+                aufgaben += [a for a in er.aufgaben_paar(jc, wg, self._erstattungen_paar(jc, wg), self.name)
+                             if a["behoerde"] == behoerde]
+        sql, args = "SELECT * FROM erstattungen WHERE verpflichtet=? AND status IN (?,?,?,?,?)", \
+            [behoerde, *er.OFFEN, "anerkannt", "teilweise_anerkannt"]
+        if az is not None:
+            sql, args = sql + " AND verpflichtet_az=?", args + [az]
+        for e in map(self._zu_erstattung, self.db.execute(sql, args).fetchall()):
+            aufgaben += er.aufgaben_erstattung(e, self.name)
+        sql = "SELECT * FROM erstattungen WHERE verpflichtet=? AND status='erstattet' AND korrektur<>'[]'"
+        for e in map(self._zu_erstattung, self.db.execute(sql, (behoerde,)).fetchall()):
+            if az is None or e["verpflichtet_az"] == az:
+                aufgaben += er.aufgaben_erstattung(e, self.name)
+        for a in aufgaben:
+            a["partner_name"] = self.name(a["partner"]) if a["partner"] else None
+        if protokollieren:
+            with self.db:
+                self._log(behoerde, "arbeitskorb", az, aufgaben=len(aufgaben))
+        return sorted(aufgaben, key=lambda a: (a["prioritaet"], a["aktenzeichen"]))
 
-    def anspruch_anmelden(self, behoerde: str, daten: dict) -> dict:
-        eigen = self._eigener_fall(behoerde, daten.get("aktenzeichen"))
-        ziel = self.db.execute(
-            "SELECT * FROM faelle WHERE behoerde=? AND aktenzeichen=? AND person=?",
-            (daten.get("an_behoerde"), daten.get("an_aktenzeichen"), eigen["person"])).fetchone()
-        if not ziel:
-            raise Fehler("Zielfall nicht gefunden oder betrifft eine andere Person", 404)
-        von = _datum(daten.get("zeitraum_von"), "zeitraum_von", pflicht=True)
-        bis = _datum(daten.get("zeitraum_bis"), "zeitraum_bis", pflicht=True)
-        if bis < von:
-            raise Fehler("'zeitraum_bis' liegt vor 'zeitraum_von'")
-        betrag = daten.get("betrag")  # darf bei Anmeldung dem Grunde nach (§ 111 SGB X) noch fehlen
-        if betrag is not None and (not isinstance(betrag, (int, float)) or betrag <= 0):
-            raise Fehler("'betrag' muss eine positive Zahl sein")
-        jetzt = _jetzt()
-        with self.db:
-            cur = self.db.execute(
-                "INSERT INTO ansprueche (von_behoerde,von_aktenzeichen,an_behoerde,an_aktenzeichen,zeitraum_von,"
-                "zeitraum_bis,betrag,rechtsgrundlage,begruendung,status,erstellt,geaendert) "
-                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
-                (behoerde, eigen["aktenzeichen"], ziel["behoerde"], ziel["aktenzeichen"], von, bis, betrag,
-                 daten.get("rechtsgrundlage") or "§ 104 SGB X", daten.get("begruendung"), "angemeldet", jetzt, jetzt))
-            self._log(behoerde, "anspruch_anmelden", eigen["aktenzeichen"], anspruch=cur.lastrowid)
-        return self.anspruch(behoerde, cur.lastrowid)
-
-    def anspruch(self, behoerde: str, nr: int) -> dict:
-        row = self.db.execute("SELECT * FROM ansprueche WHERE id=? AND (von_behoerde=? OR an_behoerde=?)",
+    def erstattung(self, behoerde: str, nr: int) -> dict:
+        row = self.db.execute("SELECT * FROM erstattungen WHERE id=? AND (berechtigt=? OR verpflichtet=?)",
                               (nr, behoerde, behoerde)).fetchone()
         if not row:
-            raise Fehler("Erstattungsanspruch nicht gefunden", 404)
-        return dict(row)
+            raise Fehler("Erstattung nicht gefunden", 404)
+        return self._aussen(self._zu_erstattung(row))
 
-    def ansprueche(self, behoerde: str, richtung: str = "eingehend", status: str | None = None) -> list[dict]:
-        spalte = {"eingehend": "an_behoerde", "ausgehend": "von_behoerde"}.get(richtung)
+    def erstattungen(self, behoerde: str, richtung: str = "eingehend", status: str | None = None) -> list[dict]:
+        """eingehend = Forderungen an mich, ausgehend = meine Forderungen."""
+        spalte = {"eingehend": "verpflichtet", "ausgehend": "berechtigt"}.get(richtung)
         if not spalte:
             raise Fehler("'richtung' muss eingehend oder ausgehend sein")
-        sql, args = f"SELECT * FROM ansprueche WHERE {spalte}=?", [behoerde]
+        sql, args = f"SELECT * FROM erstattungen WHERE {spalte}=?", [behoerde]
         if status:
             sql, args = sql + " AND status=?", args + [status]
-        return [dict(r) for r in self.db.execute(sql + " ORDER BY id DESC", args)]
+        return [self._aussen(self._zu_erstattung(r)) for r in self.db.execute(sql + " ORDER BY id DESC", args)]
 
-    def anspruch_beantworten(self, behoerde: str, nr: int, daten: dict) -> dict:
-        a = self.anspruch(behoerde, nr)
-        status = daten.get("status")
-        if a["an_behoerde"] == behoerde:
-            erlaubt = ("anerkannt", "teilweise_anerkannt", "abgelehnt")
-        else:  # anmeldende Stelle darf beziffern oder als erledigt markieren (Zahlung eingegangen)
-            erlaubt = ("angemeldet", "erledigt")
-        if status not in erlaubt:
-            raise Fehler(f"Status muss einer von {', '.join(erlaubt)} sein", 403 if status in ANSPRUCH_STATUS else 400)
-        if status == "abgelehnt" and not daten.get("antwort"):
-            raise Fehler("Ablehnung braucht eine Begründung in 'antwort'")
-        felder = {"status": status, "geaendert": _jetzt()}
-        if "antwort" in daten:
-            felder["antwort"] = daten["antwort"]
-        if status == "teilweise_anerkannt":
-            if not isinstance(daten.get("anerkannter_betrag"), (int, float)):
-                raise Fehler("Bei teilweiser Anerkennung ist 'anerkannter_betrag' Pflicht")
-            felder["anerkannter_betrag"] = daten["anerkannter_betrag"]
-        if status == "angemeldet" and isinstance(daten.get("betrag"), (int, float)):
-            felder["betrag"] = daten["betrag"]
+    # --- Entscheiden --------------------------------------------------------------------------
+
+    def entscheiden(self, behoerde: str, nr: int, daten: dict) -> dict:
+        e = self.erstattung(behoerde, nr)
+        if e["verpflichtet"] != behoerde:
+            raise Fehler("Nur die erstattungspflichtige Stelle entscheidet", 403)
+        if e["status"] not in ("beziffert", "pruefung"):
+            raise Fehler(f"Erstattung ist im Status '{e['status']}' und kann nicht entschieden werden", 409)
+        art, begruendung = daten.get("entscheidung"), str(daten.get("begruendung") or "").strip()[:1000]
+        pos = e["positionen"]
+        if art == "anerkennen":
+            status = "anerkannt"
+        elif art in ("teilweise", "ablehnen"):
+            if not begruendung:
+                raise Fehler("Teilanerkennung und Ablehnung brauchen eine 'begruendung'")
+            if art == "teilweise":
+                try:
+                    pos = er.kuerzen(pos, _cent(daten.get("betrag_cent"), "betrag_cent"))
+                except ValueError as fehler:
+                    raise Fehler(str(fehler)) from None
+            status = "teilweise_anerkannt" if art == "teilweise" else "abgelehnt"
+        else:
+            raise Fehler("'entscheidung' muss anerkennen, teilweise oder ablehnen sein")
         with self.db:
-            self.db.execute(f"UPDATE ansprueche SET {', '.join(k + '=?' for k in felder)} WHERE id=?",
-                            [*felder.values(), nr])
-            self._log(behoerde, "anspruch_" + status, None, anspruch=nr)
-        return self.anspruch(behoerde, nr)
+            self.db.execute("UPDATE erstattungen SET status=?, positionen=?, anerkannt_cent=?, begruendung=?, "
+                            "geaendert=? WHERE id=?", (status, json.dumps(pos, sort_keys=True),
+                                                       0 if status == "abgelehnt" else er.summe(pos),
+                                                       begruendung or None, _jetzt(), nr))
+            self._log(behoerde, "erstattung_" + status, e["verpflichtet_az"], erstattung=nr)
+        return self.erstattung(behoerde, nr)
 
-    def protokoll(self, behoerde: str) -> list[dict]:
-        """Eigene Protokolleinträge (für Datenschutzbeauftragte und Auskunft nach Art. 15 DSGVO)."""
+    def als_erstattet(self, behoerde: str, nr: int) -> dict:
+        e = self.erstattung(behoerde, nr)
+        if e["verpflichtet"] != behoerde:
+            raise Fehler("Nur die erstattungspflichtige Stelle meldet die Zahlung", 403)
+        if e["status"] not in ("anerkannt", "teilweise_anerkannt"):
+            raise Fehler(f"Erstattung ist im Status '{e['status']}', erst anerkennen", 409)
+        with self.db:
+            self.db.execute("UPDATE erstattungen SET status='erstattet', geaendert=? WHERE id=?", (_jetzt(), nr))
+            self._log(behoerde, "erstattung_erstattet", e["verpflichtet_az"], erstattung=nr)
+        return self.erstattung(behoerde, nr)
+
+    # --- Datenschutz --------------------------------------------------------------------------
+
+    def protokoll(self, behoerde: str, limit: int = 500) -> list[dict]:
+        """Eigene Protokolleinträge, z. B. für Datenschutzbeauftragte und Auskunft nach Art. 15 DSGVO."""
         return [dict(r) for r in self.db.execute(
-            "SELECT * FROM protokoll WHERE behoerde=? ORDER BY rowid DESC LIMIT 1000", (behoerde,))]
+            "SELECT * FROM protokoll WHERE behoerde=? ORDER BY rowid DESC LIMIT ?", (behoerde, limit))]
+
+    def aufraeumen(self, stichtag: str | None = None, faelle_monate: int = 24, erstattungen_monate: int = 48,
+                   protokoll_monate: int = 24) -> dict:
+        """Löscht nach Fristen: abgeschlossene Erstattungen (Verjährung § 113 SGB X: 4 Jahre),
+        Fälle ohne offene Erstattung, Protokolle. Fristen bitte mit dem Datenschutz abstimmen."""
+        tag = dt.date.fromisoformat(stichtag) if stichtag else dt.date.today()
+        g_e, g_f, g_p = (_monate_zurueck(tag, n) for n in (erstattungen_monate, faelle_monate, protokoll_monate))
+        with self.db:
+            n_e = self.db.execute("DELETE FROM erstattungen WHERE status IN ('erstattet','abgelehnt') AND geaendert<?",
+                                  (g_e,)).rowcount
+            n_f = self.db.execute(
+                "DELETE FROM faelle WHERE geaendert<? AND coalesce(bis, von, antrag_am, '0000')<? AND NOT EXISTS "
+                "(SELECT 1 FROM erstattungen e WHERE (e.berechtigt=faelle.behoerde AND e.berechtigt_az=faelle.aktenzeichen) "
+                "OR (e.verpflichtet=faelle.behoerde AND e.verpflichtet_az=faelle.aktenzeichen))", (g_f, g_f)).rowcount
+            self.db.execute("DELETE FROM mitglieder WHERE NOT EXISTS (SELECT 1 FROM faelle f WHERE "
+                            "f.behoerde=mitglieder.behoerde AND f.aktenzeichen=mitglieder.aktenzeichen)")
+            n_p = self.db.execute("DELETE FROM protokoll WHERE zeit<?", (g_p,)).rowcount
+        return {"erstattungen": n_e, "faelle": n_f, "protokoll": n_p}

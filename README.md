@@ -72,45 +72,54 @@ Leuten an, die ihren Code gut kennen. Der Radar spart dir die Suche, die eigentl
 
 # 🏛️ Leistungsabgleich Jobcenter ↔ Wohngeldstelle
 
-Ein Prototyp für eine **direkte Schnittstelle zwischen Jobcenter (SGB II) und Wohngeldstelle**.
-Mit der Familienkasse gibt es den digitalen Erstattungsweg schon, hier fehlt er bisher.
-Folge: In Eilfällen wartet man Tage oder Wochen auf Rückmeldung der anderen Behörde.
+Prototyp einer **direkten Schnittstelle zwischen Jobcenter (SGB II) und Wohngeldstelle (WoGG)**,
+die Erstattungsansprüche automatisch anmeldet und beziffert. Die Sachbearbeitung muss im
+Normalfall nur noch **aufheben** bzw. mit einem Klick bestätigen.
+Hintergrund und Nutzen für einen Verbesserungsvorschlag: [`docs/vorschlag.md`](docs/vorschlag.md).
 
-**Was die Schnittstelle kann**
+## Was automatisch passiert
 
-- **Abgleich in beide Richtungen:** Das Jobcenter sieht, ob für die Person Wohngeld *beantragt* ist
-  oder *gerade läuft* (Zeitraum, Betrag, Aktenzeichen, Ansprechperson). Umgekehrt sieht die
-  Wohngeldstelle laufende oder beantragte Bürgergeld-Fälle.
-- **Entscheidungshinweise für Eilfälle**, z. B. „Wohngeld läuft, bei Bürgergeld-Bewilligung
-  entfällt es (§ 7 WoGG), Erstattung nach § 104 SGB X anmelden“.
-- **Erstattungsansprüche digital:** anmelden (auch erst dem Grunde nach, § 111 SGB X), später
-  beziffern. Die Gegenseite erkennt an, erkennt teilweise an oder lehnt mit Begründung ab.
-  Danach wird der Anspruch als erledigt markiert.
+| Situation | Was das System tut | Was der Mensch tut |
+|---|---|---|
+| Jobcenter zahlt, Wohngeld ist **beantragt** | Erstattungsanspruch dem Grunde nach anmelden (§ 111 SGB X), Wohngeldstelle: „Nachzahlung einbehalten“ | nichts |
+| Wohngeld wird **rückwirkend bewilligt** | Erstattung Monat für Monat beziffern (§ 104 SGB X), dem Wohngeld-Fachverfahren vor der Auszahlung sagen, was ans Jobcenter geht | anerkennen (oder automatisch bis zur Freigrenze), Jobcenter passt künftige Monate an |
+| Wohngeld läuft, Bürgergeld wird **rückwirkend bewilligt** | bereits gezahltes Wohngeld beim Jobcenter anmelden und beziffern (§ 103 SGB X), Jobcenter-Verfahren behält den Betrag ein | Wohngeldstelle: **nur aufheben**, Rückforderung beim Bürger entfällt |
+| Haushalt ≠ Bedarfsgemeinschaft, unklare Richtung | Betrag trotzdem berechnen, aber **zur Prüfung** vorlegen | prüfen, ggf. teilweise anerkennen |
+| Beide haben voll an den Bürger gezahlt | Aufgabe „Doppelbezug“ an beide Stellen | Vorrang klären, zurückfordern |
+| Trotz anerkannter Erstattung an den Bürger ausgezahlt | Aufgabe „Auszahlung trotz Erstattung“ | Überzahlung prüfen |
 
-**Datenschutz ist eingebaut, nicht nachgerüstet**
+Berechnet wird je Monat: Wer schon gezahlt hat, bekommt **höchstens den noch nicht
+ausgezahlten Betrag der anderen Stelle** erstattet. Aufgaben verschwinden von selbst, sobald
+die Fachverfahren den neuen Stand melden. Niemand muss etwas abhaken.
 
-- Im Register stehen **keine Namen**, nur ein Pseudonym (HMAC aus Name + Geburtsdatum). Den
-  Schlüssel haben nur die Behörden. „Müller“ und „Mueller“ ergeben dasselbe Pseudonym.
-- **Zweckbindung:** Abfragen geht nur über ein eigenes, gemeldetes Aktenzeichen.
-  Gezieltes Herumsuchen ist damit ausgeschlossen.
-- **Protokoll** jeder Meldung und Abfrage, auch abgelehnter, abrufbar über `GET /protokoll`.
-
-**Ausprobieren**
+## Ausprobieren
 
 ```bash
-python -m leistungsabgleich demo          # Eilfall Schritt für Schritt
-python -m leistungsabgleich schluessel    # API-Schlüssel erzeugen → behoerden.json
-python -m leistungsabgleich serve --db abgleich.db --behoerden behoerden.json
+python -m leistungsabgleich demo           # Ablauf mit drei Beispielfällen im Terminal
+python -m leistungsabgleich serve --demo   # Weboberfläche: http://127.0.0.1:8080, Demo-Buttons zum Anmelden
+python -m pytest -q tests
 ```
 
-Alle Endpunkte stehen oben in `leistungsabgleich/__main__.py`. Beispiel Abgleich:
-`GET /faelle/BG-12345/abgleich` mit `Authorization: Bearer <Schlüssel des Jobcenters>`.
+## Betrieb (Prototyp)
 
-**Ehrlich: Was vor einem echten Einsatz fehlt.** Das ist ein Prototyp zum Zeigen und Diskutieren.
-Für den Echtbetrieb braucht es:
-- eine **Rechtsgrundlage** für den Abgleich ohne Einzelanfrage (§ 69 SGB X, ggf. landesrechtliche
-  Regelung oder Vereinbarung zwischen Träger und Kommune) sowie eine Datenschutz-Folgenabschätzung
-  nach Art. 35 DSGVO,
-- Betrieb im Behördennetz mit TLS und Anbindung an die Fachverfahren (z. B. ALLEGRO bei den
-  Jobcentern, die Wohngeld-Software der Kommune), statt die Daten von Hand zu melden,
-- langfristig ein XÖV-konformes Nachrichtenformat und Abstimmung mit BA, Land und IT-Dienstleister.
+```bash
+python -m leistungsabgleich schluessel     # je Behörde: Schlüssel an die Behörde, Hash in behoerden.json
+python -m leistungsabgleich serve --db abgleich.db --konfig behoerden.json \
+       --zertifikat cert.pem --zertifikat-schluessel key.pem
+python -m leistungsabgleich aufraeumen --db abgleich.db   # Löschfristen, z. B. nächtlich
+```
+
+Format von `behoerden.json` und alle Endpunkte stehen in `leistungsabgleich/__main__.py` und
+`leistungsabgleich/api.py`. Die Fachverfahren melden per `PUT /faelle` den vollständigen Stand
+eines Falls mit Monatsbeträgen in Cent (Anspruch und an den Bürger gezahlt). Die Antwort
+enthält sofort die Liste `einbehalten`.
+
+**Datenschutz:** keine Namen im Register, nur HMAC-Pseudonyme (Schlüssel nur bei den
+Behörden); Abfragen nur über eigene Aktenzeichen; Protokoll aller Zugriffe inklusive
+abgelehnter; API-Schlüssel nur als Hash gespeichert; Löschfristen per `aufraeumen`.
+
+**Ehrlich: Was vor einem echten Einsatz fehlt.** Das ist ein Prototyp zum Zeigen und
+Diskutieren, nicht mit echten Sozialdaten betreiben. Es fehlen: Prüfung der Rechtsgrundlagen
+und der Rechenregel durch die Fachaufsicht, Datenschutz-Folgenabschätzung (Art. 35 DSGVO),
+Anbindung an die Fachverfahren (z. B. ALLEGRO, kommunale Wohngeld-Software) statt Meldung
+per Hand, Betrieb im Behördennetz sowie langfristig ein XÖV-konformes Nachrichtenformat.
