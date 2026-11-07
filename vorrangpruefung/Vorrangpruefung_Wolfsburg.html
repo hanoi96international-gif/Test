@@ -996,6 +996,15 @@ umgInfoW:"Настоящая попеременная модель: полное
 unbornInfo:"Беременность с 12-й недели: нерождённый ребёнок учитывается для предела аренды."}
 };
 for(const l in UM) Object.assign(I[l], UM[l]);
+const AN = {
+de:{yMinR:"Mindestwert Y nach Anlage 3 WoGG: {a} wird auf {b} angehoben",mMinR:"Mindestwert M nach Anlage 3 WoGG: {a} wird auf {b} angehoben.",lim3:"Rechtsstand 07.11.2026. Im Gesetzgebungsverfahren und noch nicht berücksichtigt: Wohngeldreform ab 2027 (Aussetzen der Erhöhung, Halbierung der Heizkostenkomponente, Mindestbetrag 15 €, geänderte Freibeträge), Wegfall des Sofortzuschlags von 25 € beim Kinderzuschlag und Kindergeld 267 € ab 2027. Nach Verkündung die Parameter anpassen."},
+en:{yMinR:"Minimum Y under Annex 3 WoGG: {a} is raised to {b}",mMinR:"Minimum M under Annex 3 WoGG: {a} is raised to {b}.",lim3:"Legal status 7 Nov 2026. In the legislative process and not yet included: housing benefit reform from 2027 (no increase, heating component halved, minimum amount 15 €, changed allowances), removal of the 25 € immediate supplement in the child supplement and child benefit of 267 € from 2027. Adjust the parameters once enacted."},
+tr:{yMinR:"Anlage 3 WoGG'ye göre asgari Y: {a}, {b} tutarına yükseltilir",mMinR:"Anlage 3 WoGG'ye göre asgari M: {a}, {b} tutarına yükseltilir.",lim3:"Hukuki durum 07.11.2026. Yasama sürecinde olup henüz dahil edilmeyenler: 2027'den itibaren konut yardımı reformu (artışın askıya alınması, ısınma bileşeninin yarıya indirilmesi, asgari tutar 15 €, değişen muafiyetler), çocuk ek ödeneğinde 25 €'luk anlık ekin kaldırılması ve 2027'den itibaren 267 € çocuk parası. Yürürlüğe girince parametreleri güncelleyin."},
+ar:{yMinR:"الحد الأدنى لـ Y وفق Anlage 3 WoGG: يُرفع {a} إلى {b}",mMinR:"الحد الأدنى لـ M وفق Anlage 3 WoGG: يُرفع {a} إلى {b}.",lim3:"الوضع القانوني 07.11.2026. قيد الإجراءات التشريعية ولم تُدرج بعد: إصلاح بدل السكن من 2027 (تعليق الزيادة، تخفيض عنصر التدفئة إلى النصف، حد أدنى 15 €، تغيير الإعفاءات)، وإلغاء الإضافة الفورية البالغة 25 € في إعانة الأطفال الإضافية، وإعانة الطفل 267 € من 2027. عدّل المعايير بعد صدورها."},
+uk:{yMinR:"Мінімальне Y за Anlage 3 WoGG: {a} підвищується до {b}",mMinR:"Мінімальне M за Anlage 3 WoGG: {a} підвищується до {b}.",lim3:"Правовий стан 07.11.2026. У законодавчому процесі й ще не враховано: реформа житлової допомоги з 2027 року (призупинення підвищення, зменшення компонента опалення вдвічі, мінімальна сума 15 €, змінені пільги), скасування негайної надбавки 25 € у доплаті на дитину та Kindergeld 267 € з 2027 року. Після ухвалення оновіть параметри."},
+ru:{yMinR:"Минимальное Y по Anlage 3 WoGG: {a} повышается до {b}",mMinR:"Минимальное M по Anlage 3 WoGG: {a} повышается до {b}.",lim3:"Правовое состояние 07.11.2026. В законодательном процессе и ещё не учтено: реформа жилищного пособия с 2027 года (приостановка повышения, уменьшение компонента отопления вдвое, минимальная сумма 15 €, изменённые льготы), отмена немедленной надбавки 25 € в детской надбавке и Kindergeld 267 € с 2027 года. После принятия обновите параметры."}
+};
+for(const l in AN) Object.assign(I[l], AN[l]);
 let L = "de";
 try{ const s = localStorage.getItem("vp-wob-lang"); if(s && I[s]) L = s; }catch(e){}
 function t(k, v){
@@ -1026,7 +1035,7 @@ const DEFAULTS = {
       a:[4.000e-2,3.000e-2,2.000e-2,1.000e-2,0,-1.000e-2,-2.000e-2,-3.000e-2,-4.000e-2,-6.000e-2,-9.000e-2,-1.200e-1],
       b:[4.797e-4,3.571e-4,2.917e-4,2.163e-4,1.907e-4,1.722e-4,1.592e-4,1.583e-4,1.376e-4,1.249e-4,1.141e-4,1.107e-4],
       c:[4.080e-5,3.040e-5,2.450e-5,1.760e-5,1.720e-5,1.660e-5,1.650e-5,1.650e-5,1.660e-5,1.660e-5,1.960e-5,2.210e-5],
-      wk:1230, aeFrei:1320, min:10},
+      wk:1230, aeFrei:1320, min:10, mMin:[54,67,79,92,103,103], yMin:[396,679,906,1132,1358,1585]},
   kiz:{max:297, minPaar:900, minAE:600, quote:0.45, ae:[77,63,53,46,41], paar:[83,71,62,55,50]},
   sv:{mindest:1318.33, kv:14.0, zb:2.9, pv:3.6, pvAb:0.25, pvKl:0.6, minijob:603, gez:18.36},
   mb:{schw:17, g:17, ww:[2.3,1.4,1.2,0.8]},
@@ -1039,7 +1048,7 @@ const DEFAULTS = {
 const clone = o => JSON.parse(JSON.stringify(o));
 function deepMerge(tg,s){ for(const k in s){ if(s[k] && typeof s[k]==="object" && !Array.isArray(s[k])) tg[k]=deepMerge(tg[k]||{},s[k]); else tg[k]=s[k]; } return tg; }
 let P = clone(DEFAULTS);
-try{ const s = localStorage.getItem("vp-wob-params3"); if(s) P = deepMerge(clone(DEFAULTS), JSON.parse(s)); }catch(e){}
+try{ const s = localStorage.getItem("vp-wob-params4"); if(s) P = deepMerge(clone(DEFAULTS), JSON.parse(s)); }catch(e){}
 const getP = (o,p)=>p.split(".").reduce((x,k)=>x==null?x:x[k],o);
 const setP = (o,p,v)=>{ const ks=p.split("."), last=ks.pop(); ks.reduce((x,k)=>x[k],o)[last]=v; };
 
@@ -1063,9 +1072,11 @@ const GROUPS = [
   {t:"Wohngeld – Höchstbeträge Mietstufe IV", src:"Anlage 1 WoGG ab 01.01.2025; Wolfsburg = Mietstufe IV.", items:PERS.map((p,i)=>["wg.hb."+i,p]).concat([["wg.hbPlus","je weitere Person"]])},
   {t:"Wohngeld – Klima- und Heizkostenkomponente", src:"§ 12 WoGG (Richtflächen 48/62/74/86/98 m², +12 m²).", items:
     PERS.map((p,i)=>["wg.klima."+i,"Klima "+p]).concat([["wg.klimaPlus","Klima je weitere"]],PERS.map((p,i)=>["wg.hke."+i,"Heizkostenentlastung "+p]),[["wg.hkePlus","Entlastung je weitere"]],PERS.map((p,i)=>["wg.hkk."+i,"Heizkostenkomponente "+p]),[["wg.hkkPlus","Komponente je weitere"]])},
-  {t:"Wohngeld – Einkommen", src:"§§ 14–17a WoGG, § 9a EStG", warn:"Freibetrag Alleinerziehende (§ 17 WoGG) vereinfacht je Kind unter 18 – bitte prüfen.", items:[
-    ["wg.wk","Werbungskosten-Pauschbetrag Arbeit €/Jahr"],["wgx.renteWk","Werbungskosten-Pauschbetrag Rente €/Jahr"],["wgx.rentePa","Pauschalabzug Rente (KV/PV)"],["wg.aeFrei","Freibetrag Alleinerziehende €/Jahr je Kind"],["wgx.sb","Freibetrag GdB 100 / Pflege €/Jahr"],["wg.min","Mindestbetrag Wohngeld (§ 21 WoGG) €"]]},
+  {t:"Wohngeld – Einkommen", src:"§§ 14–17a WoGG, § 9a EStG", warn:"Reform ab 2027 im Gesetzgebungsverfahren (u. a. Freibeträge, Heizkostenkomponente, Mindestbetrag 15 €) – noch nicht berücksichtigt.", items:[
+    ["wg.wk","Werbungskosten-Pauschbetrag Arbeit €/Jahr"],["wgx.renteWk","Werbungskosten-Pauschbetrag Rente €/Jahr"],["wgx.rentePa","Pauschalabzug Rente (KV/PV)"],["wg.aeFrei","Freibetrag Alleinerziehende €/Jahr (einmal je Haushalt, mind. 1 Kind unter 18)"],["wgx.sb","Freibetrag GdB 100 / Pflege €/Jahr"],["wg.min","Mindestbetrag Wohngeld (§ 21 WoGG) €"]]},
   {t:"Wohngeldformel – Werte a, b, c", src:"Anlage 2 WoGG ab 01.01.2025. 1,15 · (M − (a + b·M + c·Y) · Y)", abc:true},
+  {t:"Wohngeld – Mindestwerte für M und Y", src:"Anlage 3 Nr. 1 WoGG ab 01.01.2025 (Werte unterhalb werden durch diese ersetzt); ab 6 Personen gleicher Wert.", items:
+    [1,2,3,4,5,6].map((k,i)=>["wg.mMin."+i,"M mindestens, "+k+(k===6?"+":"")+" Pers. €"]).concat([1,2,3,4,5,6].map((k,i)=>["wg.yMin."+i,"Y mindestens, "+k+(k===6?"+":"")+" Pers. €"]))},
   {t:"Kranken-/Pflegeversicherung und Rundfunkbeitrag 2026", src:"§ 240 Abs. 4 SGB V (1/90 der Bezugsgröße 3.955 € × 30), durchschnittlicher Zusatzbeitrag 2026, § 55 SGB XI, RBStV.", warn:"Zusatzbeitrag je Krankenkasse unterschiedlich.", items:[
     ["sv.mindest","Mindestbemessungsgrundlage €/Monat"],["sv.kv","KV-Satz ermäßigt (ohne Krankengeld) %"],["sv.zb","Zusatzbeitrag Durchschnitt %"],["sv.pv","PV-Satz %"],["sv.pvAb","PV-Abschlag je Kind ab 2. Kind %-Punkte"],["sv.pvKl","PV-Zuschlag Kinderlose %-Punkte"],["sv.minijob","Minijob-Grenze €/Monat"],["sv.gez","Rundfunkbeitrag €/Monat"]]},
   {t:"Kinderzuschlag", src:"§ 6a BKGG; Merkblatt Kinderzuschlag (BA).", warn:"Wohnkostenanteile aus KiZ-Rechnern (Existenzminimumbericht), 5+ Kinder geschätzt – gegen DA-KiZ prüfen.",
@@ -1211,15 +1222,17 @@ function wohngeld(G,H,VL){
     if(a.sb){ frei+=P.wgx.sb; rows.push([t("wgSb",{n:i+1}),"","",-P.wgx.sb]); }
   });
   G.kids.forEach((k,i)=>{ if(k.uh>0){ const j=k.uh*12; jahr+=j; rows.push([t("maintY",{n:i+1}),j,0,j]); } });
-  if(G.ae){ const f=G.kids.filter(k=>k.age<18).length*P.wg.aeFrei; if(f>0){ frei+=f; rows.push([t("aeY"),"","",-f]); } }
-  const Y = Math.max(0,jahr-frei)/12;
+  if(G.ae && G.kids.some(k=>k.age<18)){ const f=P.wg.aeFrei; frei+=f; rows.push([t("aeY"),"","",-f]); }   /* § 17 Nr. 3 WoGG: einmal je Haushalt */
+  const Yroh = Math.max(0,jahr-frei)/12, Mroh = M;
+  const mi6=Math.min(n,6)-1, Ymin=P.wg.yMin[mi6], Mmin=P.wg.mMin[mi6];   /* Anlage 3 Nr. 1 WoGG */
+  const Y = Math.max(Yroh, Ymin), Mx = Math.max(Mroh, Mmin);
   const idx=Math.min(n,12)-1, a=P.wg.a[idx], b=P.wg.b[idx], c=P.wg.c[idx];
-  const raw = 1.15*(M-(a+b*M+c*Y)*Y);
-  let wg = Math.round(Math.max(0,Math.min(raw,M)));
+  const raw = 1.15*(Mx-(a+b*Mx+c*Y)*Y);
+  let wg = Math.round(Math.max(0,Math.min(raw,Mx)));
   const unterMin = wg>0 && wg<P.wg.min; if(wg<P.wg.min) wg=0;
   const vermEx = H.verm > VL.wg, asyl = G.regime==="asyl";
   if(vermEx || asyl) wg = 0;
-  return {wg,raw,M,mRent,cap,hb,kl,hke,hkk,Y,rows,a,b,c,pa,unterMin,vermEx,asyl,n,nT,share,umgWg};
+  return {wg,raw,M:Mx,Mroh,mRent,cap,hb,kl,hke,hkk,Y,Yroh,Ymin,Mmin,rows,a,b,c,pa,unterMin,vermEx,asyl,n,nT,share,umgWg};
 }
 function kinderzuschlag(G,H,kv,VL){
   const r = {kiz:0, perChild:G.kids.map(()=>0), reason:"", st:null};
@@ -1248,7 +1261,8 @@ function kinderWG(G,H,VL){
   const mAll=Math.min(H.mi,hb+kl)+hke+hkk;
   let set=G.kids.map((k,i)=>i).filter(i=>G.kids[i].uh>0);
   for(let it=0; it<6 && set.length; it++){
-    const k=set.length, M=mAll*k/nT, Y=set.reduce((s,i)=>s+G.kids[i].uh,0);
+    const k=set.length, mi6=Math.min(k,6)-1;
+    const M=Math.max(mAll*k/nT, P.wg.mMin[mi6]), Y=Math.max(set.reduce((s,i)=>s+G.kids[i].uh,0), P.wg.yMin[mi6]);   /* Anlage 3 WoGG */
     const idx=Math.min(k,12)-1, a=P.wg.a[idx], b=P.wg.b[idx], c=P.wg.c[idx];
     let wg=Math.round(Math.max(0,Math.min(1.15*(M-(a+b*M+c*Y)*Y),M))); if(wg<P.wg.min) wg=0;
     const per=wg/k;
@@ -1356,7 +1370,7 @@ function applyStatic(){
   const root = document.documentElement;
   root.lang = L; root.dir = L==="ar" ? "rtl" : "ltr";
   document.querySelectorAll("[data-i18n]").forEach(el=>{ el.textContent = t(el.dataset.i18n); });
-  $("limits").innerHTML = t("lim").concat(t("lim2")).map(x=>"<li>"+esc(x)+"</li>").join("");
+  $("limits").innerHTML = t("lim").concat(t("lim2"),[t("lim3")]).map(x=>"<li>"+esc(x)+"</li>").join("");
   $("paramsDe").textContent = t("paramsDe"); $("paramsDe").hidden = !t("paramsDe");
 }
 function renderSteps(){
@@ -1605,7 +1619,8 @@ function renderWeg(R){
   h+='<p class="hint">'+esc(t("kopf",{a:eur(G.kopf)}))+'</p>';
   h+='<h3>'+esc(t("rw2",{n:G.n}))+'</h3>';
   h+=tbl([t("colM"),t("colEur")],[[t("hbR",{a:eur(W.hb),b:eur(W.kl)}),W.cap],[t("capR"),W.mRent],[t("hkeR"),W.hke],[t("hkkR"),W.hkk]].concat(W.share<1?[[t("shareR",{p:pct(W.share)}),-(W.mRent+W.hke+W.hkk)*(1-W.share)]]:[]),["M",W.M]);
-  h+=tbl([t("colY"),t("colGross"),t("colWk"),t("colAfter")],W.rows,[t("yR",{p:pct(W.pa)}),"","",W.Y]);
+  h+=tbl([t("colY"),t("colGross"),t("colWk"),t("colAfter")],W.rows.concat(W.Yroh<W.Ymin?[[t("yMinR",{a:eur(W.Yroh),b:eur(W.Ymin)}),"","",W.Ymin-W.Yroh]]:[]),[t("yR",{p:pct(W.pa)}),"","",W.Y]);
+  if(W.Mroh<W.Mmin) h+='<p class="hint">'+esc(t("mMinR",{a:eur(W.Mroh),b:eur(W.Mmin)}))+'</p>';
   h+='<div class="formula">1,15 · ('+W.M.toFixed(2)+' − ('+W.a+' + '+W.b+'·'+W.M.toFixed(2)+' + '+W.c+'·'+W.Y.toFixed(2)+') · '+W.Y.toFixed(2)+') = '+W.raw.toFixed(2)+' → <b>'+eur(W.wg)+'</b>'+(W.unterMin?' ('+esc(t("rBelow"))+')':'')+(W.vermEx?' – '+esc(t("vWgVerm",{c:eur(VL.wg)})):'')+'</div>';
   if(famEff(S)){
     h+='<h3>'+esc(t("rw3"))+'</h3>';
@@ -1639,11 +1654,11 @@ function renderParams(){
   box.querySelectorAll("input[data-p]").forEach(inp=>inp.addEventListener("change",()=>{
     const p=inp.dataset.p, v=num(inp.value); setP(P,p,v);
     inp.parentElement.classList.toggle("ch", v!==getP(DEFAULTS,p));
-    try{ localStorage.setItem("vp-wob-params3",JSON.stringify(P)); }catch(e){}
+    try{ localStorage.setItem("vp-wob-params4",JSON.stringify(P)); }catch(e){}
     update();
   }));
 }
-$("resetP").addEventListener("click",()=>{ P=clone(DEFAULTS); try{ localStorage.removeItem("vp-wob-params3"); }catch(e){} renderParams(); update(); });
+$("resetP").addEventListener("click",()=>{ P=clone(DEFAULTS); try{ localStorage.removeItem("vp-wob-params4"); }catch(e){} renderParams(); update(); });
 $("copyP").addEventListener("click",()=>{
   const txt=JSON.stringify(P,null,2);
   const fb=()=>{ const ta=$("copyBox"); ta.hidden=false; ta.value=txt; ta.select(); $("copyMsg").textContent=t("selectCopy"); };
