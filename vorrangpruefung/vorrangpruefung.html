@@ -8,7 +8,7 @@
   --bg:#f2f5f7; --surface:#ffffff; --surface-2:#eaf0f3; --line:#d3dde3;
   --fg:#10232c; --muted:#587078; --ink:#0d3b4a; --ink-2:#14566a; --on-ink:#f2fafc; --on-ink-muted:#a9cbd5;
   --accent:#0f6e7f; --accent-soft:#dbeef2; --gold:#e7a525; --gold-soft:#fbf0d7;
-  --ok:#1f8a4c; --ok-soft:#e0f3e8; --bad:#c2413a; --bad-soft:#f9e4e2;
+  --ok:#1f8a4c; --ok-soft:#e0f3e8; --kv:#7b5cd6; --kv-soft:#ece6fb; --bad:#c2413a; --bad-soft:#f9e4e2;
   --font-body:"Manrope","Noto Sans Arabic",system-ui,-apple-system,"Segoe UI",sans-serif;
   --font-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
   --r:14px; --shadow:0 1px 2px rgba(13,59,74,.06),0 8px 24px rgba(13,59,74,.07);
@@ -17,12 +17,12 @@
   --bg:#0c171c; --surface:#13222a; --surface-2:#1a2d36; --line:#29404b;
   --fg:#e4eef2; --muted:#93abb4; --ink:#0a2a35; --ink-2:#0f3a48; --on-ink:#eef8fb; --on-ink-muted:#9cc2cd;
   --accent:#4cc3d4; --accent-soft:#163b44; --gold:#f5c25a; --gold-soft:#3b2f15;
-  --ok:#5bd28c; --ok-soft:#173426; --bad:#ff8a80; --bad-soft:#3f1f1d; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark}}
+  --ok:#5bd28c; --ok-soft:#173426; --kv:#b9a2ff; --kv-soft:#2a2342; --bad:#ff8a80; --bad-soft:#3f1f1d; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0c171c; --surface:#13222a; --surface-2:#1a2d36; --line:#29404b;
   --fg:#e4eef2; --muted:#93abb4; --ink:#0a2a35; --ink-2:#0f3a48; --on-ink:#eef8fb; --on-ink-muted:#9cc2cd;
   --accent:#4cc3d4; --accent-soft:#163b44; --gold:#f5c25a; --gold-soft:#3b2f15;
-  --ok:#5bd28c; --ok-soft:#173426; --bad:#ff8a80; --bad-soft:#3f1f1d; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark}
+  --ok:#5bd28c; --ok-soft:#173426; --kv:#b9a2ff; --kv-soft:#2a2342; --bad:#ff8a80; --bad-soft:#3f1f1d; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:16px;line-height:1.55;margin:0}
@@ -112,8 +112,7 @@ select.sel{border:1px solid var(--line);border-radius:10px;background:var(--surf
 .verdict.ok{background:var(--ok-soft);border-color:var(--ok)} .verdict.ok svg{color:var(--ok)}
 .verdict.warn{background:var(--gold-soft);border-color:var(--gold)} .verdict.warn svg{color:var(--gold)}
 .verdict.bad{background:var(--bad-soft);border-color:var(--bad)} .verdict.bad svg{color:var(--bad)}
-.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-@media (max-width:480px){.kpis{grid-template-columns:minmax(0,1fr)}}
+.kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .kpi{border-radius:12px;padding:12px 14px;background:var(--surface-2);display:flex;flex-direction:column;gap:2px;min-width:0}
 .kpi span{font-size:.78rem;color:var(--muted);font-weight:600}
 .kpi b{font-size:1.35rem;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
@@ -135,6 +134,19 @@ select.sel{border:1px solid var(--line);border-radius:10px;background:var(--surf
 .amt{font-variant-numeric:tabular-nums;color:var(--muted);font-size:.82rem}
 .budget{font-size:.88rem;color:var(--muted);margin:0;padding-top:4px;border-top:1px solid var(--line)}
 .budget b{color:var(--fg);font-variant-numeric:tabular-nums}
+
+.seg-zus{background:var(--kv)}
+.pill.zus{background:var(--kv-soft);color:var(--kv)}
+.kpi.kv b{color:var(--kv)}
+.budgetbox{display:flex;flex-direction:column;gap:8px;padding-top:14px;border-top:1px solid var(--line)}
+.budgetbox h3{margin:0;font-size:.95rem}
+.brow{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.brow b{font-variant-numeric:tabular-nums;font-size:1.05rem;white-space:nowrap}
+.brow small{display:block;color:var(--muted);font-size:.78rem}
+.brow.diff{border-top:1px dashed var(--line);padding-top:8px}
+.brow.diff b.pos{color:var(--ok)} .brow.diff b.neg{color:var(--bad)}
+.warnchip{font-size:.82rem;background:var(--gold-soft);border-inline-start:4px solid var(--gold);padding:7px 10px;border-radius:8px;margin:0}
+.kvsel{font-size:.88rem;padding:9px 10px}
 
 /* Akkordeons */
 details{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
@@ -192,6 +204,7 @@ footer{font-size:.8rem;color:var(--muted)}
             <div><b data-i18n="single"></b><span data-i18n="singleD"></span></div>
           </button>
         </div>
+        <label class="toggle" id="verhRow"><input type="checkbox" id="verh"><span data-i18n="married"></span></label>
         <p class="sub" data-i18n="kids"></p>
         <div class="kids" id="kids"></div>
         <button type="button" class="add" id="addKid"><span aria-hidden="true">＋</span><span data-i18n="addKid"></span></button>
@@ -205,6 +218,7 @@ footer{font-size:.8rem;color:var(--muted)}
             <label class="f"><span data-i18n="gross"></span><div class="money"><input id="b1" type="number" inputmode="decimal" min="0" step="any"><span>€</span></div></label>
             <label class="f"><span data-i18n="net"></span><div class="money"><input id="n1" type="number" inputmode="decimal" min="0" step="any"><span>€</span></div></label>
           </div>
+          <label class="f"><span data-i18n="kvLabel"></span><select class="sel kvsel" id="kv1"><option value="auto"></option><option value="job" data-i18n="kvJob"></option><option value="fam" data-i18n="kvFam"></option><option value="leist" data-i18n="kvLeist"></option><option value="frei" data-i18n="kvFrei"></option></select></label>
         </div>
         <div class="person" id="p2">
           <h4 data-i18n-adult="2"></h4>
@@ -212,8 +226,10 @@ footer{font-size:.8rem;color:var(--muted)}
             <label class="f"><span data-i18n="gross"></span><div class="money"><input id="b2" type="number" inputmode="decimal" min="0" step="any"><span>€</span></div></label>
             <label class="f"><span data-i18n="net"></span><div class="money"><input id="n2" type="number" inputmode="decimal" min="0" step="any"><span>€</span></div></label>
           </div>
+          <label class="f"><span data-i18n="kvLabel"></span><select class="sel kvsel" id="kv2"><option value="auto"></option><option value="job" data-i18n="kvJob"></option><option value="fam" data-i18n="kvFam"></option><option value="leist" data-i18n="kvLeist"></option><option value="frei" data-i18n="kvFrei"></option></select></label>
         </div>
         <p class="hint" data-i18n="grossHint"></p>
+        <p class="warnchip" data-i18n="kvHint"></p>
         <label class="f"><span data-i18n="job"></span>
           <select class="sel" id="pa">
             <option value="0.3" data-i18n="job3"></option>
@@ -231,6 +247,11 @@ footer{font-size:.8rem;color:var(--muted)}
           <label class="f"><span data-i18n="heat"></span><div class="money"><input id="hz" type="number" inputmode="decimal" min="0" step="any"><span>€</span></div></label>
         </div>
         <p class="hint" data-i18n="rentHint"></p>
+        <div class="person">
+          <label class="f"><span id="mogLabel"></span><div class="money"><input id="mog" type="number" inputmode="decimal" min="0" step="any"><span>€</span></div></label>
+          <p class="warnchip" id="mogWarn" data-i18n="mogWarn"></p>
+          <div><button type="button" class="btn ghost" id="mogReset" data-i18n="mogReset"></button></div>
+        </div>
         <label class="toggle"><input type="checkbox" id="ka"><span data-i18n="karenz"></span></label>
       </section>
 
@@ -256,7 +277,8 @@ footer{font-size:.8rem;color:var(--muted)}
           <div class="legend" id="legend"></div></div>
         <div id="vrows" class="bars"></div>
       </div>
-      <p class="budget" id="budget"></p>
+      <div class="budgetbox" id="budget"></div>
+      <p class="hint" data-i18n="gezHint"></p>
     </section>
   </div>
 
@@ -467,6 +489,76 @@ rw4:"4 · Проверка с приоритетными пособиями",col
 lim:["Только предварительная проверка, не решение. Решают Wohngeldstelle и Familienkasse.","Предполагается неизменный доход. § 12a SGB II требует не менее 3 месяцев.","Лимиты аренды Вольфсбурга по состоянию на 2022 год, их нужно обновить. Значения жилищного пособия действуют до 31.12.2026.","Упрощено: только доп. потребность одинокого родителя, без Kinderwohngeld и без выплат на образование и участие; другие доходы здесь уменьшают детскую надбавку на 45 % вместо 100 %.","Все данные остаются в браузере. Ничего не передаётся."],
 footer:"Прототип предложения по улучшению. Не является официальной услугой Федерального агентства по труду или города Вольфсбург."}
 };
+/* Ergänzung: Kranken-/Pflegeversicherung, § 26 SGB II, Rundfunkbeitrag, Mietobergrenze */
+const X = {
+de:{married:"Verheiratet oder eingetragene Lebenspartnerschaft",kvLabel:"Krankenversicherung ohne SGB II",kvAuto:"automatisch: {s}",kvJob:"über eigenen Job versichert",kvFam:"familienversichert über Ehepartner",kvLeist:"über ALG I oder andere Leistung versichert",kvFrei:"muss sich freiwillig versichern",
+kvHint:"Im SGB II zahlt das Jobcenter die Kranken- und Pflegeversicherung. Ohne SGB II müssen sich unverheiratete Partner ohne versicherten Job und Alleinerziehende mit Minijob selbst versichern. Das kostet mindestens rund 270 € im Monat.",
+sJob:"pflichtversichert über Job",sFam:"familienversichert",sLeist:"über Leistung versichert",sFrei:"freiwillig, {a} im Monat",
+mog:"Mietobergrenze laut Richtlinie Wolfsburg ({n} Personen)",mogWarn:"Der hinterlegte Wert ist nicht aktuell (Stand 2022). Bitte den gültigen Wert aus der Richtlinie eintragen.",mogReset:"Tabellenwert verwenden",
+kKv:"KV/PV ohne SGB II",legZus:"Zuschuss KV/PV",pZus:"reicht mit KV/PV-Zuschuss",
+vZusH:"{v} und Zuschuss zur KV/PV beantragen",vZusT:"Ohne SGB II wäre der Haushalt nur wegen der Beiträge zur Kranken- und Pflegeversicherung ({a}) hilfebedürftig. Das Jobcenter zahlt dann nur einen Zuschuss von {b} nach § 26 SGB II statt Bürgergeld.",
+budgetH:"Was bleibt im Monat?",bSgb:"Mit SGB II",bVor:"Mit {wg} + {kiz}",bVorSub:"nach {kv} KV/PV und {gez} Rundfunkbeitrag",bVorZus:"inkl. {z} Zuschuss KV/PV",bDiff:"Unterschied",
+gezHint:"Im SGB II ist man vom Rundfunkbeitrag befreit, bei {wg} oder {kiz} nicht. Eine Härtefall-Befreiung ist möglich (§ 4 Abs. 6 RBStV).",
+rw5:"5 · Kosten ohne SGB II und Budgetvergleich",colItem:"Posten",bBasis:"Nettoeinkommen, Kindergeld, Unterhalt",bSgbL:"+ SGB II",bBen:"+ {wg} + {kiz}",bKv:"− Kranken-/Pflegeversicherung",bGez:"− Rundfunkbeitrag",bZus:"+ Zuschuss KV/PV (§ 26 SGB II)",bTot:"Verfügbar im Monat",kvP:"Person {n}: {s}",gezRow:"Rundfunkbeitrag",
+kvCalc:"Freiwilliger Beitrag = größerer Wert aus Mindestbemessung {a} und eigenem Brutto × {p} (KV-Satz ohne Krankengeld + durchschnittlicher Zusatzbeitrag + PV).",
+lim2:["Kranken-/Pflegeversicherung: Mindestbeitrag mit durchschnittlichem Zusatzbeitrag 2,9 %. Der Satz der Krankenkasse kann abweichen. Kinderlosenzuschlag ist nicht berücksichtigt.","Rundfunkbeitrag 18,36 €: geht in den Budgetvergleich ein, nicht in die Prüfung der Hilfebedürftigkeit."]},
+en:{married:"Married or registered partnership",kvLabel:"Health insurance without SGB II",kvAuto:"automatic: {s}",kvJob:"insured through own job",kvFam:"family insurance via spouse",kvLeist:"insured via unemployment or other benefit",kvFrei:"must take out voluntary insurance",
+kvHint:"Under SGB II the Jobcenter pays health and long-term care insurance. Without SGB II, unmarried partners without an insured job and single parents with a minijob must insure themselves. This costs at least about 270 € per month.",
+sJob:"insured through job",sFam:"family insurance",sLeist:"insured via benefit",sFrei:"voluntary, {a} per month",
+mog:"Rent limit under Wolfsburg guideline ({n} persons)",mogWarn:"The stored value is out of date (2022). Please enter the current value from the guideline.",mogReset:"Use table value",
+kKv:"Health/care ins. without SGB II",legZus:"insurance subsidy",pZus:"enough with insurance subsidy",
+vZusH:"Apply for {v} plus health/care insurance subsidy",vZusT:"Without SGB II the household would be in need only because of health and care insurance contributions ({a}). The Jobcenter then pays only a subsidy of {b} under § 26 SGB II instead of Bürgergeld.",
+budgetH:"What is left each month?",bSgb:"With SGB II",bVor:"With {wg} + {kiz}",bVorSub:"after {kv} health/care insurance and {gez} broadcasting fee",bVorZus:"incl. {z} insurance subsidy",bDiff:"Difference",
+gezHint:"SGB II recipients are exempt from the broadcasting fee (Rundfunkbeitrag); recipients of {wg} or {kiz} are not. A hardship exemption is possible (§ 4 (6) RBStV).",
+rw5:"5 · Costs without SGB II and budget comparison",colItem:"Item",bBasis:"Net income, child benefit, maintenance",bSgbL:"+ SGB II",bBen:"+ {wg} + {kiz}",bKv:"− health/care insurance",bGez:"− broadcasting fee",bZus:"+ insurance subsidy (§ 26 SGB II)",bTot:"Available per month",kvP:"Person {n}: {s}",gezRow:"Broadcasting fee",
+kvCalc:"Voluntary contribution = higher of minimum base {a} and own gross × {p} (health rate without sick pay + average additional rate + care insurance).",
+lim2:["Health/care insurance: minimum contribution with average additional rate of 2.9 %. The fund's actual rate may differ. Childless surcharge not included.","Broadcasting fee 18.36 €: included in the budget comparison, not in the need check."]},
+tr:{married:"Evli veya kayıtlı birliktelik",kvLabel:"SGB II olmadan sağlık sigortası",kvAuto:"otomatik: {s}",kvJob:"kendi işi üzerinden sigortalı",kvFam:"eş üzerinden aile sigortalı",kvLeist:"işsizlik parası veya başka yardım üzerinden sigortalı",kvFrei:"isteğe bağlı sigorta yaptırmalı",
+kvHint:"SGB II'de sağlık ve bakım sigortasını Jobcenter öder. SGB II olmadan, sigortalı işi olmayan evli olmayan partnerler ve minijob yapan tek ebeveynler kendilerini sigortalatmak zorundadır. Bu ayda en az yaklaşık 270 € tutar.",
+sJob:"iş üzerinden zorunlu sigortalı",sFam:"aile sigortalı",sLeist:"yardım üzerinden sigortalı",sFrei:"isteğe bağlı, ayda {a}",
+mog:"Wolfsburg yönergesine göre kira üst sınırı ({n} kişi)",mogWarn:"Kayıtlı değer güncel değil (2022). Lütfen yönergedeki geçerli değeri girin.",mogReset:"Tablo değerini kullan",
+kKv:"SGB II olmadan sağlık/bakım sig.",legZus:"sigorta desteği",pZus:"sigorta desteğiyle yeterli",
+vZusH:"{v} ve sağlık/bakım sigortası desteği için başvurun",vZusT:"SGB II olmadan hane yalnızca sağlık ve bakım sigortası primleri ({a}) nedeniyle muhtaç olurdu. Bu durumda Jobcenter, Bürgergeld yerine § 26 SGB II'ye göre yalnızca {b} destek öder.",
+budgetH:"Ayda ne kalıyor?",bSgb:"SGB II ile",bVor:"{wg} + {kiz} ile",bVorSub:"{kv} sağlık/bakım sigortası ve {gez} yayın ücreti sonrası",bVorZus:"{z} sigorta desteği dahil",bDiff:"Fark",
+gezHint:"SGB II alanlar yayın ücretinden (Rundfunkbeitrag) muaftır; {wg} veya {kiz} alanlar değildir. Zor durum muafiyeti mümkündür (§ 4 Abs. 6 RBStV).",
+rw5:"5 · SGB II olmadan giderler ve bütçe karşılaştırması",colItem:"Kalem",bBasis:"Net gelir, çocuk parası, nafaka",bSgbL:"+ SGB II",bBen:"+ {wg} + {kiz}",bKv:"− sağlık/bakım sigortası",bGez:"− yayın ücreti",bZus:"+ sigorta desteği (§ 26 SGB II)",bTot:"Aylık kullanılabilir",kvP:"Kişi {n}: {s}",gezRow:"Yayın ücreti",
+kvCalc:"İsteğe bağlı prim = asgari matrah {a} ile kendi brüt gelirinden büyük olanı × {p}.",
+lim2:["Sağlık/bakım sigortası: ortalama %2,9 ek primle asgari prim. Kasanın gerçek oranı farklı olabilir. Çocuksuzluk ek primi dahil değil.","Yayın ücreti 18,36 €: bütçe karşılaştırmasına dahildir, muhtaçlık kontrolüne değil."]},
+ar:{married:"متزوجان أو شراكة مسجلة",kvLabel:"التأمين الصحي بدون SGB II",kvAuto:"تلقائي: {s}",kvJob:"مؤمَّن عبر عمله",kvFam:"تأمين عائلي عبر الزوج/الزوجة",kvLeist:"مؤمَّن عبر إعانة البطالة أو إعانة أخرى",kvFrei:"يجب التأمين الاختياري",
+kvHint:"في SGB II يدفع مركز العمل (Jobcenter) التأمين الصحي وتأمين الرعاية. بدون SGB II يجب على الشريك غير المتزوج بدون عمل مؤمَّن وعلى الوالد المنفرد الذي يعمل Minijob أن يؤمّن نفسه. التكلفة حوالي 270 € شهريًا على الأقل.",
+sJob:"مؤمَّن إلزاميًا عبر العمل",sFam:"تأمين عائلي",sLeist:"مؤمَّن عبر إعانة",sFrei:"اختياري، {a} شهريًا",
+mog:"الحد الأعلى للإيجار حسب لائحة فولفسبورغ ({n} أفراد)",mogWarn:"القيمة المخزنة غير محدثة (2022). يرجى إدخال القيمة السارية من اللائحة.",mogReset:"استخدام قيمة الجدول",
+kKv:"التأمين الصحي بدون SGB II",legZus:"دعم التأمين",pZus:"كافٍ مع دعم التأمين",
+vZusH:"قدّم طلب {v} ودعم التأمين الصحي وتأمين الرعاية",vZusT:"بدون SGB II ستكون الأسرة بحاجة فقط بسبب اشتراكات التأمين الصحي وتأمين الرعاية ({a}). عندها يدفع Jobcenter دعمًا قدره {b} فقط وفق § 26 SGB II بدلًا من Bürgergeld.",
+budgetH:"ماذا يتبقى شهريًا؟",bSgb:"مع SGB II",bVor:"مع {wg} + {kiz}",bVorSub:"بعد {kv} للتأمين الصحي و{gez} لرسوم البث",bVorZus:"بما في ذلك {z} دعم التأمين",bDiff:"الفرق",
+gezHint:"متلقو SGB II معفون من رسوم البث (Rundfunkbeitrag)، أما متلقو {wg} أو {kiz} فلا. الإعفاء في حالات الضرورة ممكن (§ 4 Abs. 6 RBStV).",
+rw5:"5 · التكاليف بدون SGB II ومقارنة الميزانية",colItem:"البند",bBasis:"صافي الدخل، إعانة الطفل، النفقة",bSgbL:"+ SGB II",bBen:"+ {wg} + {kiz}",bKv:"− التأمين الصحي وتأمين الرعاية",bGez:"− رسوم البث",bZus:"+ دعم التأمين (§ 26 SGB II)",bTot:"المتاح شهريًا",kvP:"الشخص {n}: {s}",gezRow:"رسوم البث",
+kvCalc:"الاشتراك الاختياري = الأعلى بين الحد الأدنى للأساس {a} والدخل الإجمالي الخاص × {p}.",
+lim2:["التأمين الصحي: الحد الأدنى للاشتراك مع متوسط اشتراك إضافي 2.9 %. قد تختلف نسبة الصندوق الفعلية. لا تُحتسب علاوة عدم الإنجاب.","رسوم البث 18.36 €: تدخل في مقارنة الميزانية وليس في فحص الحاجة."]},
+uk:{married:"У шлюбі або зареєстроване партнерство",kvLabel:"Медичне страхування без SGB II",kvAuto:"автоматично: {s}",kvJob:"застрахований через власну роботу",kvFam:"сімейне страхування через чоловіка/дружину",kvLeist:"застрахований через допомогу з безробіття чи іншу виплату",kvFrei:"має застрахуватися добровільно",
+kvHint:"У SGB II медичне страхування і страхування догляду оплачує Jobcenter. Без SGB II неодружені партнери без застрахованої роботи та одинокі батьки з Minijob мають страхуватися самі. Це коштує щонайменше близько 270 € на місяць.",
+sJob:"обов'язково застрахований через роботу",sFam:"сімейне страхування",sLeist:"застрахований через виплату",sFrei:"добровільно, {a} на місяць",
+mog:"Межа оренди за директивою Вольфсбурга ({n} осіб)",mogWarn:"Збережене значення застаріле (2022). Введіть чинне значення з директиви.",mogReset:"Використати значення з таблиці",
+kKv:"Мед./догл. страхування без SGB II",legZus:"доплата на страхування",pZus:"достатньо з доплатою на страхування",
+vZusH:"Подайте заяву на {v} і доплату на медичне страхування",vZusT:"Без SGB II домогосподарство потребувало б допомоги лише через внески на медичне страхування і страхування догляду ({a}). Тоді Jobcenter платить лише доплату {b} за § 26 SGB II замість Bürgergeld.",
+budgetH:"Що залишається щомісяця?",bSgb:"Із SGB II",bVor:"Із {wg} + {kiz}",bVorSub:"після {kv} на страхування та {gez} радіозбору",bVorZus:"включно з доплатою {z}",bDiff:"Різниця",
+gezHint:"Отримувачі SGB II звільнені від радіозбору (Rundfunkbeitrag), отримувачі {wg} або {kiz} – ні. Можливе звільнення у скрутних випадках (§ 4 Abs. 6 RBStV).",
+rw5:"5 · Витрати без SGB II та порівняння бюджету",colItem:"Стаття",bBasis:"Чистий дохід, Kindergeld, аліменти",bSgbL:"+ SGB II",bBen:"+ {wg} + {kiz}",bKv:"− медичне страхування і страхування догляду",bGez:"− радіозбір",bZus:"+ доплата на страхування (§ 26 SGB II)",bTot:"Доступно на місяць",kvP:"Особа {n}: {s}",gezRow:"Радіозбір",
+kvCalc:"Добровільний внесок = більше з мінімальної бази {a} та власного брутто × {p}.",
+lim2:["Медичне страхування: мінімальний внесок із середнім додатковим внеском 2,9 %. Ставка каси може відрізнятися. Надбавка для бездітних не врахована.","Радіозбір 18,36 €: враховано в порівнянні бюджету, не в перевірці потреби."]},
+ru:{married:"В браке или зарегистрированное партнёрство",kvLabel:"Медицинская страховка без SGB II",kvAuto:"автоматически: {s}",kvJob:"застрахован через свою работу",kvFam:"семейная страховка через супруга",kvLeist:"застрахован через пособие по безработице или другую выплату",kvFrei:"должен застраховаться добровольно",
+kvHint:"В SGB II медицинскую страховку и страхование по уходу оплачивает Jobcenter. Без SGB II незарегистрированные партнёры без застрахованной работы и одинокие родители с Minijob должны страховаться сами. Это стоит минимум около 270 € в месяц.",
+sJob:"обязательно застрахован через работу",sFam:"семейная страховка",sLeist:"застрахован через выплату",sFrei:"добровольно, {a} в месяц",
+mog:"Предел аренды по директиве Вольфсбурга ({n} чел.)",mogWarn:"Сохранённое значение устарело (2022). Введите действующее значение из директивы.",mogReset:"Использовать значение из таблицы",
+kKv:"Мед./уход страховка без SGB II",legZus:"доплата на страховку",pZus:"достаточно с доплатой на страховку",
+vZusH:"Подайте заявление на {v} и доплату на медстраховку",vZusT:"Без SGB II домохозяйство нуждалось бы только из-за взносов на медицинское страхование и страхование по уходу ({a}). Тогда Jobcenter платит лишь доплату {b} по § 26 SGB II вместо Bürgergeld.",
+budgetH:"Что остаётся в месяц?",bSgb:"С SGB II",bVor:"С {wg} + {kiz}",bVorSub:"после {kv} на страховку и {gez} радиосбора",bVorZus:"включая доплату {z}",bDiff:"Разница",
+gezHint:"Получатели SGB II освобождены от радиосбора (Rundfunkbeitrag), получатели {wg} или {kiz} – нет. Возможно освобождение в трудных случаях (§ 4 Abs. 6 RBStV).",
+rw5:"5 · Расходы без SGB II и сравнение бюджета",colItem:"Статья",bBasis:"Чистый доход, Kindergeld, алименты",bSgbL:"+ SGB II",bBen:"+ {wg} + {kiz}",bKv:"− медицинское страхование и страхование по уходу",bGez:"− радиосбор",bZus:"+ доплата на страховку (§ 26 SGB II)",bTot:"Доступно в месяц",kvP:"Лицо {n}: {s}",gezRow:"Радиосбор",
+kvCalc:"Добровольный взнос = большее из минимальной базы {a} и собственного брутто × {p}.",
+lim2:["Медстраховка: минимальный взнос со средним дополнительным взносом 2,9 %. Ставка кассы может отличаться. Надбавка для бездетных не учтена.","Радиосбор 18,36 €: учтён в сравнении бюджета, но не в проверке нуждаемости."]}
+};
+for(const l in X) Object.assign(I[l], X[l]);
 let L = "de";
 try{ const s = localStorage.getItem("vp-wob-lang"); if(s && I[s]) L = s; }catch(e){}
 function t(k, v){
@@ -477,7 +569,7 @@ function t(k, v){
 }
 const loc = ()=>LANGS.find(x=>x[0]===L)[2];
 const eur = v => new Intl.NumberFormat(loc(),{style:"currency",currency:"EUR"}).format(Math.round(v*100)/100);
-const pct = v => new Intl.NumberFormat(loc(),{style:"percent",maximumFractionDigits:1}).format(v);
+const pct = v => new Intl.NumberFormat(loc(),{style:"percent",maximumFractionDigits:2}).format(v);
 
 /* ================= Parameter (Stand 07.11.2026) ================= */
 const DEFAULTS = {
@@ -493,7 +585,8 @@ const DEFAULTS = {
       b:[4.797e-4,3.571e-4,2.917e-4,2.163e-4,1.907e-4,1.722e-4,1.592e-4,1.583e-4,1.376e-4,1.249e-4,1.141e-4,1.107e-4],
       c:[4.080e-5,3.040e-5,2.450e-5,1.760e-5,1.720e-5,1.660e-5,1.650e-5,1.650e-5,1.660e-5,1.660e-5,1.960e-5,2.210e-5],
       wk:1230, aeFrei:1320, min:10},
-  kiz:{max:297, minPaar:900, minAE:600, quote:0.45, ae:[77,63,53,46,41], paar:[83,71,62,55,50]}
+  kiz:{max:297, minPaar:900, minAE:600, quote:0.45, ae:[77,63,53,46,41], paar:[83,71,62,55,50]},
+  sv:{mindest:1318.33, kv:14.0, zb:2.9, pv:3.6, pvAb:0.25, minijob:603, gez:18.36}
 };
 const clone = o => JSON.parse(JSON.stringify(o));
 function deepMerge(tg,s){ for(const k in s){ if(s[k] && typeof s[k]==="object" && !Array.isArray(s[k])) tg[k]=deepMerge(tg[k]||{},s[k]); else tg[k]=s[k]; } return tg; }
@@ -517,6 +610,8 @@ const GROUPS = [
   {t:"Wohngeld – Einkommen", src:"§§ 14–17 WoGG, § 9a EStG", warn:"Freibetrag Alleinerziehende (§ 17 WoGG) vereinfacht je Kind unter 18 – bitte prüfen.", items:[
     ["wg.wk","Werbungskosten-Pauschbetrag €/Jahr"],["wg.aeFrei","Freibetrag Alleinerziehende €/Jahr je Kind"],["wg.min","Mindestbetrag Wohngeld (§ 21 WoGG) €"]]},
   {t:"Wohngeldformel – Werte a, b, c", src:"Anlage 2 WoGG ab 01.01.2025. 1,15 · (M − (a + b·M + c·Y) · Y)", abc:true},
+  {t:"Kranken-/Pflegeversicherung und Rundfunkbeitrag 2026", src:"§ 240 Abs. 4 SGB V (1/90 der Bezugsgröße 3.955 € × 30), durchschnittlicher Zusatzbeitrag 2026, § 55 SGB XI, RBStV.", warn:"Zusatzbeitrag je Krankenkasse unterschiedlich. Abschlag PV ab dem 2. Kind unter 25 je 0,25 Prozentpunkte.", items:[
+    ["sv.mindest","Mindestbemessungsgrundlage €/Monat"],["sv.kv","KV-Satz ermäßigt (ohne Krankengeld) %"],["sv.zb","Zusatzbeitrag Durchschnitt %"],["sv.pv","PV-Satz %"],["sv.pvAb","PV-Abschlag je Kind ab 2. Kind %-Punkte"],["sv.minijob","Minijob-Grenze €/Monat"],["sv.gez","Rundfunkbeitrag €/Monat"]]},
   {t:"Kinderzuschlag", src:"§ 6a BKGG; Merkblatt Kinderzuschlag (BA).", warn:"Wohnkostenanteile aus KiZ-Rechnern (Existenzminimumbericht), 5+ Kinder geschätzt – gegen DA-KiZ prüfen.",
     items:[["kiz.max","Höchstbetrag je Kind €"],["kiz.minPaar","Mindesteinkommen Paar € brutto"],["kiz.minAE","Mindesteinkommen alleinerziehend € brutto"],["kiz.quote","Minderungsquote Einkommen"]]
       .concat([1,2,3,4,5].map((k,i)=>["kiz.ae."+i,"Wohnkostenanteil alleinerz., "+k+(k===5?"+":"")+" Kind(er) %"]))
@@ -524,8 +619,8 @@ const GROUPS = [
 ];
 
 /* ================= Haushalt ================= */
-const EXAMPLE = {typ:"paar", b1:2300, n1:1720, b2:0, n2:0, so:0, pa:"0.3", mi:780, hz:110, ka:false, kids:[{age:4,uh:0},{age:9,uh:0}], step:1};
-const EMPTY = {typ:"paar", b1:0, n1:0, b2:0, n2:0, so:0, pa:"0.3", mi:0, hz:0, ka:false, kids:[], step:1};
+const EXAMPLE = {typ:"paar", verh:false, b1:1700, n1:1330, b2:0, n2:0, kv1:"auto", kv2:"auto", so:0, pa:"0.3", mi:780, hz:110, ka:false, mog:null, kids:[{age:4,uh:0},{age:9,uh:0}], step:1};
+const EMPTY = {typ:"paar", verh:false, b1:0, n1:0, b2:0, n2:0, kv1:"auto", kv2:"auto", so:0, pa:"0.3", mi:0, hz:0, ka:false, mog:null, kids:[], step:1};
 let S = clone(EXAMPLE);
 try{ const s = localStorage.getItem("vp-wob-input2"); if(s) S = Object.assign(clone(EXAMPLE), JSON.parse(s)); }catch(e){}
 const save = ()=>{ try{ localStorage.setItem("vp-wob-input2", JSON.stringify(S)); }catch(e){} };
@@ -559,10 +654,11 @@ function grund(H){
     mbPct = m.length ? Math.max((u7>=1||u16>=2)?36:0, Math.min(60,12*m.length)) : 0; }
   const mb = Math.round(P.rb.single*mbPct)/100;
   const rbEltern = ae ? P.rb.single : 2*P.rb.partner;
-  const grenze = byN(P.kdu.p,P.kdu.plus,n);
+  const grenzeTab = byN(P.kdu.p,P.kdu.plus,n);
+  const grenze = (H.mog!=null && H.mog>0) ? H.mog : grenzeTab;
   const mieteAnerk = H.ka ? Math.min(H.mi,grenze*P.kdu.karenz) : Math.min(H.mi,grenze);
   const kdu = mieteAnerk+H.hz;
-  return {ae,kids,nAd,n,eink,sonstBer,elternEink,mbPct,mb,rbEltern,grenze,mieteAnerk,kdu,kopf:kdu/n};
+  return {ae,kids,nAd,n,eink,sonstBer,elternEink,mbPct,mb,rbEltern,grenze,grenzeTab,mieteAnerk,kdu,kopf:kdu/n};
 }
 function sgb2(G, x){
   const wgShare = (x.wg||0)/G.n; let kgSurplus=0, childGap=0;
@@ -571,7 +667,7 @@ function sgb2(G, x){
     if(own>=need){ kgSurplus+=P.kindergeld; }
     else { const rem=need-own, used=Math.min(P.kindergeld,rem); kgSurplus+=P.kindergeld-used; childGap+=rem-used; }
   });
-  const pGap = (G.rbEltern+G.mb+G.kopf*G.nAd) - (G.elternEink+kgSurplus+wgShare*G.nAd);
+  const pGap = (G.rbEltern+G.mb+G.kopf*G.nAd+(x.kv||0)) -(G.elternEink+kgSurplus+wgShare*G.nAd);
   return {gap: Math.max(0, Math.round((pGap+childGap)*100)/100)};
 }
 function wohngeld(G,H){
@@ -589,26 +685,56 @@ function wohngeld(G,H){
   const unterMin = wg>0 && wg<P.wg.min; if(wg<P.wg.min) wg=0;
   return {wg,raw,M,mRent,cap,hb,kl,hke,hkk,Y,frei,rows,a,b,c,pa,unterMin};
 }
-function kinderzuschlag(G,H){
+function kinderzuschlag(G,H,kv){
   const r = {kiz:0, perChild:G.kids.map(()=>0), reason:"", st:null};
   if(!G.kids.length){ r.reason=t("rNoKids"); return r; }
   const brutto = G.eink.reduce((s,e)=>s+e.b,0)+H.so, minE = G.ae?P.kiz.minAE:P.kiz.minPaar;
   if(brutto<minE){ r.reason=t("rMin",{x:eur(minE)}); return r; }
   const tab = G.ae?P.kiz.ae:P.kiz.paar, anteil = tab[Math.min(G.kids.length,tab.length)-1]/100;
-  const bedarf = G.rbEltern+G.mb+anteil*G.kdu, excess = Math.max(0,G.elternEink-bedarf);
+  const bedarf = G.rbEltern+G.mb+anteil*G.kdu, einkK = Math.max(0,G.elternEink-(kv||0)), excess = Math.max(0,einkK-bedarf);
   const base = G.kids.map(k=>Math.max(0,P.kiz.max-P.kiz.quote*k.uh)), baseSum = base.reduce((s,x)=>s+x,0);
   const minderung = P.kiz.quote*excess, total = Math.max(0,Math.floor(baseSum-minderung));
   r.perChild = baseSum>0 ? base.map(x=>total*x/baseSum) : base.map(()=>0);
   r.kiz = total; if(!total) r.reason = t("rExcess");
-  r.st = {brutto,minE,anteil,bedarf,eink:G.elternEink,excess,baseSum,minderung};
+  r.st = {brutto,minE,anteil,bedarf,eink:einkK,kv:kv||0,excess,baseSum,minderung};
   return r;
 }
+/* Kranken-/Pflegeversicherung außerhalb des SGB II.
+   Im SGB II ist jede Person über das Jobcenter versichert. Ohne SGB II gilt:
+   Job über Minijob-Grenze = pflichtversichert; Ehepartner ohne eigenen Schutz = familienversichert;
+   sonst (z. B. unverheiratete Partner, Alleinerziehende mit Minijob) = freiwillige Versicherung zum Mindestbeitrag.
+   Kinder sind über einen versicherten Elternteil familienversichert. */
+function kvCalc(G,H){
+  const s=P.sv, k=G.kids.length;
+  const pv = s.pv - (k>=2 ? s.pvAb*(Math.min(k,5)-1) : 0);
+  const rate = (s.kv+s.zb+pv)/100;
+  const ad = G.ae ? [{b:H.b1,o:H.kv1}] : [{b:H.b1,o:H.kv1},{b:H.b2,o:H.kv2}];
+  const pers = ad.map((a,i)=>{
+    let auto;
+    if(a.b>s.minijob) auto="job";
+    else if(!G.ae && H.verh && ad[1-i].b>s.minijob) auto="fam";
+    else auto="frei";
+    const st = (a.o && a.o!=="auto") ? a.o : auto;
+    const basis = Math.max(s.mindest, a.b);
+    const voll = Math.round(basis*rate*100)/100;
+    return {auto, st, basis, voll, beitrag: st==="frei" ? voll : 0};
+  });
+  return {pers, rate, pv, total: Math.round(pers.reduce((x,p)=>x+p.beitrag,0)*100)/100};
+}
 function berechne(H){
-  const G=grund(H), W=wohngeld(G,H), K=kinderzuschlag(G,H);
-  const s0=sgb2(G,{}), s1=sgb2(G,{wg:W.wg}), s2=sgb2(G,{kiz:K.perChild}), s3=sgb2(G,{wg:W.wg,kiz:K.perChild});
+  const G=grund(H), W=wohngeld(G,H), KV=kvCalc(G,H), K=kinderzuschlag(G,H,KV.total);
+  const s0=sgb2(G,{}), s0kv=sgb2(G,{kv:KV.total});
+  const xs=[null,{wg:W.wg},{kiz:K.perChild},{wg:W.wg,kiz:K.perChild}];
+  const has=[true,W.wg>0,K.kiz>0,(W.wg>0||K.kiz>0)];
+  const V = xs.map((x,i)=>{
+    if(i===0) return {gap:s0.gap, st:s0.gap>0?"gap":"ok", zus:0};
+    const g=sgb2(G,Object.assign({kv:KV.total},x)).gap, gn=sgb2(G,x).gap;
+    const st = !has[i] ? "na" : g===0 ? "ok" : (gn===0 ? "zus" : "gap");
+    return {gap:g, gapNoKv:gn, st, zus: st==="zus" ? g : 0};
+  });
   const need = G.rbEltern+G.mb+G.kdu+G.kids.reduce((s,k)=>s+rbKind(k.age),0);
   const basis = G.eink.reduce((s,e)=>s+e.n,0)+H.so+G.kids.reduce((s,k)=>s+k.uh,0)+G.kids.length*P.kindergeld;
-  return {G,W,K,s0,s1,s2,s3,need,basis};
+  return {G,W,K,KV,s0,s0kv,V,need,basis};
 }
 
 /* ================= Oberfläche ================= */
@@ -628,7 +754,7 @@ function applyStatic(){
   root.lang = L; root.dir = L==="ar" ? "rtl" : "ltr";
   document.querySelectorAll("[data-i18n]").forEach(el=>{ el.textContent = t(el.dataset.i18n); });
   document.querySelectorAll("[data-i18n-adult]").forEach(el=>{ el.textContent = t("adult",{n:el.dataset.i18nAdult}); });
-  $("limits").innerHTML = t("lim").map(x=>"<li>"+esc(x)+"</li>").join("");
+  $("limits").innerHTML = t("lim").concat(t("lim2")).map(x=>"<li>"+esc(x)+"</li>").join("");
   $("paramsDe").textContent = t("paramsDe"); $("paramsDe").hidden = !t("paramsDe");
 }
 function renderSteps(){
@@ -661,12 +787,17 @@ function renderKids(){
 }
 function fillForm(){
   ["b1","n1","b2","n2","so","mi","hz"].forEach(id=>{ $(id).value = S[id]||""; });
-  $("pa").value=S.pa; $("ka").checked=S.ka;
+  $("pa").value=S.pa; $("ka").checked=S.ka; $("verh").checked=!!S.verh;
+  $("kv1").value=S.kv1||"auto"; $("kv2").value=S.kv2||"auto";
 }
 function bind(){
   ["b1","n1","b2","n2","so","mi","hz"].forEach(id=>$(id).addEventListener("input",()=>{ S[id]=Math.max(0,num($(id).value)); update(); }));
   $("pa").addEventListener("change",()=>{ S.pa=$("pa").value; update(); });
   $("ka").addEventListener("change",()=>{ S.ka=$("ka").checked; update(); });
+  $("verh").addEventListener("change",()=>{ S.verh=$("verh").checked; update(); });
+  ["kv1","kv2"].forEach(id=>$(id).addEventListener("change",()=>{ S[id]=$(id).value; update(); }));
+  $("mog").addEventListener("input",()=>{ const v=num($("mog").value); S.mog = v>0 ? v : null; update(); });
+  $("mogReset").addEventListener("click",()=>{ S.mog=null; update(); });
   document.querySelectorAll("[data-typ]").forEach(b=>b.addEventListener("click",()=>{ S.typ=b.dataset.typ; update(); }));
   $("addKid").addEventListener("click",()=>{ S.kids.push({age:6,uh:0}); renderKids(); update(); const last=$("ka"+(S.kids.length-1)); if(last) last.focus(); });
   $("backBtn").addEventListener("click",()=>{ S.step=Math.max(1,S.step-1); showStep(); });
@@ -679,42 +810,67 @@ function bind(){
   $("f").addEventListener("submit",e=>e.preventDefault());
 }
 
+function stName(st,p){
+  if(st==="job") return t("sJob"); if(st==="fam") return t("sFam"); if(st==="leist") return t("sLeist");
+  return t("sFrei",{a:eur(p.voll)});
+}
 function update(){
   save();
   document.querySelectorAll("[data-typ]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.typ===S.typ)));
-  $("p2").hidden = S.typ==="ae";
-  const R=berechne(S), {W,K,s0,s1,s2,s3}=R;
-  const wgOk=W.wg>0&&s1.gap===0, kizOk=K.kiz>0&&s2.gap===0, bothOk=(W.wg>0||K.kiz>0)&&s3.gap===0;
-  let cls,h,tx;
+  $("p2").hidden = S.typ==="ae"; $("verhRow").hidden = S.typ==="ae";
+  const R=berechne(S), {G,W,K,KV,s0,s0kv,V}=R;
+  KV.pers.forEach((p,i)=>{ const sel=$("kv"+(i+1)); if(sel) sel.options[0].textContent=t("kvAuto",{s:stName(p.auto,p)}); });
+  $("mogLabel").textContent=t("mog",{n:G.n});
+  if(document.activeElement!==$("mog")) $("mog").value = Math.round(G.grenze*100)/100;
+  $("mogReset").hidden = S.mog==null;
+  $("mogWarn").hidden = S.mog!=null;
+
+  const ok=i=>V[i].st==="ok";
+  let cls,h,tx,best=-1;
   if(s0.gap===0){cls="warn";h=t("vNoneH");tx=t("vNoneT",{a:eur(W.wg),b:eur(K.kiz)});}
-  else if(wgOk&&kizOk){cls="ok";h=t("vEachH");tx=t("vEachT");}
-  else if(wgOk){cls="ok";h=t("vWgH");tx=t("vWgT")+(K.kiz>0?" "+t("alsoKiz"):"");}
-  else if(kizOk){cls="ok";h=t("vKizH");tx=t("vKizT")+(W.wg>0?" "+t("alsoWg"):"");}
-  else if(bothOk){cls="ok";h=t("vBothH");tx=t("vBothT");}
-  else {cls="bad";h=t("vSgbH");tx=t("vSgbT",{a:eur(s3.gap)});}
+  else if(ok(1)&&ok(2)){cls="ok";h=t("vEachH");tx=t("vEachT");best=3;}
+  else if(ok(1)){cls="ok";h=t("vWgH");tx=t("vWgT")+(K.kiz>0?" "+t("alsoKiz"):"");best=1;}
+  else if(ok(2)){cls="ok";h=t("vKizH");tx=t("vKizT")+(W.wg>0?" "+t("alsoWg"):"");best=2;}
+  else if(ok(3)){cls="ok";h=t("vBothH");tx=t("vBothT");best=3;}
+  else {
+    const z=[1,2,3].filter(i=>V[i].st==="zus").sort((a,b)=>V[a].zus-V[b].zus)[0];
+    if(z){cls="ok";h=t("vZusH",{v:t("v"+z)});tx=t("vZusT",{a:eur(KV.total),b:eur(V[z].zus)});best=z;}
+    else {cls="bad";h=t("vSgbH");tx=t("vSgbT",{a:eur(V[3].gap)});}
+  }
   $("verdict").innerHTML='<div class="verdict '+cls+'">'+ICON[cls]+'<div><b>'+esc(h)+'</b><p>'+esc(tx)+'</p><p class="law">'+esc(t("law"))+'</p></div></div>';
-  $("kpis").innerHTML='<div class="kpi"><span>'+esc(t("kGap"))+'</span><b>'+eur(s0.gap)+'</b></div><div class="kpi wg"><span>'+esc(I[L].wg)+'</span><b>'+eur(W.wg)+'</b></div><div class="kpi kz"><span>'+esc(I[L].kiz)+'</span><b>'+eur(K.kiz)+'</b></div>';
-  $("legend").innerHTML='<span><i class="seg-own"></i>'+esc(t("legOwn"))+'</span><span><i class="seg-ben"></i>'+esc(t("legBen"))+'</span><span><i class="seg-gap"></i>'+esc(t("legGap"))+'</span>';
-  const best = s0.gap===0?-1:(bothOk&&!wgOk&&!kizOk)?3:wgOk?1:kizOk?2:-1;
-  const need = Math.max(R.need,1), own = Math.max(0,R.need-s0.gap);
-  const vs=[[t("v0"),s0.gap,null,0],[t("v1"),s1.gap,W.wg>0,1],[t("v2"),s2.gap,K.kiz>0,2],[t("v3"),s3.gap,(W.wg>0||K.kiz>0),3]];
-  $("vrows").innerHTML = vs.map(([name,gap,has,i])=>{
-    const ben = i===0?0:Math.max(0,s0.gap-gap);
+  $("kpis").innerHTML=
+    '<div class="kpi"><span>'+esc(t("kGap"))+'</span><b>'+eur(s0.gap)+'</b></div>'+
+    '<div class="kpi kv"><span>'+esc(t("kKv"))+'</span><b>'+eur(KV.total)+'</b></div>'+
+    '<div class="kpi wg"><span>'+esc(I[L].wg)+'</span><b>'+eur(W.wg)+'</b></div>'+
+    '<div class="kpi kz"><span>'+esc(I[L].kiz)+'</span><b>'+eur(K.kiz)+'</b></div>';
+  $("legend").innerHTML='<span><i class="seg-own"></i>'+esc(t("legOwn"))+'</span><span><i class="seg-ben"></i>'+esc(t("legBen"))+'</span><span><i class="seg-zus"></i>'+esc(t("legZus"))+'</span><span><i class="seg-gap"></i>'+esc(t("legGap"))+'</span>';
+
+  const scale=Math.max(R.need+KV.total,1), w=x=>(100*Math.max(0,x)/scale).toFixed(2)+"%";
+  $("vrows").innerHTML=[0,1,2,3].map(i=>{
+    const v=V[i]; let own,ben=0,zus=0,gap;
+    if(i===0){ own=R.need-s0.gap; gap=s0.gap; }
+    else { own=R.need+KV.total-s0kv.gap; ben=Math.max(0,s0kv.gap-v.gap); zus=v.zus; gap=v.gap-zus; }
     let pill;
-    if(i===0) pill = gap>0?'<span class="pill bad">'+esc(t("pNeedy"))+'</span>':'<span class="pill ok">'+esc(t("pNot"))+'</span>';
-    else if(!has) pill='<span class="pill na">'+esc(t("pNa"))+'</span>';
-    else pill = gap===0?'<span class="pill ok">'+esc(t("pOk"))+'</span>':'<span class="pill bad">'+esc(t("pGap"))+'</span>';
-    let amt = "";
-    if(i===1) amt = W.wg>0?eur(W.wg):(W.unterMin?t("rBelow"):t("rNoWg"));
-    if(i===2) amt = K.kiz>0?eur(K.kiz):K.reason;
-    if(i===3) amt = eur(W.wg+K.kiz);
-    if(gap>0) amt = (amt?amt+" · ":"")+t("gapW",{x:eur(gap)});
-    const w = x=>(100*x/need).toFixed(2)+"%";
+    if(i===0) pill = v.gap>0?'<span class="pill bad">'+esc(t("pNeedy"))+'</span>':'<span class="pill ok">'+esc(t("pNot"))+'</span>';
+    else pill = {ok:'<span class="pill ok">'+esc(t("pOk"))+'</span>',zus:'<span class="pill zus">'+esc(t("pZus"))+'</span>',gap:'<span class="pill bad">'+esc(t("pGap"))+'</span>',na:'<span class="pill na">'+esc(t("pNa"))+'</span>'}[v.st];
+    const parts=[];
+    if(i===1) parts.push(W.wg>0?eur(W.wg):(W.unterMin?t("rBelow"):t("rNoWg")));
+    if(i===2) parts.push(K.kiz>0?eur(K.kiz):K.reason);
+    if(i===3) parts.push(eur(W.wg+K.kiz));
+    if(zus>0) parts.push(t("legZus")+" "+eur(zus));
+    if(gap>0) parts.push(t("gapW",{x:eur(gap)}));
+    const amt=parts.join(" · "), name=t("v"+i);
     return '<div class="vrow'+(i===best?' best':'')+'"><div class="vtop"><b>'+esc(name)+'</b>'+pill+'</div>'+
-      '<div class="track" role="img" aria-label="'+esc(name+": "+amt)+'"><div class="seg-own" style="width:'+w(own)+'"></div><div class="seg-ben" style="width:'+w(ben)+'"></div><div class="seg-gap" style="width:'+w(gap)+'"></div></div>'+
+      '<div class="track" role="img" aria-label="'+esc(name+": "+amt)+'"><div class="seg-own" style="width:'+w(own)+'"></div><div class="seg-ben" style="width:'+w(ben)+'"></div><div class="seg-zus" style="width:'+w(zus)+'"></div><div class="seg-gap" style="width:'+w(gap)+'"></div></div>'+
       '<span class="amt">'+esc(amt)+'</span></div>';
   }).join("");
-  $("budget").innerHTML = esc(t("budget",{a:"\u0001",b:"\u0002"})).replace("\u0001","<b>"+eur(R.basis+s0.gap)+"</b>").replace("\u0002","<b>"+eur(R.basis+W.wg+K.kiz)+"</b>");
+
+  const sgbB=R.basis+s0.gap, vorB=R.basis+W.wg+K.kiz-KV.total-P.sv.gez+V[3].zus, diff=vorB-sgbB;
+  const sub=t("bVorSub",{kv:eur(KV.total),gez:eur(P.sv.gez)})+(V[3].zus>0?" · "+t("bVorZus",{z:eur(V[3].zus)}):"");
+  $("budget").innerHTML='<h3>'+esc(t("budgetH"))+'</h3>'+
+    '<div class="brow"><span>'+esc(t("bSgb"))+'</span><b>'+eur(sgbB)+'</b></div>'+
+    '<div class="brow"><span>'+esc(t("bVor"))+'<small>'+esc(sub)+'</small></span><b>'+eur(vorB)+'</b></div>'+
+    '<div class="brow diff"><span>'+esc(t("bDiff"))+'</span><b class="'+(diff>=0?'pos':'neg')+'">'+(diff>=0?'+':'')+eur(diff)+'</b></div>';
   renderWeg(R);
 }
 function tbl(head, rows, sum){
@@ -743,10 +899,18 @@ function renderWeg(R){
   h+='<h3>'+esc(t("rw3"))+'</h3>';
   if(!K.st) h+='<p class="hint">'+esc(K.reason)+'</p>';
   else { const s=K.st;
-    h+=tbl([t("colStep"),t("colEur")],[[t("kGross",{a:eur(s.minE)}),s.brutto],[t("kNeed",{p:Math.round(s.anteil*100)}),s.bedarf],[t("kInc"),s.eink],[t("kEx"),s.excess],[t("kBase"),s.baseSum],[t("kMinus"),s.minderung>0?-s.minderung:0]],[t("kTot"),K.kiz]); }
+    h+=tbl([t("colStep"),t("colEur")],[[t("kGross",{a:eur(s.minE)}),s.brutto],[t("kNeed",{p:Math.round(s.anteil*100)}),s.bedarf],...(s.kv>0?[[t("bKv"),-s.kv]]:[]),[t("kInc"),s.eink],[t("kEx"),s.excess],[t("kBase"),s.baseSum],[t("kMinus"),s.minderung>0?-s.minderung:0]],[t("kTot"),K.kiz]); }
   h+='<h3>'+esc(t("rw4"))+'</h3>';
-  h+=tbl([t("colVar"),t("colGap")],[[t("v0"),R.s0.gap],[t("v1"),R.s1.gap],[t("v2"),R.s2.gap],[t("v3"),R.s3.gap]]);
+  h+=tbl([t("colVar"),t("colGap")],[0,1,2,3].map(i=>[t("v"+i)+(R.V[i].st==="zus"?" ("+t("pZus")+")":""),R.V[i].gap]));
   h+='<p class="hint">'+esc(t("rw4h"))+'</p>';
+  const KV=R.KV, V=R.V;
+  h+='<h3>'+esc(t("rw5"))+'</h3>';
+  h+=tbl([t("colItem"),t("colEur")],KV.pers.map((p,i)=>[t("kvP",{n:i+1,s:stName(p.st,p)}),p.beitrag]).concat([[t("gezRow"),P.sv.gez]]));
+  h+='<p class="hint">'+esc(t("kvCalc",{a:eur(P.sv.mindest),p:pct(KV.rate)}))+'</p>';
+  const sgbB=R.basis+R.s0.gap, vorB=R.basis+W.wg+K.kiz-KV.total-P.sv.gez+V[3].zus;
+  const br=[[t("bBasis"),R.basis,R.basis],[t("bSgbL"),R.s0.gap,""],[t("bBen"),"",W.wg+K.kiz],[t("bKv"),"",-KV.total],[t("bGez"),"",-P.sv.gez]];
+  if(V[3].zus>0) br.push([t("bZus"),"",V[3].zus]);
+  h+=tbl([t("colItem"),t("v0"),t("v3")],br,[t("bTot"),sgbB,vorB]);
   $("weg").innerHTML=h;
 }
 function renderParams(){
