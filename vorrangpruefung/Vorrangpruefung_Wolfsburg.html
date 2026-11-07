@@ -170,6 +170,19 @@ details.more .checks{padding:0 14px 14px}
 .chip.w{background:var(--gold-soft);border-inline-start:4px solid var(--gold)}
 .steps{grid-template-columns:repeat(4,minmax(0,1fr))}
 
+.kz-list{margin:0;padding:0 14px 0 34px;display:flex;flex-direction:column;gap:7px;font-size:.9rem}
+html[dir="rtl"] .kz-list{padding:0 34px 0 14px}
+.kz-key{font-weight:700}
+.kz-ex{margin:10px 14px 14px;font-size:.85rem;background:var(--surface);border-radius:8px;padding:10px 12px;color:var(--muted)}
+.kzres{display:flex;flex-direction:column;gap:8px}
+.kzres:empty{display:none}
+.kzres p{margin:0;font-size:.9rem}
+.kzbox{background:var(--surface);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;border-inline-start:4px solid var(--accent)}
+.kzbox.no{border-inline-start-color:var(--gold)}
+.kzbar{height:10px;border-radius:9px;background:var(--surface-2);overflow:hidden}
+.kzbar i{display:block;height:100%;background:var(--accent)}
+.kzmeta{font-size:.78rem;color:var(--muted)}
+
 /* Akkordeons */
 details{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
 summary{cursor:pointer;padding:16px 22px;font-weight:700;list-style-position:inside}
@@ -298,13 +311,33 @@ footer{font-size:.8rem;color:var(--muted)}
           <p class="warnchip" id="mogWarn" data-i18n="mogWarn"></p>
           <div><button type="button" class="btn ghost" id="mogReset" data-i18n="mogReset"></button></div>
         </div>
-        <label class="f"><span data-i18n="kdzL"></span>
-          <select class="sel" id="kdz">
-            <option value="normal" data-i18n="kdzN"></option>
-            <option value="karenz" data-i18n="kdzK"></option>
-            <option value="senk" data-i18n="kdzS"></option>
-          </select></label>
-        <p class="warnchip" data-i18n="kdzHint"></p>
+        <div class="person kz">
+          <h4 data-i18n="kzTitle"></h4>
+          <details class="more" open>
+            <summary data-i18n="kzWhat"></summary>
+            <ul class="kz-list">
+              <li data-i18n="kz1"></li><li data-i18n="kz2"></li><li data-i18n="kz3"></li><li data-i18n="kz4"></li>
+              <li class="kz-key" data-i18n="kz5"></li><li data-i18n="kz6"></li><li data-i18n="kz7"></li>
+            </ul>
+            <p class="kz-ex" data-i18n="kzEx"></p>
+          </details>
+          <p class="sub" data-i18n="kzCalcH"></p>
+          <div class="pair">
+            <label class="f"><span data-i18n="kzStart"></span><input class="sel" type="month" id="kzStart" placeholder="2026-03"></label>
+            <label class="f"><span data-i18n="kzPrev"></span><input class="sel" type="month" id="kzPrev" placeholder="2024-06"></label>
+          </div>
+          <div class="pair">
+            <label class="f"><span data-i18n="kzGap"></span><input class="sel" type="number" inputmode="numeric" min="0" max="60" id="kzGap"></label>
+            <label class="f" id="kzUsedL"><span data-i18n="kzUsed"></span><input class="sel" type="number" inputmode="numeric" min="0" max="12" id="kzUsed"></label>
+          </div>
+          <div class="kzres" id="kzRes" aria-live="polite"></div>
+          <label class="f"><span data-i18n="kdzL"></span>
+            <select class="sel" id="kdz">
+              <option value="normal" data-i18n="kdzN"></option>
+              <option value="karenz" data-i18n="kdzK"></option>
+              <option value="senk" data-i18n="kdzS"></option>
+            </select></label>
+        </div>
         <label class="f"><span data-i18n="verm"></span><div class="money"><input id="verm" type="number" inputmode="decimal" min="0" step="any"><span>€</span></div></label>
         <p class="hint" data-i18n="vermHint"></p>
       </section>
@@ -748,6 +781,93 @@ hzG:"Предел соразмерных расходов на отоплени�
 for(const l in Z) Object.assign(I[l], Z[l]);
 const KA={de:"Kinder eingetragen: Der Kinderzuschlag wird automatisch mitgeprüft.",en:"Children entered: child supplement is checked automatically as well.",tr:"Çocuk girildi: çocuk ek ödeneği de otomatik olarak kontrol edilir.",ar:"تم إدخال أطفال: تُفحص إعانة الأطفال الإضافية تلقائيًا أيضًا.",uk:"Дітей додано: доплата на дитину перевіряється автоматично.",ru:"Дети указаны: детская надбавка проверяется автоматически."};
 for(const l in KA) I[l].kizAuto=KA[l];
+const KZ = {
+de:{kzTitle:"Karenzzeit",kzWhat:"Einfach erklärt: Was ist die Karenzzeit?",
+kz1:"In den ersten 12 Monaten im Leistungsbezug übernimmt das Jobcenter die tatsächliche Miete – auch wenn sie über der Mietobergrenze liegt. Seit 01.07.2026 aber höchstens 150 % der Mietobergrenze.",
+kz2:"Heizkosten sind nicht geschützt. Sie werden ab dem ersten Monat auf Angemessenheit geprüft.",
+kz3:"Beginn: mit dem ersten Monat, für den Leistungen bezogen werden.",
+kz4:"Unterbrechung: Volle Monate ohne Leistung zählen nicht mit. Die Karenzzeit verlängert sich um diese Monate – sie beginnt aber nicht von vorne.",
+kz5:"Neubeginn: Eine neue, volle Karenzzeit von 12 Monaten gibt es erst, wenn vorher mindestens 3 Jahre (36 Monate) lang keine Leistungen nach SGB II oder SGB XII bezogen wurden (§ 22 Abs. 1 SGB II, § 35 SGB XII). Bei einer kürzeren Pause laufen nur die restlichen Monate der alten Karenzzeit weiter.",
+kz6:"Danach: Ist die Miete zu hoch, fordert das Jobcenter zur Kostensenkung auf. Die tatsächlichen Kosten werden dann in der Regel noch höchstens 6 Monate übernommen. Für das Vermögen gilt dieselbe Karenzzeit (40.000 € + 15.000 € je weitere Person).",
+kz7:"Umzug: Wer ohne Zustimmung in eine teurere Wohnung zieht, bekommt nur die bisherige Miete – auch in der Karenzzeit.",
+kzEx:"Beispiele: Leistungen ab März 2026 → Karenzzeit bis Februar 2027. Fehlt im August 2026 ein voller Monat Leistung, endet sie erst im März 2027. Endete ein früherer Bezug im Juni 2024 und beginnt der neue im Mai 2026, liegen nur 22 Monate dazwischen → keine neue Karenzzeit, nur die Restmonate.",
+kzCalcH:"Karenzzeit für diesen Fall berechnen",kzStart:"Beginn des aktuellen Leistungsbezugs (Monat)",kzPrev:"Ende eines früheren Leistungsbezugs (falls vorhanden)",kzGap:"Volle Monate ohne Leistung seit Beginn",kzUsed:"Schon verbrauchte Karenzmonate aus dem früheren Bezug",
+kzNew:"Neue Karenzzeit: 12 Monate ab {m}.",kzNewGap:"Seit dem früheren Bezug sind {x} Monate ohne Leistung vergangen – mindestens 36, also beginnt die Karenzzeit von vorne.",
+kzNoNew:"Keine neue Karenzzeit: Zwischen dem früheren Bezug und jetzt liegen nur {x} Monate ohne Leistung (nötig: 36). Es laufen nur die restlichen {r} Monate weiter.",kzUsedHint:"Ohne Angabe wird angenommen, dass die frühere Karenzzeit ganz verbraucht ist.",
+kzEnd:"Die Karenzzeit läuft bis einschließlich {m}.",kzExt:"Verlängert um {x} Monat(e) ohne Leistung.",kzActive:"Heute läuft die Karenzzeit noch {x} Monat(e).",kzOver:"Heute ist die Karenzzeit abgelaufen.",kzNone:"Es ist keine Karenzzeit mehr übrig.",kzFuture:"Die Karenzzeit hat noch nicht begonnen.",
+kz2023:"Die Karenzzeit gibt es erst seit 01.01.2023. Bei Bezug davor beginnt sie frühestens im Januar 2023.",kzRestart:"Eine neue Karenzzeit wäre erst wieder möglich, wenn ab Ende dieses Bezugs 3 Jahre keine Leistungen bezogen werden.",kzSet:"Die Auswahl unten wurde danach automatisch gesetzt."},
+en:{kzTitle:"Waiting period (Karenzzeit)",kzWhat:"Explained simply: what is the waiting period?",
+kz1:"In the first 12 months of receiving benefits, the Jobcenter pays the actual rent – even above the rent limit. Since 1 Jul 2026, however, at most 150 % of the rent limit.",
+kz2:"Heating costs are not protected. They are checked for appropriateness from the first month.",
+kz3:"Start: with the first month for which benefits are received.",
+kz4:"Interruption: full months without benefits do not count. The waiting period is extended by these months – but it does not start again.",
+kz5:"Restart: a new, full 12-month waiting period only applies if no SGB II or SGB XII benefits were received for at least 3 years (36 months) before (§ 22 (1) SGB II, § 35 SGB XII). After a shorter break, only the remaining months of the old waiting period continue.",
+kz6:"Afterwards: if the rent is too high, the Jobcenter asks for a cost reduction. Actual costs are then usually covered for at most 6 more months. The same waiting period applies to assets (40,000 € + 15,000 € per additional person).",
+kz7:"Moving: anyone who moves into a more expensive flat without approval only gets the previous rent – also during the waiting period.",
+kzEx:"Examples: benefits from March 2026 → waiting period until February 2027. If August 2026 is a full month without benefits, it ends in March 2027. If earlier benefits ended in June 2024 and new ones start in May 2026, only 22 months lie in between → no new waiting period, only the remaining months.",
+kzCalcH:"Calculate the waiting period for this case",kzStart:"Start of current benefits (month)",kzPrev:"End of earlier benefits (if any)",kzGap:"Full months without benefits since start",kzUsed:"Waiting-period months already used in earlier benefits",
+kzNew:"New waiting period: 12 months from {m}.",kzNewGap:"{x} months without benefits have passed since the earlier benefits – at least 36, so the waiting period starts again.",
+kzNoNew:"No new waiting period: only {x} months without benefits lie between the earlier benefits and now (required: 36). Only the remaining {r} months continue.",kzUsedHint:"If left empty, the earlier waiting period is assumed to be fully used.",
+kzEnd:"The waiting period runs up to and including {m}.",kzExt:"Extended by {x} month(s) without benefits.",kzActive:"Today the waiting period still runs for {x} month(s).",kzOver:"Today the waiting period has ended.",kzNone:"No waiting period is left.",kzFuture:"The waiting period has not started yet.",
+kz2023:"The waiting period only exists since 1 Jan 2023. For benefits before that it starts in January 2023 at the earliest.",kzRestart:"A new waiting period would only be possible again after 3 years without benefits from the end of these benefits.",kzSet:"The selection below has been set automatically."},
+tr:{kzTitle:"Bekleme süresi (Karenzzeit)",kzWhat:"Kısaca: Bekleme süresi nedir?",
+kz1:"Yardım alınan ilk 12 ayda Jobcenter gerçek kirayı öder – kira üst sınırın üzerinde olsa bile. Ancak 01.07.2026'dan beri en fazla kira üst sınırının %150'si.",
+kz2:"Isınma giderleri korunmaz. İlk aydan itibaren uygunluk açısından kontrol edilir.",
+kz3:"Başlangıç: yardım alınan ilk ay.",
+kz4:"Kesinti: Yardımsız geçen tam aylar sayılmaz. Bekleme süresi bu aylar kadar uzar – ama baştan başlamaz.",
+kz5:"Yeniden başlama: 12 aylık yeni bir bekleme süresi ancak öncesinde en az 3 yıl (36 ay) SGB II veya SGB XII yardımı alınmamışsa başlar (§ 22 Abs. 1 SGB II, § 35 SGB XII). Daha kısa bir aradan sonra eski bekleme süresinin yalnızca kalan ayları devam eder.",
+kz6:"Sonrası: Kira çok yüksekse Jobcenter giderlerin azaltılmasını ister. Gerçek giderler genellikle en fazla 6 ay daha karşılanır. Varlık için de aynı bekleme süresi geçerlidir (40.000 € + her ek kişi için 15.000 €).",
+kz7:"Taşınma: Onay almadan daha pahalı bir daireye taşınan kişi yalnızca eski kirayı alır – bekleme süresinde de.",
+kzEx:"Örnekler: Mart 2026'dan itibaren yardım → bekleme süresi Şubat 2027'ye kadar. Ağustos 2026 tam bir ay yardımsız geçerse Mart 2027'de biter. Önceki yardım Haziran 2024'te bittiyse ve yenisi Mayıs 2026'da başlarsa arada sadece 22 ay vardır → yeni bekleme süresi yok, sadece kalan aylar.",
+kzCalcH:"Bu durum için bekleme süresini hesapla",kzStart:"Mevcut yardımın başlangıcı (ay)",kzPrev:"Önceki yardımın bitişi (varsa)",kzGap:"Başlangıçtan beri yardımsız tam aylar",kzUsed:"Önceki yardımda kullanılmış bekleme ayları",
+kzNew:"Yeni bekleme süresi: {m} itibarıyla 12 ay.",kzNewGap:"Önceki yardımdan beri {x} ay yardımsız geçti – en az 36, bu yüzden bekleme süresi baştan başlar.",
+kzNoNew:"Yeni bekleme süresi yok: Önceki yardım ile şimdi arasında yalnızca {x} ay yardımsız geçmiş (gerekli: 36). Yalnızca kalan {r} ay devam eder.",kzUsedHint:"Boş bırakılırsa önceki bekleme süresinin tamamen kullanıldığı varsayılır.",
+kzEnd:"Bekleme süresi {m} dahil devam eder.",kzExt:"Yardımsız {x} ay kadar uzatıldı.",kzActive:"Bugün bekleme süresinin {x} ayı daha var.",kzOver:"Bugün bekleme süresi sona ermiştir.",kzNone:"Hiç bekleme süresi kalmadı.",kzFuture:"Bekleme süresi henüz başlamadı.",
+kz2023:"Bekleme süresi 01.01.2023'ten beri vardır. Daha önceki yardımlarda en erken Ocak 2023'te başlar.",kzRestart:"Yeni bir bekleme süresi ancak bu yardımın bitiminden itibaren 3 yıl yardım alınmazsa mümkün olur.",kzSet:"Aşağıdaki seçim buna göre otomatik ayarlandı."},
+ar:{kzTitle:"فترة السماح (Karenzzeit)",kzWhat:"شرح مبسط: ما هي فترة السماح؟",
+kz1:"في أول 12 شهرًا من تلقي الإعانة يدفع Jobcenter الإيجار الفعلي – حتى لو تجاوز الحد الأعلى. لكن منذ 01.07.2026 بحد أقصى 150 % من الحد الأعلى للإيجار.",
+kz2:"تكاليف التدفئة غير محمية، وتُفحص من الشهر الأول.",
+kz3:"البداية: أول شهر تُستلم فيه الإعانة.",
+kz4:"الانقطاع: الأشهر الكاملة بدون إعانة لا تُحتسب. تمتد فترة السماح بعدد هذه الأشهر – لكنها لا تبدأ من جديد.",
+kz5:"البدء من جديد: لا تبدأ فترة سماح جديدة كاملة مدتها 12 شهرًا إلا إذا لم تُستلم أي إعانات وفق SGB II أو SGB XII لمدة 3 سنوات (36 شهرًا) على الأقل قبلها (§ 22 Abs. 1 SGB II, § 35 SGB XII). بعد انقطاع أقصر تستمر فقط الأشهر المتبقية من فترة السماح القديمة.",
+kz6:"بعد ذلك: إذا كان الإيجار مرتفعًا جدًا يطلب Jobcenter خفض التكاليف. تُغطى التكاليف الفعلية عادةً لمدة 6 أشهر إضافية كحد أقصى. تنطبق فترة السماح نفسها على الأصول (40.000 € + 15.000 € لكل شخص إضافي).",
+kz7:"الانتقال: من ينتقل دون موافقة إلى شقة أغلى يحصل فقط على الإيجار السابق – حتى خلال فترة السماح.",
+kzEx:"أمثلة: إعانة من مارس 2026 ← فترة السماح حتى فبراير 2027. إذا كان أغسطس 2026 شهرًا كاملًا بدون إعانة تنتهي في مارس 2027. إذا انتهت إعانة سابقة في يونيو 2024 وبدأت الجديدة في مايو 2026 فبينهما 22 شهرًا فقط ← لا فترة سماح جديدة، فقط الأشهر المتبقية.",
+kzCalcH:"احسب فترة السماح لهذه الحالة",kzStart:"بداية الإعانة الحالية (الشهر)",kzPrev:"نهاية إعانة سابقة (إن وجدت)",kzGap:"الأشهر الكاملة بدون إعانة منذ البداية",kzUsed:"أشهر فترة السماح المستهلكة في الإعانة السابقة",
+kzNew:"فترة سماح جديدة: 12 شهرًا ابتداءً من {m}.",kzNewGap:"مرّ {x} شهرًا بدون إعانة منذ الإعانة السابقة – 36 على الأقل، لذلك تبدأ فترة السماح من جديد.",
+kzNoNew:"لا فترة سماح جديدة: بين الإعانة السابقة والآن {x} شهرًا فقط بدون إعانة (المطلوب: 36). تستمر فقط الأشهر المتبقية وعددها {r}.",kzUsedHint:"إذا تُرك فارغًا يُفترض أن فترة السماح السابقة استُهلكت بالكامل.",
+kzEnd:"تستمر فترة السماح حتى نهاية {m}.",kzExt:"مُددت بمقدار {x} شهر بدون إعانة.",kzActive:"اليوم تبقى من فترة السماح {x} شهر.",kzOver:"اليوم انتهت فترة السماح.",kzNone:"لم يتبقَّ شيء من فترة السماح.",kzFuture:"لم تبدأ فترة السماح بعد.",
+kz2023:"توجد فترة السماح منذ 01.01.2023 فقط. للإعانات قبل ذلك تبدأ في يناير 2023 على أقرب تقدير.",kzRestart:"لن تكون فترة سماح جديدة ممكنة إلا بعد 3 سنوات بدون إعانات من نهاية هذه الإعانة.",kzSet:"تم ضبط الاختيار أدناه تلقائيًا بناءً على ذلك."},
+uk:{kzTitle:"Пільговий період (Karenzzeit)",kzWhat:"Просто пояснення: що таке пільговий період?",
+kz1:"У перші 12 місяців отримання допомоги Jobcenter оплачує фактичну оренду – навіть понад межу оренди. Але з 01.07.2026 щонайбільше 150 % межі оренди.",
+kz2:"Опалення не захищене. Його перевіряють на належність з першого місяця.",
+kz3:"Початок: перший місяць, за який отримується допомога.",
+kz4:"Перерва: повні місяці без допомоги не враховуються. Пільговий період подовжується на ці місяці – але не починається знову.",
+kz5:"Новий початок: новий повний 12-місячний пільговий період настає лише тоді, коли перед цим щонайменше 3 роки (36 місяців) не отримувалися виплати за SGB II чи SGB XII (§ 22 Abs. 1 SGB II, § 35 SGB XII). Після коротшої перерви продовжуються лише залишкові місяці старого періоду.",
+kz6:"Після цього: якщо оренда завелика, Jobcenter вимагає знизити витрати. Фактичні витрати зазвичай покриваються ще щонайбільше 6 місяців. Для майна діє той самий пільговий період (40 000 € + 15 000 € за кожну наступну особу).",
+kz7:"Переїзд: хто без згоди переїжджає в дорожче житло, отримує лише попередню оренду – також у пільговий період.",
+kzEx:"Приклади: допомога з березня 2026 → пільговий період до лютого 2027. Якщо серпень 2026 – повний місяць без допомоги, він закінчується в березні 2027. Якщо попередня допомога закінчилася в червні 2024, а нова почалася в травні 2026, між ними лише 22 місяці → нового періоду немає, лише залишкові місяці.",
+kzCalcH:"Розрахувати пільговий період для цього випадку",kzStart:"Початок поточної допомоги (місяць)",kzPrev:"Кінець попередньої допомоги (якщо була)",kzGap:"Повні місяці без допомоги від початку",kzUsed:"Уже використані місяці пільгового періоду з попередньої допомоги",
+kzNew:"Новий пільговий період: 12 місяців від {m}.",kzNewGap:"Від попередньої допомоги минуло {x} місяців без виплат – щонайменше 36, тому період починається знову.",
+kzNoNew:"Нового пільгового періоду немає: між попередньою допомогою і тепер лише {x} місяців без виплат (потрібно: 36). Продовжуються лише залишкові {r} місяців.",kzUsedHint:"Якщо не вказано, вважається, що попередній період повністю використано.",
+kzEnd:"Пільговий період триває до {m} включно.",kzExt:"Подовжено на {x} міс. без допомоги.",kzActive:"Сьогодні пільговий період триває ще {x} міс.",kzOver:"Сьогодні пільговий період закінчився.",kzNone:"Пільгового періоду не залишилося.",kzFuture:"Пільговий період ще не розпочався.",
+kz2023:"Пільговий період існує лише з 01.01.2023. Для допомоги до цього він починається не раніше січня 2023.",kzRestart:"Новий пільговий період буде можливий лише після 3 років без допомоги від кінця цієї допомоги.",kzSet:"Вибір нижче встановлено автоматично."},
+ru:{kzTitle:"Льготный период (Karenzzeit)",kzWhat:"Просто о главном: что такое льготный период?",
+kz1:"В первые 12 месяцев получения пособия Jobcenter оплачивает фактическую аренду – даже выше предела аренды. Но с 01.07.2026 не более 150 % предела аренды.",
+kz2:"Отопление не защищено. Его проверяют на соразмерность с первого месяца.",
+kz3:"Начало: первый месяц, за который получается пособие.",
+kz4:"Перерыв: полные месяцы без пособия не засчитываются. Льготный период продлевается на эти месяцы – но не начинается заново.",
+kz5:"Новый старт: новый полный 12-месячный льготный период наступает только если перед этим не менее 3 лет (36 месяцев) не получались выплаты по SGB II или SGB XII (§ 22 Abs. 1 SGB II, § 35 SGB XII). После более короткого перерыва продолжаются только оставшиеся месяцы старого периода.",
+kz6:"После этого: если аренда слишком высока, Jobcenter требует снизить расходы. Фактические расходы обычно покрываются ещё не более 6 месяцев. Для имущества действует тот же льготный период (40 000 € + 15 000 € за каждого следующего человека).",
+kz7:"Переезд: кто без согласия переезжает в более дорогое жильё, получает только прежнюю аренду – и в льготный период тоже.",
+kzEx:"Примеры: пособие с марта 2026 → льготный период до февраля 2027. Если август 2026 – полный месяц без пособия, он заканчивается в марте 2027. Если прежнее пособие закончилось в июне 2024, а новое началось в мае 2026, между ними только 22 месяца → нового периода нет, только оставшиеся месяцы.",
+kzCalcH:"Рассчитать льготный период для этого случая",kzStart:"Начало текущего пособия (месяц)",kzPrev:"Окончание прежнего пособия (если было)",kzGap:"Полные месяцы без пособия с начала",kzUsed:"Уже использованные месяцы льготного периода из прежнего пособия",
+kzNew:"Новый льготный период: 12 месяцев с {m}.",kzNewGap:"С прежнего пособия прошло {x} месяцев без выплат – не менее 36, поэтому период начинается заново.",
+kzNoNew:"Нового льготного периода нет: между прежним пособием и сейчас только {x} месяцев без выплат (нужно: 36). Продолжаются только оставшиеся {r} месяцев.",kzUsedHint:"Если не указано, считается, что прежний период полностью использован.",
+kzEnd:"Льготный период длится до {m} включительно.",kzExt:"Продлён на {x} мес. без пособия.",kzActive:"Сегодня льготный период длится ещё {x} мес.",kzOver:"Сегодня льготный период закончился.",kzNone:"Льготного периода не осталось.",kzFuture:"Льготный период ещё не начался.",
+kz2023:"Льготный период существует только с 01.01.2023. Для пособия до этого он начинается не раньше января 2023.",kzRestart:"Новый льготный период будет возможен только после 3 лет без пособия с конца этого пособия.",kzSet:"Выбор ниже установлен автоматически."}
+};
+for(const l in KZ) Object.assign(I[l], KZ[l]);
 let L = "de";
 try{ const s = localStorage.getItem("vp-wob-lang"); if(s && I[s]) L = s; }catch(e){}
 function t(k, v){
@@ -827,10 +947,10 @@ const GROUPS = [
 const AD0 = {gj:1990, ef:"ja", schw:false, merkG:false, sb:false, kv:"auto", jb:0, jn:0, rb:0, rn:0, grz:false, so:0};
 const SON0 = {azubi:false, eu:false, asyl:false, stat:false};
 const EX = {
-  fam:{mode:"fam", typ:"paar", verh:false, ad:[Object.assign({},AD0,{gj:1988,jb:1700,jn:1330}),Object.assign({},AD0,{gj:1990})], kids:[{age:4,uh:0},{age:9,uh:0}], son:clone(SON0), pa:"0.3", stabil:true, mi:780, hz:110, ww:false, kdz:"normal", hzG:null, mog:null, verm:2000, step:1},
-  wg:{mode:"wg", typ:"solo", verh:false, ad:[Object.assign({},AD0,{gj:1957,ef:"ar",rb:1250,rn:1096,grz:true}),Object.assign({},AD0)], kids:[], son:clone(SON0), pa:"0.3", stabil:true, mi:520, hz:70, ww:false, kdz:"normal", hzG:null, mog:null, verm:5000, step:1}
+  fam:{mode:"fam", typ:"paar", verh:false, ad:[Object.assign({},AD0,{gj:1988,jb:1700,jn:1330}),Object.assign({},AD0,{gj:1990})], kids:[{age:4,uh:0},{age:9,uh:0}], son:clone(SON0), pa:"0.3", stabil:true, mi:780, hz:110, ww:false, kdz:"normal", hzG:null, kzStart:"", kzPrev:"", kzGap:0, kzUsed:null, mog:null, verm:2000, step:1},
+  wg:{mode:"wg", typ:"solo", verh:false, ad:[Object.assign({},AD0,{gj:1957,ef:"ar",rb:1250,rn:1096,grz:true}),Object.assign({},AD0)], kids:[], son:clone(SON0), pa:"0.3", stabil:true, mi:520, hz:70, ww:false, kdz:"normal", hzG:null, kzStart:"", kzPrev:"", kzGap:0, kzUsed:null, mog:null, verm:5000, step:1}
 };
-const emptyFor = mode => ({mode, typ: mode==="fam"?"paar":"solo", verh:false, ad:[Object.assign({},AD0,{gj:0}),Object.assign({},AD0,{gj:0})], kids:[], son:clone(SON0), pa:"0.3", stabil:true, mi:0, hz:0, ww:false, kdz:"normal", hzG:null, mog:null, verm:0, step:1});
+const emptyFor = mode => ({mode, typ: mode==="fam"?"paar":"solo", verh:false, ad:[Object.assign({},AD0,{gj:0}),Object.assign({},AD0,{gj:0})], kids:[], son:clone(SON0), pa:"0.3", stabil:true, mi:0, hz:0, ww:false, kdz:"normal", hzG:null, kzStart:"", kzPrev:"", kzGap:0, kzUsed:null, mog:null, verm:0, step:1});
 let S = clone(EX.fam);
 try{ const s = localStorage.getItem("vp-wob-input4"); if(s){ const o=JSON.parse(s); S = Object.assign(clone(EX[o.mode==="wg"?"wg":"fam"]), o); } }catch(e){}
 const save = ()=>{ try{ localStorage.setItem("vp-wob-input4", JSON.stringify(S)); }catch(e){} };
@@ -992,6 +1112,46 @@ function kvCalc(G,H){
   });
   return {pers, rate, pv, total: r2(pers.reduce((x,p)=>x+p.beitrag,0))};
 }
+/* Karenzzeit (§ 22 Abs. 1 SGB II, § 35 SGB XII):
+   12 Monate ab erstem Leistungsmonat (frühestens 01/2023); volle Monate ohne Leistung verlängern sie;
+   neu beginnt sie nur nach mindestens 36 Monaten ohne SGB-II/XII-Leistungen, sonst laufen die Restmonate weiter. */
+const mIdx = v => { const m=/^(\d{4})-(\d{2})$/.exec(v||""); return m ? (+m[1])*12 + (+m[2]-1) : null; };
+const mName = i => new Intl.DateTimeFormat(loc(),{month:"long",year:"numeric"}).format(new Date(Math.floor(i/12), i%12, 1));
+function karenz(H){
+  const start = mIdx(H.kzStart); if(start==null) return null;
+  const prev = mIdx(H.kzPrev), floor = 2023*12, now = YEAR*12+MON-1;
+  const pause = prev!=null && prev<start ? start-prev-1 : null;
+  const neu = pause==null || pause>=36;
+  const used = neu ? 0 : (H.kzUsed==null ? 12 : clamp(H.kzUsed,0,12));
+  const rest = 12-used, gap = Math.max(0, Math.floor(H.kzGap||0));
+  const eff = Math.max(start, floor);
+  const end = eff + rest + gap - 1;
+  const active = rest>0 && now>=eff && now<=end;
+  return {start, eff, pause, neu, used, rest, gap, end, active, now, before2023: start<floor, usedBlank: !neu && H.kzUsed==null, future: now<eff};
+}
+function renderKarenz(){
+  const k = karenz(S), box = $("kzRes");
+  $("kzUsedL").hidden = !(k && !k.neu);
+  if(!k){ box.innerHTML=""; return; }
+  const lines=[];
+  if(k.neu){ lines.push('<b>'+esc(t("kzNew",{m:mName(k.eff)}))+'</b>'); if(k.pause!=null) lines.push(esc(t("kzNewGap",{x:k.pause}))); }
+  else { lines.push('<b>'+esc(t("kzNoNew",{x:k.pause,r:k.rest}))+'</b>'); if(k.usedBlank) lines.push('<span class="kzmeta">'+esc(t("kzUsedHint"))+'</span>'); }
+  if(k.rest<=0) lines.push(esc(t("kzNone")));
+  else {
+    lines.push(esc(t("kzEnd",{m:mName(k.end)})));
+    if(k.gap>0) lines.push('<span class="kzmeta">'+esc(t("kzExt",{x:k.gap}))+'</span>');
+    const total=k.rest+k.gap, done=clamp(k.now-k.eff+1,0,total);
+    lines.push('<div class="kzbar" role="img" aria-label="'+done+' / '+total+'"><i style="width:'+(100*done/Math.max(total,1)).toFixed(1)+'%"></i></div>');
+    lines.push('<b>'+esc(k.future?t("kzFuture"):k.active?t("kzActive",{x:k.end-k.now+1}):t("kzOver"))+'</b>');
+  }
+  if(k.before2023) lines.push('<span class="kzmeta">'+esc(t("kz2023"))+'</span>');
+  lines.push('<span class="kzmeta">'+esc(t("kzRestart"))+'</span>');
+  box.innerHTML='<div class="kzbox'+(k.active?'':' no')+'">'+lines.map(x=>'<p>'+x+'</p>').join("")+'</div>';
+}
+function kzAutoSet(){
+  const k = karenz(S); if(!k || S.kdz==="senk") return;
+  S.kdz = k.active ? "karenz" : "normal"; $("kdz").value = S.kdz;
+}
 function berechne(H){
   const G=grund(H); SYS=G.sys;
   const VL=vermLimits(G,H), W=wohngeld(G,H,VL), KV=kvCalc(G,H), K=kinderzuschlag(G,H,KV.total,VL);
@@ -1096,7 +1256,8 @@ function renderIncomes(){
 }
 function fillForm(){
   ["mi","hz","verm"].forEach(id=>{ $(id).value = S[id]||""; });
-  $("pa").value=S.pa; $("kdz").value=S.kdz||"normal"; $("hzG").value=S.hzG||""; $("verh").checked=!!S.verh; $("ww").checked=!!S.ww; $("stabil").checked=S.stabil!==false;
+  $("pa").value=S.pa; $("kdz").value=S.kdz||"normal"; $("hzG").value=S.hzG||"";
+  $("kzStart").value=S.kzStart||""; $("kzPrev").value=S.kzPrev||""; $("kzGap").value=S.kzGap||""; $("kzUsed").value=S.kzUsed==null?"":S.kzUsed; $("verh").checked=!!S.verh; $("ww").checked=!!S.ww; $("stabil").checked=S.stabil!==false;
   Object.keys(SON0).forEach(k=>{ $("s_"+k).checked=!!S.son[k]; });
   if(Object.keys(SON0).some(k=>S.son[k])) $("sonder").open = true;
 }
@@ -1105,6 +1266,10 @@ function bind(){
   ["mi","hz","verm"].forEach(id=>$(id).addEventListener("input",()=>{ S[id]=Math.max(0,num($(id).value)); update(); }));
   $("pa").addEventListener("change",()=>{ S.pa=$("pa").value; update(); });
   $("kdz").addEventListener("change",()=>{ S.kdz=$("kdz").value; update(); });
+  $("kzStart").addEventListener("input",()=>{ S.kzStart=$("kzStart").value; kzAutoSet(); update(); });
+  $("kzPrev").addEventListener("input",()=>{ S.kzPrev=$("kzPrev").value; kzAutoSet(); update(); });
+  $("kzGap").addEventListener("input",()=>{ S.kzGap=Math.max(0,Math.floor(num($("kzGap").value))); kzAutoSet(); update(); });
+  $("kzUsed").addEventListener("input",()=>{ const v=$("kzUsed").value; S.kzUsed = v==="" ? null : clamp(Math.floor(num(v)),0,12); kzAutoSet(); update(); });
   $("hzG").addEventListener("input",()=>{ const v=num($("hzG").value); S.hzG = v>0 ? v : null; update(); });
   [["verh","verh"],["ww","ww"],["stabil","stabil"]].forEach(([id,k])=>$(id).addEventListener("change",()=>{ S[k]=$(id).checked; update(); }));
   Object.keys(SON0).forEach(k=>$("s_"+k).addEventListener("change",()=>{ S.son[k]=$("s_"+k).checked; update(); }));
@@ -1146,6 +1311,7 @@ function update(){
   $("mogLabel").textContent=t("mog",{n:G.n});
   if(document.activeElement!==$("mog")) $("mog").value = r2(G.grenze);
   $("mogReset").hidden = S.mog==null; $("mogWarn").hidden = S.mog!=null;
+  renderKarenz();
   /* Statischen Text mit SGB-Bezug neu setzen (SGB II oder SGB XII) */
   document.querySelectorAll("[data-i18n]").forEach(el=>{ if(FIX.has(el.dataset.i18n)) el.textContent = t(el.dataset.i18n); });
 
