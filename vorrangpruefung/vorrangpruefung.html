@@ -178,6 +178,17 @@ html[dir="rtl"] .kz-list{padding:0 34px 0 14px}
 .kzbar i{display:block;height:100%;background:var(--accent)}
 .kzmeta{font-size:.78rem;color:var(--muted)}
 
+.copywrap{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.btn.small{padding:7px 12px;font-size:.85rem;display:inline-flex;align-items:center;gap:6px}
+#copyResBox{width:100%;height:160px;font-family:var(--font-mono);font-size:.75rem;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg)}
+.res-head{flex-wrap:wrap}
+.mbar{position:fixed;inset:auto 0 0 0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:10px;
+  background:var(--ink);color:var(--on-ink);padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));box-shadow:0 -6px 20px rgba(0,0,0,.18)}
+.mbar span{font-size:.88rem;font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mbar .btn{flex:none}
+@media (min-width:921px){.mbar{display:none!important}}
+@media (max-width:920px){main.in{padding-bottom:96px}}
+
 /* Akkordeons */
 details{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
 summary{cursor:pointer;padding:16px 22px;font-weight:700;list-style-position:inside}
@@ -362,7 +373,10 @@ footer{font-size:.8rem;color:var(--muted)}
 
     <!-- Ergebnis -->
     <section class="card" id="resCard" aria-live="polite">
-      <div class="res-head"><h2 data-i18n="result"></h2></div>
+      <div class="res-head"><h2 data-i18n="result"></h2>
+        <div class="copywrap"><button type="button" class="btn small" id="copyRes"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span data-i18n="copyRes"></span></button><span class="hint" id="copyResMsg" aria-live="polite"></span></div>
+      </div>
+      <textarea id="copyResBox" hidden readonly></textarea>
       <div id="verdict"></div>
       <div class="chips" id="chips"></div>
       <div class="kpis" id="kpis"></div>
@@ -395,6 +409,7 @@ footer{font-size:.8rem;color:var(--muted)}
   <details><summary data-i18n="limits"></summary><div class="dbody"><ul class="notes" id="limits"></ul></div></details>
 
   <footer data-i18n="footer"></footer>
+  <div class="mbar" id="mbar" hidden><span id="mbarTxt"></span><button type="button" class="btn primary small" id="mbarBtn" data-i18n="toResult"></button></div>
 </main>
 
 <script>
@@ -931,6 +946,15 @@ kwgAmt:"включая жилищное пособие для ребёнка {a}
 kidsKz:"Домохозяйства с детьми: при неизбежных расходах в льготный период возможны исключения из предела 150 %. Проверьте отдельный случай."}
 };
 for(const l in KI) Object.assign(I[l], KI[l]);
+const OP = {
+de:{copyRes:"Ergebnis kopieren",sumTitle:"Vorrangprüfung Wolfsburg – Ergebnis",sumDate:"Stand: {d}",wNet:"Person {n}: Netto ist höher als brutto – bitte prüfen.",wRente:"Person {n}: Zahlbetrag ist höher als die Rente brutto – bitte prüfen.",wGj:"Person {n}: Geburtsjahr fehlt – Regelaltersgrenze und Zuständigkeit sind unsicher.",wMiete:"Es ist keine Miete eingetragen.",kzNoNew0:"Keine neue Karenzzeit: Zwischen dem früheren Bezug und jetzt liegen nur {x} Monate ohne Leistung (nötig: 36). Die frühere Karenzzeit ist verbraucht."},
+en:{copyRes:"Copy result",sumTitle:"Priority Check Wolfsburg – result",sumDate:"As of: {d}",wNet:"Person {n}: net is higher than gross – please check.",wRente:"Person {n}: amount paid is higher than gross pension – please check.",wGj:"Person {n}: year of birth missing – retirement age and responsibility are uncertain.",wMiete:"No rent has been entered.",kzNoNew0:"No new waiting period: only {x} months without benefits lie between the earlier benefits and now (required: 36). The earlier waiting period is used up."},
+tr:{copyRes:"Sonucu kopyala",sumTitle:"Öncelik Kontrolü Wolfsburg – sonuç",sumDate:"Tarih: {d}",wNet:"Kişi {n}: net, brütten yüksek – lütfen kontrol edin.",wRente:"Kişi {n}: ödenen tutar brüt emekli aylığından yüksek – lütfen kontrol edin.",wGj:"Kişi {n}: doğum yılı eksik – emeklilik yaşı ve sorumluluk belirsiz.",wMiete:"Kira girilmedi.",kzNoNew0:"Yeni bekleme süresi yok: Önceki yardım ile şimdi arasında yalnızca {x} ay yardımsız geçmiş (gerekli: 36). Önceki bekleme süresi tükenmiştir."},
+ar:{copyRes:"نسخ النتيجة",sumTitle:"فحص الأولوية فولفسبورغ – النتيجة",sumDate:"التاريخ: {d}",wNet:"الشخص {n}: الصافي أعلى من الإجمالي – يرجى التحقق.",wRente:"الشخص {n}: المبلغ المدفوع أعلى من المعاش الإجمالي – يرجى التحقق.",wGj:"الشخص {n}: سنة الميلاد مفقودة – سن التقاعد والجهة المختصة غير مؤكدين.",wMiete:"لم يتم إدخال إيجار.",kzNoNew0:"لا فترة سماح جديدة: بين الإعانة السابقة والآن {x} شهرًا فقط بدون إعانة (المطلوب: 36). فترة السماح السابقة مستهلكة."},
+uk:{copyRes:"Копіювати результат",sumTitle:"Перевірка пріоритету Вольфсбург – результат",sumDate:"Станом на: {d}",wNet:"Особа {n}: нетто більше за брутто – перевірте.",wRente:"Особа {n}: сума виплати більша за пенсію брутто – перевірте.",wGj:"Особа {n}: немає року народження – пенсійний вік і відповідальність невизначені.",wMiete:"Оренду не введено.",kzNoNew0:"Нового пільгового періоду немає: між попередньою допомогою і тепер лише {x} місяців без виплат (потрібно: 36). Попередній період використано."},
+ru:{copyRes:"Копировать результат",sumTitle:"Проверка приоритета Вольфсбург – результат",sumDate:"На дату: {d}",wNet:"Лицо {n}: нетто больше брутто – проверьте.",wRente:"Лицо {n}: сумма выплаты больше пенсии брутто – проверьте.",wGj:"Лицо {n}: нет года рождения – пенсионный возраст и ответственность не определены.",wMiete:"Аренда не введена.",kzNoNew0:"Нового льготного периода нет: между прежним пособием и сейчас только {x} месяцев без выплат (нужно: 36). Прежний период использован."}
+};
+for(const l in OP) Object.assign(I[l], OP[l]);
 let L = "de";
 try{ const s = localStorage.getItem("vp-wob-lang"); if(s && I[s]) L = s; }catch(e){}
 function t(k, v){
@@ -1232,9 +1256,8 @@ function renderKarenz(){
   if(!k){ box.innerHTML=""; return; }
   const lines=[];
   if(k.neu){ lines.push('<b>'+esc(t("kzNew",{m:mName(k.eff)}))+'</b>'); if(k.pause!=null) lines.push(esc(t("kzNewGap",{x:k.pause}))); }
-  else { lines.push('<b>'+esc(t("kzNoNew",{x:k.pause,r:k.rest}))+'</b>'); if(k.usedBlank) lines.push('<span class="kzmeta">'+esc(t("kzUsedHint"))+'</span>'); }
-  if(k.rest<=0) lines.push(esc(t("kzNone")));
-  else {
+  else { lines.push('<b>'+esc(k.rest>0 ? t("kzNoNew",{x:k.pause,r:k.rest}) : t("kzNoNew0",{x:k.pause}))+'</b>'); if(k.usedBlank) lines.push('<span class="kzmeta">'+esc(t("kzUsedHint"))+'</span>'); }
+  if(k.rest>0){
     lines.push(esc(t("kzEnd",{m:mName(k.end)})));
     if(k.gap>0) lines.push('<span class="kzmeta">'+esc(t("kzExt",{x:k.gap}))+'</span>');
     const total=k.rest+k.gap, done=clamp(k.now-k.eff+1,0,total);
@@ -1439,6 +1462,8 @@ function update(){
     else {cls="bad";h=t("vSgbH");tx=famEff(S) ? t("vSgbT",{a:eur(V[3].gap)}) : t("vSgbWgT",{a:eur(V[1].gap)});}
   }
   if(best>0 && G.sys==="II" && !S.stabil){ cls="warn"; tx=t("vNotStableT",{v:t("v"+best)}); h=t("vNotStableH"); }
+  LAST = {h, tx, law};
+  $("mbarTxt").textContent = h;
   $("verdict").innerHTML='<div class="verdict '+cls+'">'+ICON[cls]+'<div><b>'+esc(h)+'</b><p>'+esc(tx)+'</p>'+(law?'<p class="law">'+esc(law)+'</p>':'')+'</div></div>';
 
   /* Hinweise */
@@ -1451,6 +1476,12 @@ function update(){
   if(G.unbornOn) chips.push(['w',t("unbornInfo")]);
   KW.set.forEach(i=>chips.push(['sys',t("kwgInfo",{n:i+1,a:eur(KW.per[i])})]));
   if(S.kdz==="karenz" && G.kids.length && isFinite(G.mieteCap) && S.mi>G.mieteCap) chips.push(['w',t("kidsKz")]);
+  G.ads.forEach((a,i)=>{
+    if(a.jn>a.jb && a.jb>0) chips.push(['w',t("wNet",{n:i+1})]);
+    if(a.rn>a.rb && a.rb>0) chips.push(['w',t("wRente",{n:i+1})]);
+    if(!a.gj) chips.push(['w',t("wGj",{n:i+1})]);
+  });
+  if(!S.mi) chips.push(['w',t("wMiete")]);
   if(S.son.azubi) chips.push(['w',t("warnAzubi")]);
   if(S.son.stat) chips.push(['w',t("warnStat")]);
   if(G.pers.some(p=>p.edge)) chips.push(['w',t("warnRag")]);
@@ -1570,6 +1601,33 @@ $("copyP").addEventListener("click",()=>{
   const fb=()=>{ const ta=$("copyBox"); ta.hidden=false; ta.value=txt; ta.select(); $("copyMsg").textContent=t("selectCopy"); };
   try{ navigator.clipboard.writeText(txt).then(()=>{ $("copyMsg").textContent=t("copied"); },fb); }catch(e){ fb(); }
 });
+
+/* Ergebnis als Text (für den Vermerk) */
+let LAST = {h:"",tx:"",law:""};
+function summaryText(){
+  const L2 = [];
+  const df = new Intl.DateTimeFormat(loc(),{day:"2-digit",month:"2-digit",year:"numeric"}).format(new Date());
+  L2.push(t("sumTitle"), t("sumDate",{d:df}), "");
+  L2.push(LAST.h, LAST.tx); if(LAST.law) L2.push(LAST.law); L2.push("");
+  document.querySelectorAll("#chips .chip").forEach(c=>L2.push("• "+c.textContent));
+  L2.push("");
+  document.querySelectorAll("#kpis .kpi").forEach(k=>L2.push(k.querySelector("span").textContent+": "+k.querySelector("b").textContent));
+  L2.push("");
+  document.querySelectorAll("#vrows .vrow").forEach(v=>{ const pill=v.querySelector(".pill"); L2.push(v.querySelector(".vtop b").textContent+" – "+(pill?pill.textContent:"")+" – "+v.querySelector(".amt").textContent); });
+  L2.push("");
+  document.querySelectorAll("#budget .brow").forEach(r=>{ const sp=r.querySelector("span").cloneNode(true); const sm=sp.querySelector("small"); if(sm) sm.remove(); L2.push(sp.textContent.trim()+": "+r.querySelector("b").textContent); });
+  return L2.join("\n");
+}
+$("copyRes").addEventListener("click",()=>{
+  const txt = summaryText();
+  const fb=()=>{ const ta=$("copyResBox"); ta.hidden=false; ta.value=txt; ta.select(); $("copyResMsg").textContent=t("selectCopy"); };
+  try{ navigator.clipboard.writeText(txt).then(()=>{ $("copyResMsg").textContent=t("copied"); $("copyResBox").hidden=true; },fb); }catch(e){ fb(); }
+});
+$("mbarBtn").addEventListener("click",()=>{ $("resCard").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth", block:"start"}); });
+try{
+  const io = new IntersectionObserver(es=>{ es.forEach(e=>{ $("mbar").hidden = e.isIntersecting; }); }, {threshold:0.05});
+  io.observe($("resCard"));
+}catch(e){}
 
 function renderAll(){ renderLangs(); applyStatic(); rebuild(); showStep(); update(); }
 bind(); fillForm(); renderParams(); renderAll();
