@@ -6,19 +6,26 @@
 <title>Leistungsabgleich</title>
 <style>
 :root{--bg:#f5f6f8;--fg:#1b2230;--muted:#5d6676;--card:#fff;--line:#dfe3ea;--accent:#1d5bbf;--accent-fg:#fff;
---p1:#b42318;--p2:#b54708;--p3:#1d5bbf;--p4:#067647;--chip:#eef1f6}
+--p1:#b42318;--p2:#b54708;--p3:#1d5bbf;--p4:#067647;--chip:#eef1f6;--beta:#fff4e5;--beta-fg:#7a3e00}
 @media (prefers-color-scheme:dark){:root{--bg:#101318;--fg:#e5e8ee;--muted:#98a1b0;--card:#191d24;--line:#2b313b;
---accent:#6b9ff5;--accent-fg:#0d1117;--p1:#f97066;--p2:#f5a524;--p3:#6b9ff5;--p4:#47cd89;--chip:#232933}}
+--accent:#6b9ff5;--accent-fg:#0d1117;--p1:#f97066;--p2:#f5a524;--p3:#6b9ff5;--p4:#47cd89;--chip:#232933;--beta:#2d2210;--beta-fg:#f5c77e}}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{margin:0;font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--fg)}
+.beta{background:var(--beta);color:var(--beta-fg);padding:6px 16px;font-size:13px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.beta button{padding:2px 10px;font-size:13px}
 header{display:flex;gap:12px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);background:var(--card);flex-wrap:wrap}
 header strong{font-size:17px}
-header .wer{color:var(--muted);flex:1}
-main{max-width:980px;margin:0 auto;padding:16px}
+header .wer{color:var(--muted);flex:1;min-width:140px}
+main{max-width:1000px;margin:0 auto;padding:16px}
+footer{max-width:1000px;margin:0 auto;padding:8px 16px 32px;color:var(--muted);font-size:12px}
 button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;padding:6px 12px;cursor:pointer}
 button.primaer{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
 button:disabled{opacity:.5;cursor:default}
-input,select{font:inherit;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--fg)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input,select,textarea{font:inherit;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--fg);max-width:100%}
+textarea{width:100%;min-height:90px;resize:vertical}
+label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
 nav{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
 nav button[aria-selected=true]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
 .karte{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:12px}
@@ -37,188 +44,324 @@ th{color:var(--muted);font-weight:500}
 td.zahl,th.zahl{text-align:right;white-space:nowrap}
 .tabelle{overflow-x:auto}
 .zeile{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.zeile .rechts{margin-left:auto}
 .zusammen{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
 .zusammen div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
 .zusammen b{display:block;font-size:22px}
 .zusammen span{color:var(--muted);font-size:13px}
+dialog{border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--fg);padding:18px;width:min(460px,calc(100vw - 32px))}
+dialog::backdrop{background:rgba(0,0,0,.35)}
+dialog h2{margin:0 0 6px;font-size:17px}
+.hinweis{font-size:13px;color:var(--muted)}
 </style>
 </head>
 <body>
+<div class="beta" role="note"><b>Beta</b> Nur für den Pilotbetrieb. Ergebnisse vor der Weiterverarbeitung prüfen.
+  <button id="feedbackknopf" type="button">Feedback geben</button></div>
 <header><strong>Leistungsabgleich</strong><span class="wer" id="wer">Jobcenter ↔ Wohngeldstelle</span>
-<button id="abmelden" hidden>Abmelden</button></header>
+<button id="abmelden" type="button" hidden>Abmelden</button></header>
 <main>
   <section id="login" class="karte">
-    <p>Mit dem API-Schlüssel Ihrer Behörde anmelden.</p>
-    <form id="loginform" class="zeile"><input id="key" type="password" autocomplete="off" placeholder="Schlüssel" required>
-      <button class="primaer">Anmelden</button></form>
-    <div id="demo" class="zeile"></div>
-    <p class="fehler" id="loginfehler"></p>
+    <form id="loginform">
+      <label for="key">API-Schlüssel Ihrer Behörde</label>
+      <input id="key" type="password" autocomplete="off" required>
+      <label for="kuerzel">Ihr Kürzel (steht im Protokoll)</label>
+      <input id="kuerzel" autocomplete="username" pattern="[A-Za-z0-9._\-]{2,40}" placeholder="z. B. mkern" required>
+      <div class="aktionen"><button class="primaer">Anmelden</button></div>
+    </form>
+    <div id="demo" class="zeile" style="margin-top:12px"></div>
+    <p class="fehler" id="loginfehler" role="alert"></p>
   </section>
   <nav id="tabs" hidden>
-    <button data-tab="korb" aria-selected="true">Arbeitskorb</button>
-    <button data-tab="eingehend">Forderungen an uns</button>
-    <button data-tab="ausgehend">Unsere Forderungen</button>
-    <button data-tab="abgleich">Abgleich</button>
-    <button data-tab="protokoll">Protokoll</button>
+    <button type="button" data-tab="korb" aria-selected="true">Arbeitskorb</button>
+    <button type="button" data-tab="eingehend">Forderungen an uns</button>
+    <button type="button" data-tab="ausgehend">Unsere Forderungen</button>
+    <button type="button" data-tab="abgleich">Abgleich</button>
+    <button type="button" data-tab="kennzahlen">Kennzahlen</button>
+    <button type="button" data-tab="protokoll">Protokoll</button>
   </nav>
-  <section id="inhalt"></section>
+  <section id="inhalt" aria-live="polite"></section>
 </main>
+<footer id="fuss"></footer>
+
+<dialog id="entscheidung">
+  <form method="dialog" id="entscheidungform">
+    <h2 id="e-titel"></h2>
+    <p class="hinweis" id="e-text"></p>
+    <div id="e-betrag-feld"><label for="e-betrag">Anerkannter Gesamtbetrag in Euro</label>
+      <input id="e-betrag" inputmode="decimal" placeholder="z. B. 250,00"></div>
+    <label for="e-begruendung">Begründung</label>
+    <textarea id="e-begruendung" maxlength="1000"></textarea>
+    <p class="fehler" id="e-fehler" role="alert"></p>
+    <div class="aktionen"><button class="primaer" value="ok">Speichern</button><button value="abbruch" formnovalidate>Abbrechen</button></div>
+  </form>
+</dialog>
+
+<dialog id="feedback">
+  <form method="dialog" id="feedbackform">
+    <h2>Feedback zur Beta</h2>
+    <p class="hinweis">Was hat gefehlt, was war unklar, was hat Zeit gespart? <b>Bitte keine Namen oder Aktenzeichen.</b></p>
+    <label for="f-text">Ihre Rückmeldung</label>
+    <textarea id="f-text" maxlength="2000" required></textarea>
+    <p class="fehler" id="f-fehler" role="alert"></p>
+    <div class="aktionen"><button class="primaer" value="ok">Senden</button><button value="abbruch" formnovalidate>Abbrechen</button></div>
+  </form>
+</dialog>
+
 <script>
 "use strict";
 const $ = s => document.querySelector(s);
-let key = null, tab = "korb";
-try { key = sessionStorage.getItem("abgleich-key"); } catch (e) {}
+const speicher = {
+  get: k => { try { return sessionStorage.getItem(k); } catch (e) { return null; } },
+  set: (k, v) => { try { sessionStorage.setItem(k, v); } catch (e) {} },
+  weg: k => { try { sessionStorage.removeItem(k); } catch (e) {} },
+};
+let key = speicher.get("abgleich-key"), kuerzel = speicher.get("abgleich-kuerzel"), tab = "korb", ich = null;
+let filterTyp = "", filterText = "";
+try { kuerzel = kuerzel || localStorage.getItem("abgleich-kuerzel"); } catch (e) {}
 
 function el(tag, attrs, ...kinder) {
   const n = document.createElement(tag);
   for (const [k, v] of Object.entries(attrs || {})) {
-    if (k.startsWith("on")) n.addEventListener(k.slice(2), v); else if (v != null) n.setAttribute(k, v);
+    if (k.startsWith("on")) n.addEventListener(k.slice(2), v); else if (v != null && v !== false) n.setAttribute(k, v);
   }
-  for (const k of kinder.flat()) if (k != null) n.append(k instanceof Node ? k : String(k));
+  for (const k of kinder.flat()) if (k != null && k !== false) n.append(k instanceof Node ? k : String(k));
   return n;
 }
 const euro = c => c == null ? "–" : (c / 100).toLocaleString("de-DE", {style: "currency", currency: "EUR"});
 const STATUS = {angemeldet: "angemeldet (dem Grunde nach)", beziffert: "beziffert", pruefung: "zur Prüfung",
   anerkannt: "anerkannt", teilweise_anerkannt: "teilweise anerkannt", abgelehnt: "abgelehnt", erstattet: "erstattet"};
+const TYPEN = {einbehalten: "Nachzahlung einbehalten", korrektur: "Auszahlung trotz Erstattung", doppelbezug: "Doppelbezug",
+  erstattung_pruefen: "Erstattung prüfen", aufheben: "Bescheid aufheben", klaeren: "Vorrang klären", erstattung_zahlen: "Erstattung auszahlen"};
 
+function kopfzeilen() {
+  const h = {"Authorization": "Bearer " + key, "Content-Type": "application/json"};
+  if (kuerzel) h["X-Bearbeiter"] = kuerzel;
+  return h;
+}
 async function api(pfad, methode = "GET", daten) {
-  const r = await fetch(pfad, {method: methode, headers: {"Authorization": "Bearer " + key, "Content-Type": "application/json"},
-    body: daten ? JSON.stringify(daten) : undefined});
+  const r = await fetch(pfad, {method: methode, headers: kopfzeilen(), body: daten ? JSON.stringify(daten) : undefined});
   const d = await r.json().catch(() => ({}));
-  if (!r.ok) throw new Error(d.fehler || ("Fehler " + r.status));
+  if (r.status === 401 && ich) { abmelden(); throw new Error("Sitzung abgelaufen"); }
+  if (!r.ok) throw new Error((d.fehler || "Fehler " + r.status) + (d.anfrage ? ` (Anfrage ${d.anfrage})` : ""));
   return d;
 }
 
-async function anmelden(k) {
-  key = k;
+async function anmelden(k, kz) {
+  key = k; kuerzel = kz;
   try {
-    const ich = await api("/ich");
-    try { sessionStorage.setItem("abgleich-key", k); } catch (e) {}
-    $("#wer").textContent = ich.name;
+    ich = await api("/ich");
+    speicher.set("abgleich-key", k); speicher.set("abgleich-kuerzel", kz);
+    try { localStorage.setItem("abgleich-kuerzel", kz); } catch (e) {}
+    $("#wer").textContent = `${ich.name} · ${kz}`;
     $("#login").hidden = true; $("#tabs").hidden = false; $("#abmelden").hidden = false;
-    zeigen();
-  } catch (e) { key = null; $("#loginfehler").textContent = e.message; }
-}
-
-function abmelden() {
-  key = null; try { sessionStorage.removeItem("abgleich-key"); } catch (e) {}
-  location.reload();
-}
-
-async function aktion(nr, was) {
-  try {
-    if (was === "erstattet") await api(`/erstattungen/${nr}/erstattet`, "POST");
-    else if (was === "anerkennen") await api(`/erstattungen/${nr}/entscheidung`, "POST", {entscheidung: "anerkennen"});
-    else {
-      let betrag_cent;
-      if (was === "teilweise") {
-        const t = prompt("Anerkannter Gesamtbetrag in Euro:");
-        if (!t) return;
-        betrag_cent = Math.round(parseFloat(t.replace(/\./g, "").replace(",", ".")) * 100);
-      }
-      const begruendung = prompt(was === "teilweise" ? "Begründung der Teilanerkennung:" : "Begründung der Ablehnung:");
-      if (!begruendung) return;
-      await api(`/erstattungen/${nr}/entscheidung`, "POST",
-        {entscheidung: was === "teilweise" ? "teilweise" : "ablehnen", begruendung, betrag_cent});
+    if (ich.rolle === "fachverfahren") {
+      $("#tabs").hidden = true;
+      $("#inhalt").replaceChildren(el("div", {class: "karte"}, "Dieser Schlüssel ist nur für das Fachverfahren (Meldungen). Bitte mit einem Schlüssel der Sachbearbeitung anmelden."));
+      return;
     }
     zeigen();
-  } catch (e) { alert(e.message); }
+  } catch (e) { key = null; ich = null; $("#loginfehler").textContent = e.message; }
+}
+function abmelden() { speicher.weg("abgleich-key"); speicher.weg("abgleich-kuerzel"); location.reload(); }
+
+// --- Entscheidungen ---------------------------------------------------------------------------
+function entscheidungDialog(a, was) {
+  const d = $("#entscheidung");
+  $("#e-titel").textContent = was === "teilweise" ? "Teilweise anerkennen" : "Ablehnen";
+  $("#e-text").textContent = `Erstattung Nr. ${a.erstattung}, ${a.partner_name}. ${was === "teilweise" ? "Der Rest gilt als abgelehnt." : ""}`;
+  $("#e-betrag-feld").hidden = was !== "teilweise";
+  $("#e-betrag").value = ""; $("#e-begruendung").value = ""; $("#e-fehler").textContent = "";
+  d.onclose = null;
+  $("#entscheidungform").onsubmit = async ev => {
+    if (ev.submitter && ev.submitter.value === "abbruch") return;
+    ev.preventDefault();
+    const begruendung = $("#e-begruendung").value.trim();
+    const daten = {entscheidung: was, begruendung};
+    if (!begruendung) { $("#e-fehler").textContent = "Bitte eine Begründung eingeben."; return; }
+    if (was === "teilweise") {
+      const t = $("#e-betrag").value.trim().replace(/\s|€/g, "");
+      const zahl = Number(t.includes(",") ? t.replace(/\./g, "").replace(",", ".") : t);
+      if (!(zahl > 0)) { $("#e-fehler").textContent = "Bitte einen Betrag größer 0 eingeben."; return; }
+      daten.betrag_cent = Math.round(zahl * 100);
+    }
+    try { await api(`/erstattungen/${a.erstattung}/entscheidung`, "POST", daten); d.close(); zeigen(); }
+    catch (e) { $("#e-fehler").textContent = e.message; }
+  };
+  d.showModal();
+}
+
+async function aktion(a, was, knopf) {
+  if (was === "teilweise" || was === "ablehnen") return entscheidungDialog(a, was);
+  knopf.disabled = true;
+  try {
+    if (was === "erstattet") await api(`/erstattungen/${a.erstattung}/erstattet`, "POST");
+    else await api(`/erstattungen/${a.erstattung}/entscheidung`, "POST", {entscheidung: "anerkennen"});
+    zeigen();
+  } catch (e) { knopf.disabled = false; alert(e.message); }
 }
 
 const BESCHRIFTUNG = {anerkennen: "Anerkennen", teilweise: "Teilweise …", ablehnen: "Ablehnen …", erstattet: "Als erstattet markieren"};
 
 function aufgabeKarte(a) {
-  return el("div", {class: "karte p" + a.prioritaet},
+  return el("article", {class: "karte p" + a.prioritaet},
     el("div", {class: "kopf"}, el("span", {class: "titel"}, a.titel), el("span", {class: "chip"}, a.aktenzeichen),
       a.zeitraum && el("span", {class: "chip"}, a.zeitraum)),
     el("div", {}, a.text),
     el("div", {class: "meta"}, a.partner_name ? `Gegenstelle: ${a.partner_name}, Az. ${a.partner_aktenzeichen}` : "",
       a.erstattung ? ` · Erstattung Nr. ${a.erstattung}` : ""),
-    a.aktionen.length ? el("div", {class: "aktionen"}, a.aktionen.map((x, i) =>
-      el("button", {class: i === 0 ? "primaer" : null, onclick: () => aktion(a.erstattung, x)}, BESCHRIFTUNG[x]))) : null);
+    a.aktionen.length ? el("div", {class: "aktionen"}, a.aktionen.map((x, i) => {
+      const b = el("button", {type: "button", class: i === 0 ? "primaer" : null}, BESCHRIFTUNG[x]);
+      b.addEventListener("click", () => aktion(a, x, b));
+      return b;
+    })) : null);
 }
 
+// --- Ansichten --------------------------------------------------------------------------------
 async function korb() {
-  const liste = await api("/arbeitskorb");
-  const zahl = t => liste.filter(a => t.includes(a.typ)).length;
+  const alle = await api("/arbeitskorb");
+  const zahl = t => alle.filter(a => t.includes(a.typ)).length;
+  const liste = alle.filter(a => (!filterTyp || a.typ === filterTyp) &&
+    (!filterText || a.aktenzeichen.toLowerCase().includes(filterText) || (a.partner_aktenzeichen || "").toLowerCase().includes(filterText)));
+  const auswahl = el("select", {"aria-label": "Aufgabentyp", onchange: e => { filterTyp = e.target.value; zeigen(); }},
+    el("option", {value: ""}, "Alle Aufgaben"),
+    Object.entries(TYPEN).filter(([t]) => zahl([t])).map(([t, n]) => el("option", {value: t, selected: t === filterTyp}, `${n} (${zahl([t])})`)));
+  const suche = el("input", {type: "search", placeholder: "Aktenzeichen suchen", value: filterText, "aria-label": "Aktenzeichen suchen"});
+  suche.addEventListener("change", e => { filterText = e.target.value.trim().toLowerCase(); zeigen(); });
   return [
     el("div", {class: "zusammen"},
-      el("div", {}, el("b", {}, liste.length), el("span", {}, "offene Aufgaben")),
+      el("div", {}, el("b", {}, alle.length), el("span", {}, "offene Aufgaben")),
       el("div", {}, el("b", {}, zahl(["einbehalten", "korrektur"])), el("span", {}, "dringend vor Auszahlung")),
       el("div", {}, el("b", {}, zahl(["aufheben", "klaeren", "doppelbezug"])), el("span", {}, "Bescheide anpassen")),
       el("div", {}, el("b", {}, zahl(["erstattung_pruefen", "erstattung_zahlen"])), el("span", {}, "Erstattungen"))),
-    liste.length ? liste.map(aufgabeKarte) : el("div", {class: "leer"}, "Nichts zu tun. Neue Aufgaben entstehen automatisch.")];
+    el("div", {class: "zeile"}, auswahl, suche, el("span", {class: "hinweis rechts"}, "aktualisiert " + new Date().toLocaleTimeString("de-DE", {hour: "2-digit", minute: "2-digit"}))),
+    liste.length ? liste.map(aufgabeKarte)
+      : el("div", {class: "leer"}, alle.length ? "Keine Aufgaben für diesen Filter." : "Nichts zu tun. Neue Aufgaben entstehen automatisch.")];
+}
+
+async function herunterladen(richtung) {
+  const r = await fetch(`/erstattungen?richtung=${richtung}&format=csv`, {headers: kopfzeilen()});
+  if (!r.ok) return alert("Export fehlgeschlagen");
+  const a = el("a", {href: URL.createObjectURL(await r.blob()), download: `erstattungen-${richtung}.csv`});
+  document.body.append(a); a.click(); a.remove();
 }
 
 async function erstattungen(richtung) {
   const liste = await api("/erstattungen?richtung=" + richtung);
-  if (!liste.length) return el("div", {class: "leer"}, "Keine Erstattungen.");
-  return el("div", {class: "karte tabelle"}, el("table", {},
+  const kopf = el("div", {class: "zeile"}, el("span", {class: "hinweis"}, `${liste.length} Erstattungen`),
+    el("button", {type: "button", class: "rechts", onclick: () => herunterladen(richtung)}, "Als CSV herunterladen"));
+  if (!liste.length) return [kopf, el("div", {class: "leer"}, "Keine Erstattungen.")];
+  return [kopf, el("div", {class: "karte tabelle"}, el("table", {},
     el("thead", {}, el("tr", {}, ["Nr.", richtung === "eingehend" ? "Von" : "An", "Unser Az.", "Zeitraum", "Rechtsgrundlage", "Status"]
-      .map(t => el("th", {}, t)), el("th", {class: "zahl"}, "Betrag"))),
+      .map(t => el("th", {scope: "col"}, t)), el("th", {class: "zahl", scope: "col"}, "Betrag"))),
     el("tbody", {}, liste.map(e => el("tr", {},
       el("td", {}, e.id),
       el("td", {}, richtung === "eingehend" ? e.berechtigt_name : e.verpflichtet_name, el("br"),
         el("small", {}, richtung === "eingehend" ? e.berechtigt_az : e.verpflichtet_az)),
       el("td", {}, richtung === "eingehend" ? e.verpflichtet_az : e.berechtigt_az),
       el("td", {}, e.zeitraum), el("td", {}, el("small", {}, e.rechtsgrundlage)),
-      el("td", {}, STATUS[e.status] || e.status, e.automatisch ? el("br") : null, e.automatisch ? el("small", {}, "automatisch") : null,
-        e.begruendung ? el("br") : null, e.begruendung ? el("small", {}, e.begruendung) : null),
+      el("td", {}, STATUS[e.status] || e.status, e.automatisch && el("br"), e.automatisch && el("small", {}, "automatisch"),
+        e.begruendung && el("br"), e.begruendung && el("small", {}, e.begruendung)),
       el("td", {class: "zahl"}, e.status === "angemeldet" ? ["offen", el("br"), el("small", {}, "höchstens " + euro(e.hoechstens_cent))]
-        : e.anerkannt_cent != null && e.anerkannt_cent !== e.summe_cent
-        ? [euro(e.anerkannt_cent), el("br"), el("small", {}, "von " + euro(e.summe_cent))] : euro(e.summe_cent)))))));
+        : e.gefordert_cent != null && e.anerkannt_cent !== e.gefordert_cent
+        ? [euro(e.anerkannt_cent), el("br"), el("small", {}, "von " + euro(e.gefordert_cent))] : euro(e.summe_cent)))))))];
 }
 
 function abgleich() {
   const ergebnis = el("div");
-  const eingabe = el("input", {placeholder: "Eigenes Aktenzeichen, z. B. BG-12345", required: ""});
+  const eingabe = el("input", {placeholder: "Eigenes Aktenzeichen, z. B. BG-12345", required: "", "aria-label": "Eigenes Aktenzeichen"});
   const form = el("form", {class: "zeile", onsubmit: async ev => {
     ev.preventDefault(); ergebnis.replaceChildren();
     try {
       const d = await api(`/faelle/${encodeURIComponent(eingabe.value.trim())}/abgleich`);
       ergebnis.append(
         d.faelle.length ? el("div", {class: "karte tabelle"}, el("table", {},
-          el("thead", {}, el("tr", {}, ["Stelle", "Az.", "Status", "Zeitraum", "Kontakt"].map(t => el("th", {}, t)),
-            el("th", {class: "zahl"}, "aktuell"))),
+          el("thead", {}, el("tr", {}, ["Stelle", "Az.", "Status", "Zeitraum", "Kontakt"].map(t => el("th", {scope: "col"}, t)),
+            el("th", {class: "zahl", scope: "col"}, "aktuell"))),
           el("tbody", {}, d.faelle.map(f => el("tr", {}, el("td", {}, f.name), el("td", {}, f.aktenzeichen),
-            el("td", {}, f.laeuft ? "läuft" : f.status, f.antrag_am ? el("br") : null, f.antrag_am ? el("small", {}, "Antrag " + f.antrag_am) : null),
+            el("td", {}, f.laeuft ? "läuft" : f.status, f.antrag_am && el("br"), f.antrag_am && el("small", {}, "Antrag " + f.antrag_am)),
             el("td", {}, f.von ? `${f.von} bis ${f.bis || "offen"}` : "–"), el("td", {}, f.kontakt || "–"),
             el("td", {class: "zahl"}, euro(f.anspruch_aktuell_cent)))))))
           : el("div", {class: "leer"}, "Bei der anderen Stelle ist zu diesem Fall nichts bekannt."),
         d.hinweise.map(h => el("div", {class: "karte p3"}, h)),
         d.aufgaben.map(aufgabeKarte));
-    } catch (e) { ergebnis.append(el("p", {class: "fehler"}, e.message)); }
+    } catch (e) { ergebnis.append(el("p", {class: "fehler", role: "alert"}, e.message)); }
   }}, eingabe, el("button", {class: "primaer"}, "Abgleichen"));
-  return [el("p", {}, "Zeigt, was bei der anderen Stelle zu den Personen eines eigenen Falls läuft. Jede Abfrage wird protokolliert."),
+  setTimeout(() => eingabe.focus());
+  return [el("p", {}, "Zeigt, was bei der anderen Stelle zu den Personen eines eigenen Falls läuft. Jede Abfrage wird mit Ihrem Kürzel protokolliert."),
     form, ergebnis];
+}
+
+async function kennzahlen() {
+  const k = await api("/kennzahlen");
+  const block = (titel, daten) => {
+    const zeilen = Object.entries(daten);
+    return el("div", {class: "karte tabelle"}, el("div", {class: "titel"}, titel), zeilen.length ? el("table", {},
+      el("thead", {}, el("tr", {}, el("th", {}, "Status"), el("th", {class: "zahl"}, "Anzahl"), el("th", {class: "zahl"}, "anerkannt"))),
+      el("tbody", {}, zeilen.map(([s, v]) => el("tr", {}, el("td", {}, STATUS[s] || s), el("td", {class: "zahl"}, v.anzahl),
+        el("td", {class: "zahl"}, euro(v.anerkannt_cent))))))
+      : el("p", {class: "hinweis"}, "Noch keine."));
+  };
+  const quote = k.entschieden ? Math.round(100 * k.automatisch_anerkannt / k.entschieden) + " %" : "–";
+  const tage = t => t == null ? "–" : t.toLocaleString("de-DE") + " Tage";
+  return [
+    el("div", {class: "zusammen"},
+      el("div", {}, el("b", {}, k.faelle), el("span", {}, "gemeldete Fälle")),
+      el("div", {}, el("b", {}, quote), el("span", {}, "der Forderungen an uns automatisch anerkannt")),
+      el("div", {}, el("b", {}, tage(k.tage_bis_erstattung.unsere)), el("span", {}, "bis unsere Erstattung eingeht")),
+      el("div", {}, el("b", {}, k.abfragen_30_tage), el("span", {}, "Abgleiche in 30 Tagen"))),
+    block("Forderungen an uns", k.forderungen_an_uns), block("Unsere Forderungen", k.unsere_forderungen),
+    el("p", {class: "hinweis"}, "Diese Zahlen eignen sich für die Auswertung des Pilotbetriebs: Wie viele Fälle laufen automatisch, wie schnell kommt das Geld?")];
 }
 
 async function protokoll() {
   const liste = await api("/protokoll");
   return el("div", {class: "karte tabelle"}, el("table", {},
-    el("thead", {}, el("tr", {}, ["Zeit (UTC)", "Aktion", "Az.", "Details"].map(t => el("th", {}, t)))),
-    el("tbody", {}, liste.map(p => el("tr", {}, el("td", {}, p.zeit.replace("T", " ").slice(0, 19)), el("td", {}, p.aktion),
-      el("td", {}, p.aktenzeichen || "–"), el("td", {}, el("small", {}, p.details)))))));
+    el("thead", {}, el("tr", {}, ["Zeit (UTC)", "Kürzel", "Aktion", "Az.", "Details"].map(t => el("th", {scope: "col"}, t)))),
+    el("tbody", {}, liste.map(p => el("tr", {}, el("td", {}, p.zeit.replace("T", " ").slice(0, 19)), el("td", {}, p.bearbeiter || "System"),
+      el("td", {}, p.aktion), el("td", {}, p.aktenzeichen || "–"), el("td", {}, el("small", {}, p.details)))))));
 }
 
+let laedt = false;
 async function zeigen() {
+  if (laedt) return;
+  laedt = true;
   document.querySelectorAll("nav button").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === tab));
   const ziel = $("#inhalt");
   try {
     const inhalt = tab === "korb" ? await korb() : tab === "abgleich" ? abgleich() : tab === "protokoll" ? await protokoll()
-      : await erstattungen(tab);
-    ziel.replaceChildren(...[inhalt].flat(2));
-  } catch (e) { ziel.replaceChildren(el("p", {class: "fehler"}, e.message)); }
+      : tab === "kennzahlen" ? await kennzahlen() : await erstattungen(tab);
+    ziel.replaceChildren(...[inhalt].flat(2).filter(Boolean));
+  } catch (e) { ziel.replaceChildren(el("p", {class: "fehler", role: "alert"}, e.message)); }
+  finally { laedt = false; }
 }
 
-$("#tabs").addEventListener("click", ev => { if (ev.target.dataset.tab) { tab = ev.target.dataset.tab; zeigen(); } });
-$("#loginform").addEventListener("submit", ev => { ev.preventDefault(); anmelden($("#key").value.trim()); });
+// Arbeitskorb jede Minute neu laden, solange sichtbar und kein Dialog offen
+setInterval(() => {
+  if (ich && tab === "korb" && !document.hidden && !document.querySelector("dialog[open]")) zeigen();
+}, 60000);
+
+$("#tabs").addEventListener("click", ev => { const t = ev.target.closest("button"); if (t && t.dataset.tab) { tab = t.dataset.tab; zeigen(); } });
+$("#loginform").addEventListener("submit", ev => { ev.preventDefault(); anmelden($("#key").value.trim(), $("#kuerzel").value.trim()); });
 $("#abmelden").addEventListener("click", abmelden);
+$("#feedbackknopf").addEventListener("click", () => {
+  if (!ich) return alert("Bitte zuerst anmelden.");
+  $("#f-text").value = ""; $("#f-fehler").textContent = ""; $("#feedback").showModal();
+});
+$("#feedbackform").addEventListener("submit", async ev => {
+  if (ev.submitter && ev.submitter.value === "abbruch") return;
+  ev.preventDefault();
+  try { await api("/feedback", "POST", {text: $("#f-text").value, seite: tab}); $("#feedback").close(); alert("Danke für Ihre Rückmeldung!"); }
+  catch (e) { $("#f-fehler").textContent = e.message; }
+});
+if (kuerzel) $("#kuerzel").value = kuerzel;
+fetch("/status").then(r => r.json()).then(s => { $("#fuss").textContent = `Version ${s.version} · Beta`; }).catch(() => {});
 fetch("/demo").then(r => r.ok ? r.json() : null).then(d => {
   if (!d) return;
-  $("#demo").append("Demo:", ...Object.entries(d).map(([name, k]) => el("button", {onclick: () => anmelden(k)}, name)));
+  $("#demo").append("Demo:", ...Object.entries(d).map(([name, k]) =>
+    el("button", {type: "button", onclick: () => anmelden(k, $("#kuerzel").value.trim() || "demo")}, name)));
 }).catch(() => {});
-if (key) anmelden(key);
+if (key && kuerzel) anmelden(key, kuerzel);
 </script>
 </body>
 </html>

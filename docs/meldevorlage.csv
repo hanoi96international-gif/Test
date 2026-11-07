@@ -1,0 +1,5 @@
+aktenzeichen;nachname;vorname;geburtsdatum;haushalt;status;antrag_am;bescheid_am;von;bis;kontakt;monat;anspruch;gezahlt
+WG-2026-0815;Muster;Erika;14.03.1985;Muster,Max,01.01.2015;bewilligt;04.05.2026;20.05.2026;01.06.2026;31.05.2027;Frau Kern, -2231;06/2026;312,00;312,00
+WG-2026-0815;Muster;Erika;14.03.1985;Muster,Max,01.01.2015;bewilligt;04.05.2026;20.05.2026;01.06.2026;31.05.2027;Frau Kern, -2231;07/2026;312,00;312,00
+WG-2026-0815;Muster;Erika;14.03.1985;Muster,Max,01.01.2015;bewilligt;04.05.2026;20.05.2026;01.06.2026;31.05.2027;Frau Kern, -2231;08/2026;312,00;0
+WG-2026-1102;Beispiel;Jonas;02.11.1979;;beantragt;12.08.2026;;;;Herr Brandt, -2236;;;

@@ -1,11 +1,12 @@
 """Leistungsabgleich: Datenaustausch zwischen Jobcenter (SGB II) und Wohngeldstelle (WoGG).
 
-Beide Behörden melden ihre Fälle (Antrag gestellt, bewilligt, abgelehnt, eingestellt) an ein
-gemeinsames Register. Personen werden dort nur als Pseudonym gespeichert. Jede Behörde kann
-für eine eigene Person sehen, ob bei der anderen Stelle ein Antrag läuft oder Leistungen
-bewilligt sind, und Erstattungsansprüche (§§ 102 ff. SGB X) digital anmelden.
+Beide Behörden melden ihre Fälle an ein gemeinsames Register. Personen stehen dort nur als
+Pseudonym. Überschneiden sich Leistungen, werden Erstattungsansprüche (§§ 102 ff. SGB X)
+automatisch angemeldet und beziffert; die Sachbearbeitung bekommt nur noch die nötigen Aufgaben.
 """
 
-from .register import Register, pseudonym
+__version__ = "0.9.0b1"
 
-__all__ = ["Register", "pseudonym"]
+from .register import Register, pseudonym  # noqa: E402
+
+__all__ = ["Register", "pseudonym", "__version__"]

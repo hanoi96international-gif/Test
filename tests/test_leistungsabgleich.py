@@ -210,7 +210,7 @@ def test_teilanerkennung():
     wg_fall(r)
     jc_fall(r)
     e = r.entscheiden("jc", 1, {"entscheidung": "teilweise", "betrag_cent": 20000, "begruendung": "Teilmonat"})
-    assert e["status"] == "teilweise_anerkannt" and e["anerkannt_cent"] == 20000
+    assert e["status"] == "teilweise_anerkannt" and e["anerkannt_cent"] == 20000 and e["gefordert_cent"] == 31200
 
 
 # --- Datenschutz ----------------------------------------------------------------------------------
@@ -257,24 +257,142 @@ def test_demo_daten():
     assert [e["status"] for e in r.erstattungen(beispiel.JC)] == ["anerkannt"]
 
 
+# --- Beta: Betrieb, Migration, Kennzahlen, Feedback ------------------------------------------------
+
+def test_migration_von_version_2_0(tmp_path):
+    import sqlite3
+    pfad = str(tmp_path / "alt.db")
+    alt = sqlite3.connect(pfad)  # Schema der Version 2.0, ohne Bearbeiter-Spalte und Feedback
+    alt.executescript("""CREATE TABLE faelle (behoerde TEXT, aktenzeichen TEXT, art TEXT, person TEXT, haushalt TEXT,
+        status TEXT, antrag_am TEXT, bescheid_am TEXT, von TEXT, bis TEXT, monate TEXT, kontakt TEXT, geaendert TEXT,
+        PRIMARY KEY (behoerde, aktenzeichen));
+        CREATE TABLE mitglieder (behoerde TEXT, aktenzeichen TEXT, person TEXT, PRIMARY KEY (behoerde, aktenzeichen, person));
+        CREATE TABLE erstattungen (id INTEGER PRIMARY KEY AUTOINCREMENT, berechtigt TEXT, berechtigt_az TEXT,
+        berechtigt_art TEXT, verpflichtet TEXT, verpflichtet_az TEXT, rechtsgrundlage TEXT, status TEXT, positionen TEXT,
+        pruefhinweise TEXT DEFAULT '[]', korrektur TEXT DEFAULT '[]', anerkannt_cent INTEGER, begruendung TEXT,
+        automatisch INTEGER DEFAULT 0, angemeldet TEXT, geaendert TEXT);
+        CREATE TABLE protokoll (zeit TEXT, behoerde TEXT, aktion TEXT, aktenzeichen TEXT, details TEXT);
+        INSERT INTO protokoll VALUES ('2026-01-01', 'jc', 'melden', 'BG-0', '{}');""")
+    alt.commit()
+    alt.close()
+    r = Register(pfad, reg().behoerden)
+    assert r.db.execute("PRAGMA user_version").fetchone()[0] == 3
+    assert r.protokoll("jc")[0]["bearbeiter"] is None
+    wg_fall(r)
+    jc_fall(r)
+    r.abfragen("jc", "BG-1", bearbeiter="mkern")
+    assert r.protokoll("jc")[0]["bearbeiter"] == "mkern"
+    r.feedback("jc", "Klappt gut", "korb", "mkern")
+    assert Register(pfad).feedback_liste()[0]["text"] == "Klappt gut"  # zweites Öffnen: keine erneute Migration
+
+
+def test_sicherung_und_wartung(tmp_path):
+    from leistungsabgleich.__main__ import wartung
+    pfad = str(tmp_path / "abgleich.db")
+    r = Register(pfad, reg(auto_jc=200000).behoerden)
+    wg_fall(r)
+    jc_fall(r)
+    for _ in range(3):
+        erg = wartung(pfad, tmp_path / "sicherungen", behalten=2)
+    kopie = Register(erg["sicherung"])
+    assert kopie.db.execute("SELECT count(*) FROM erstattungen").fetchone()[0] == 1
+    assert len(list((tmp_path / "sicherungen").glob("*.db"))) <= 2
+
+
+def test_kennzahlen_und_feedback():
+    r = reg(auto_jc=200000)
+    wg_fall(r)
+    jc_fall(r)
+    r.als_erstattet("jc", 1, "mkern")
+    k = r.kennzahlen("jc")
+    assert k["forderungen_an_uns"] == {"erstattet": {"anzahl": 1, "anerkannt_cent": 31200}}
+    assert k["automatisch_anerkannt"] == 1 and k["entschieden"] == 1
+    assert k["tage_bis_erstattung"]["an_uns"] == 0.0
+    assert r.kennzahlen("wg")["offene_aufgaben"] == {"aufheben": 1}
+    with pytest.raises(Fehler):
+        r.feedback("jc", "")
+
+
+def test_konfiguration(tmp_path):
+    from leistungsabgleich.__main__ import konfig_laden
+    pfad = tmp_path / "behoerden.json"
+    h1, h2 = schluessel_hash("a"), schluessel_hash("b")
+    pfad.write_text(json.dumps({"behoerden": {
+        "jc": {"art": "jobcenter", "schluessel": [{"sha256": h1, "rolle": "fachverfahren"}]},
+        "wg": {"art": "wohngeld", "schluessel_sha256": h2}}}))  # altes Format geht weiter
+    _, schluessel = konfig_laden(str(pfad))
+    assert schluessel == {h1: ("jc", "fachverfahren"), h2: ("wg", "alle")}
+    pfad.write_text(json.dumps({"behoerden": {"jc": {"art": "jobcenter", "schluessel": [{"sha256": h1, "rolle": "chef"}]}}}))
+    with pytest.raises(SystemExit):
+        konfig_laden(str(pfad))
+
+
+def test_beispielkonfiguration_ist_gueltig():
+    from leistungsabgleich.__main__ import konfig_laden
+    behoerden, schluessel = konfig_laden("deploy/behoerden.beispiel.json")
+    assert {b["art"] for b in behoerden.values()} == {"jobcenter", "wohngeld"}
+
+
+# --- Meldewerkzeug (CSV) --------------------------------------------------------------------------
+
+CSV = """aktenzeichen;nachname;vorname;geburtsdatum;haushalt;status;antrag_am;bescheid_am;von;bis;kontakt;monat;anspruch;gezahlt
+WG-1;Müller;Anna;14.03.1985;Müller,Ben,01.01.2015;bewilligt;04.05.2026;20.05.2026;01.06.2026;31.05.2027;Zi. 104;06/2026;312,00;312,00
+WG-1;Müller;Anna;14.03.1985;Müller,Ben,01.01.2015;bewilligt;04.05.2026;20.05.2026;01.06.2026;31.05.2027;Zi. 104;2026-07;1.312,50;0
+WG-2;Schmidt;Jonas;1979-11-02;;beantragt;12.08.2026;;;;;;;
+"""
+
+
+def test_csv_lesen():
+    from leistungsabgleich.meldeclient import lesen
+    m = lesen("\ufeff" + CSV, K)
+    assert [x["aktenzeichen"] for x in m] == ["WG-1", "WG-2"]
+    assert m[0]["person"] == P and m[0]["haushalt"] == [KIND]
+    assert m[0]["von"] == "2026-06-01" and m[0]["monate"] == [
+        {"monat": "2026-06", "anspruch_cent": 31200, "gezahlt_cent": 31200},
+        {"monat": "2026-07", "anspruch_cent": 131250, "gezahlt_cent": 0}]
+    assert m[1]["status"] == "beantragt" and m[1]["monate"] == []
+    r = reg()
+    for x in m:
+        r.melden("wg", "wohngeld", x)  # Ergebnis ist eine gültige Meldung
+
+
+@pytest.mark.parametrize("kaputt, meldung", [
+    (CSV.replace("14.03.1985;Müller,Ben", "31.02.1985;Müller,Ben", 1), "Zeile 2"),
+    (CSV.replace("312,00;312,00", "3,125;0"), "Nachkommastellen"),
+    (CSV.replace(";2026-07;", ";13/2026;"), "Zeile 3"),
+    (CSV.replace("Zi. 104;2026-07", "Zi. 105;2026-07"), "weichen von Zeile 2 ab"),
+    (CSV.replace("beantragt", "läuft"), "status"),
+    ("a;b\n1;2\n", "Spalten fehlen"),
+])
+def test_csv_fehler_mit_zeilennummer(kaputt, meldung):
+    from leistungsabgleich.meldeclient import CsvFehler, lesen
+    with pytest.raises(CsvFehler, match=meldung):
+        lesen(kaputt, K)
+
+
 # --- HTTP -----------------------------------------------------------------------------------------
 
 @pytest.fixture
 def server():
     r = reg(auto_jc=200000)
-    srv = ThreadingHTTPServer(("127.0.0.1", 0), make_handler(
-        r, {schluessel_hash("key-jc"): "jc", schluessel_hash("key-wg"): "wg"}))
+    srv = ThreadingHTTPServer(("127.0.0.1", 0), make_handler(r, {
+        schluessel_hash("key-jc"): ("jc", "alle"), schluessel_hash("key-wg"): ("wg", "alle"),
+        schluessel_hash("fv-jc"): ("jc", "fachverfahren"), schluessel_hash("sb-jc"): ("jc", "sachbearbeitung")},
+        log=open("/dev/null", "w")))
     threading.Thread(target=srv.serve_forever, daemon=True).start()
     yield f"http://127.0.0.1:{srv.server_port}"
     srv.shutdown()
 
 
-def _http(url, methode="GET", key=None, daten=None, roh=False):
+def _http(url, methode="GET", key=None, daten=None, roh=False, bearbeiter="test"):
+    kopf = {"Authorization": f"Bearer {key}"} if key else {}
+    if bearbeiter and key:
+        kopf["X-Bearbeiter"] = bearbeiter
     req = urllib.request.Request(url, method=methode, data=json.dumps(daten).encode() if daten is not None else None,
-                                 headers={"Authorization": f"Bearer {key}"} if key else {})
+                                 headers=kopf)
     try:
         with urllib.request.urlopen(req) as r:
-            return (r.status, r.read().decode(), dict(r.headers)) if roh else (r.status, json.load(r))
+            return (r.status, r.read().decode("utf-8-sig"), dict(r.headers)) if roh else (r.status, json.load(r))
     except urllib.error.HTTPError as e:
         return e.code, json.load(e)
 
@@ -287,21 +405,51 @@ def test_http_ablauf(server):
     wg = {"aktenzeichen": "WG/1", "person": P, "status": "bewilligt", "von": "2026-06-01", "bescheid_am": "2026-05-20",
           "monate": monate("2026-06", "2027-05", 31200, gezahlt_bis="2026-11")}
     assert _http(f"{server}/faelle", "PUT", "key-wg", wg)[0] == 200
-    code, antwort = _http(f"{server}/faelle", "PUT", "key-jc", {
+    code, antwort = _http(f"{server}/faelle", "PUT", "fv-jc", {
         "aktenzeichen": "BG-1", "person": P, "status": "bewilligt", "von": "2026-11-01", "bescheid_am": "2026-11-06",
-        "monate": monate("2026-11", "2027-04", 89000)})
+        "monate": monate("2026-11", "2027-04", 89000)}, bearbeiter=None)
     assert code == 200 and antwort["einbehalten"][0]["betrag_cent"] == 31200
     code, erg = _http(f"{server}/faelle/WG%2F1/abgleich?stichtag=2026-11-07", key="key-wg")
     assert code == 200 and erg["faelle"][0]["aktenzeichen"] == "BG-1" and erg["aufgaben"][0]["typ"] == "aufheben"
-    code, korb = _http(f"{server}/arbeitskorb", key="key-jc")
+    code, korb = _http(f"{server}/arbeitskorb", key="sb-jc")
     assert [a["typ"] for a in korb] == ["erstattung_zahlen"]
     nr = korb[0]["erstattung"]
     assert _http(f"{server}/erstattungen/{nr}/erstattet", "POST", "key-wg")[0] == 403
-    code, e = _http(f"{server}/erstattungen/{nr}/erstattet", "POST", "key-jc")
+    assert _http(f"{server}/erstattungen/{nr}/erstattet", "POST", "sb-jc", bearbeiter=None)[0] == 400  # Kürzel fehlt
+    code, e = _http(f"{server}/erstattungen/{nr}/erstattet", "POST", "sb-jc", bearbeiter="m.kern")
     assert code == 200 and e["status"] == "erstattet"
     assert _http(f"{server}/erstattungen?richtung=ausgehend", key="key-wg")[1][0]["status"] == "erstattet"
-    assert _http(f"{server}/protokoll", key="key-jc")[1][0]["aktion"] == "erstattung_erstattet"
+    prot = _http(f"{server}/protokoll", key="key-jc")[1]
+    assert prot[0]["aktion"] == "erstattung_erstattet" and prot[0]["bearbeiter"] == "m.kern"
+    code, k = _http(f"{server}/kennzahlen", key="sb-jc")
+    assert code == 200 and k["forderungen_an_uns"]["erstattet"]["anzahl"] == 1
+    code, text, kopf = _http(f"{server}/erstattungen?richtung=eingehend&format=csv", key="sb-jc", roh=True)
+    assert code == 200 and "text/csv" in kopf["Content-Type"] and "312,00" in text.splitlines()[1]
+    assert _http(f"{server}/feedback", "POST", "fv-jc", {"text": "Gute Sache"})[1] == {"danke": True}
     assert _http(f"{server}/gibtsnicht", key="key-jc")[0] == 404
+
+
+def test_http_rollen(server):
+    assert _http(f"{server}/arbeitskorb", key="fv-jc")[0] == 403  # Fachverfahren liest keine Aufgaben
+    assert _http(f"{server}/faelle", "PUT", "sb-jc", {"aktenzeichen": "x"})[0] == 403  # Sachbearbeitung meldet nicht
+    assert _http(f"{server}/faelle/BG-1/abgleich", key="sb-jc", bearbeiter=None)[0] == 400
+    assert _http(f"{server}/ich", key="sb-jc", bearbeiter="nicht erlaubt!")[0] == 400
+
+
+def test_http_status_und_openapi(server):
+    assert _http(f"{server}/status")[1]["status"] == "ok"
+    code, spec = _http(f"{server}/openapi.json")
+    assert code == 200 and spec["openapi"].startswith("3.")
+    for pfad in ("/faelle", "/faelle/{aktenzeichen}/abgleich", "/arbeitskorb", "/erstattungen",
+                 "/erstattungen/{nr}/entscheidung", "/erstattungen/{nr}/erstattet", "/kennzahlen", "/protokoll",
+                 "/feedback", "/status", "/ich"):
+        assert pfad in spec["paths"]
+
+
+def test_http_sperre_nach_fehlversuchen(server):
+    for _ in range(10):
+        assert _http(f"{server}/ich", key="geraten")[0] == 401
+    assert _http(f"{server}/ich", key="key-jc")[0] == 429  # auch richtige Schlüssel warten
 
 
 def test_http_fehlerhafte_anfragen(server):
@@ -313,7 +461,15 @@ def test_http_fehlerhafte_anfragen(server):
     assert _http(f"{server}/faelle", "PUT", "key-jc", {"aktenzeichen": "x"})[0] == 400
 
 
+def test_http_meldewerkzeug(server):
+    from leistungsabgleich.meldeclient import lesen, senden
+    erg = senden(lesen(CSV, K), server, "key-wg", "mkern")
+    assert [e["ok"] for e in erg] == [True, True]
+    assert senden(lesen(CSV, K), server, "falsch")[0] == {"aktenzeichen": "WG-1", "ok": False,
+                                                          "fehler": "Nicht angemeldet oder Schlüssel ungültig"}
+
+
 def test_weboberflaeche(server):
     code, html, kopf = _http(f"{server}/", roh=True)
-    assert code == 200 and "Arbeitskorb" in html
+    assert code == 200 and "Arbeitskorb" in html and "Beta" in html
     assert "frame-ancestors 'none'" in kopf["Content-Security-Policy"]

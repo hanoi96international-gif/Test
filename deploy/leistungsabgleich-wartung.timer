@@ -1,0 +1,9 @@
+[Unit]
+Description=Leistungsabgleich: nächtliche Wartung
+
+[Timer]
+OnCalendar=*-*-* 02:17
+Persistent=true
+
+[Install]
+WantedBy=timers.target

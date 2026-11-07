@@ -100,26 +100,23 @@ python -m leistungsabgleich serve --demo   # Weboberfläche: http://127.0.0.1:80
 python -m pytest -q tests
 ```
 
-## Betrieb (Prototyp)
+## Beta-Pilot
 
-```bash
-python -m leistungsabgleich schluessel     # je Behörde: Schlüssel an die Behörde, Hash in behoerden.json
-python -m leistungsabgleich serve --db abgleich.db --konfig behoerden.json \
-       --zertifikat cert.pem --zertifikat-schluessel key.pem
-python -m leistungsabgleich aufraeumen --db abgleich.db   # Löschfristen, z. B. nächtlich
-```
+Version **0.9.0b1** ist für einen Pilotbetrieb mit einem Jobcenter und einer Wohngeldstelle gedacht.
+Dazu gehören:
 
-Format von `behoerden.json` und alle Endpunkte stehen in `leistungsabgleich/__main__.py` und
-`leistungsabgleich/api.py`. Die Fachverfahren melden per `PUT /faelle` den vollständigen Stand
-eines Falls mit Monatsbeträgen in Cent (Anspruch und an den Bürger gezahlt). Die Antwort
-enthält sofort die Liste `einbehalten`.
+- **Melden ohne Fachverfahrensanbindung:** CSV-Export → `leistungsabgleich melden faelle.csv`.
+  Die Pseudonyme werden auf dem Arbeitsplatz gebildet, Namen verlassen die Behörde nicht.
+  Vorlage: [`docs/meldevorlage.csv`](docs/meldevorlage.csv)
+- **Rollen und Kürzel:** getrennte Schlüssel für Fachverfahren und Sachbearbeitung, jede
+  Entscheidung und jeder Abgleich mit Kürzel im Protokoll
+- **Auswertung:** Kennzahlen (Automatikquote, Tage bis zur Erstattung), Feedback-Knopf, CSV-Export
+- **Betrieb:** Docker oder systemd mit nächtlicher Sicherung, Datenbank-Migrationen, Statusabfrage,
+  OpenAPI-Beschreibung (`/openapi.json`), Brute-Force-Sperre, JSON-Logs ohne Fallbezug
 
-**Datenschutz:** keine Namen im Register, nur HMAC-Pseudonyme (Schlüssel nur bei den
-Behörden); Abfragen nur über eigene Aktenzeichen; Protokoll aller Zugriffe inklusive
-abgelehnter; API-Schlüssel nur als Hash gespeichert; Löschfristen per `aufraeumen`.
+Alles Weitere, inklusive **Checkliste vor dem ersten echten Fall**, steht im
+[Betriebshandbuch](docs/betrieb.md). Änderungen: [CHANGELOG.md](CHANGELOG.md).
 
-**Ehrlich: Was vor einem echten Einsatz fehlt.** Das ist ein Prototyp zum Zeigen und
-Diskutieren, nicht mit echten Sozialdaten betreiben. Es fehlen: Prüfung der Rechtsgrundlagen
-und der Rechenregel durch die Fachaufsicht, Datenschutz-Folgenabschätzung (Art. 35 DSGVO),
-Anbindung an die Fachverfahren (z. B. ALLEGRO, kommunale Wohngeld-Software) statt Meldung
-per Hand, Betrieb im Behördennetz sowie langfristig ein XÖV-konformes Nachrichtenformat.
+**Ehrlich:** Auch als Beta gilt: keine echten Sozialdaten, bevor Rechtsgrundlage,
+Datenschutz-Folgenabschätzung, Fachaufsicht und Personalrat geklärt sind (Checkliste im
+Betriebshandbuch). Die zitierten Paragraphen und die Rechenregel müssen fachlich geprüft werden.

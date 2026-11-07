@@ -1,0 +1,16 @@
+# Nächtliche Sicherung und Löschfristen. Gestartet von leistungsabgleich-wartung.timer
+[Unit]
+Description=Leistungsabgleich: Sicherung und Löschfristen
+
+[Service]
+Type=oneshot
+DynamicUser=yes
+StateDirectory=leistungsabgleich
+WorkingDirectory=/opt/leistungsabgleich
+ExecStart=/usr/bin/python3 -m leistungsabgleich wartung --db /var/lib/leistungsabgleich/abgleich.db \
+    --sicherungen /var/lib/leistungsabgleich/sicherungen --behalten 14
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+UMask=0077

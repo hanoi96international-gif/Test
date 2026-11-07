@@ -1,0 +1,33 @@
+# /etc/systemd/system/leistungsabgleich.service
+# Voraussetzung: Programm unter /opt/leistungsabgleich, Konfiguration /etc/leistungsabgleich/behoerden.json
+[Unit]
+Description=Leistungsabgleich Jobcenter / Wohngeldstelle (Beta)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+DynamicUser=yes
+StateDirectory=leistungsabgleich
+WorkingDirectory=/opt/leistungsabgleich
+ExecStart=/usr/bin/python3 -m leistungsabgleich serve --host 127.0.0.1 --port 8080 \
+    --db /var/lib/leistungsabgleich/abgleich.db --konfig /etc/leistungsabgleich/behoerden.json
+Restart=on-failure
+RestartSec=5
+# Härtung
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+SystemCallArchitectures=native
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

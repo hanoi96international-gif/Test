@@ -1,0 +1,21 @@
+{
+  "behoerden": {
+    "jc-musterstadt": {
+      "art": "jobcenter",
+      "name": "Jobcenter Musterstadt",
+      "auto_anerkennung_bis_cent": 200000,
+      "schluessel": [
+        {"sha256": "0000000000000000000000000000000000000000000000000000000000000001", "rolle": "fachverfahren", "bezeichnung": "Meldewerkzeug Team Leistung"},
+        {"sha256": "0000000000000000000000000000000000000000000000000000000000000002", "rolle": "sachbearbeitung", "bezeichnung": "Sachbearbeitung"}
+      ]
+    },
+    "wg-musterstadt": {
+      "art": "wohngeld",
+      "name": "Wohngeldstelle Musterstadt",
+      "schluessel": [
+        {"sha256": "0000000000000000000000000000000000000000000000000000000000000003", "rolle": "fachverfahren", "bezeichnung": "Meldewerkzeug"},
+        {"sha256": "0000000000000000000000000000000000000000000000000000000000000004", "rolle": "sachbearbeitung", "bezeichnung": "Sachbearbeitung"}
+      ]
+    }
+  }
+}

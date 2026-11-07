@@ -30,12 +30,28 @@ CREATE TABLE IF NOT EXISTS erstattungen (
     verpflichtet TEXT NOT NULL, verpflichtet_az TEXT NOT NULL, rechtsgrundlage TEXT NOT NULL,
     status TEXT NOT NULL, positionen TEXT NOT NULL, pruefhinweise TEXT NOT NULL DEFAULT '[]',
     korrektur TEXT NOT NULL DEFAULT '[]', anerkannt_cent INTEGER, begruendung TEXT,
-    automatisch INTEGER NOT NULL DEFAULT 0, angemeldet TEXT NOT NULL, geaendert TEXT NOT NULL);
+    automatisch INTEGER NOT NULL DEFAULT 0, angemeldet TEXT NOT NULL, geaendert TEXT NOT NULL,
+    gefordert_cent INTEGER);
 CREATE INDEX IF NOT EXISTS erstattungen_v ON erstattungen(verpflichtet, verpflichtet_az);
 CREATE INDEX IF NOT EXISTS erstattungen_b ON erstattungen(berechtigt, berechtigt_az);
 CREATE TABLE IF NOT EXISTS protokoll (
-    zeit TEXT NOT NULL, behoerde TEXT NOT NULL, aktion TEXT NOT NULL, aktenzeichen TEXT, details TEXT);
+    zeit TEXT NOT NULL, behoerde TEXT NOT NULL, aktion TEXT NOT NULL, aktenzeichen TEXT, details TEXT,
+    bearbeiter TEXT);
+CREATE INDEX IF NOT EXISTS protokoll_behoerde ON protokoll(behoerde, zeit);
+CREATE TABLE IF NOT EXISTS feedback (
+    zeit TEXT NOT NULL, behoerde TEXT NOT NULL, bearbeiter TEXT, seite TEXT, text TEXT NOT NULL);
 """
+
+# Schrittweise Änderungen an bestehenden Datenbanken. Index = Zielversion - 2 (Version 1 = Stand 2.0).
+MIGRATIONEN = [
+    """ALTER TABLE protokoll ADD COLUMN bearbeiter TEXT;
+       CREATE INDEX IF NOT EXISTS protokoll_behoerde ON protokoll(behoerde, zeit);
+       CREATE TABLE IF NOT EXISTS feedback (
+           zeit TEXT NOT NULL, behoerde TEXT NOT NULL, bearbeiter TEXT, seite TEXT, text TEXT NOT NULL);""",
+    # 3: ursprüngliche Forderung bleibt bei Teilanerkennung sichtbar
+    "ALTER TABLE erstattungen ADD COLUMN gefordert_cent INTEGER;",
+]
+SCHEMA_VERSION = len(MIGRATIONEN) + 1
 
 
 class Fehler(Exception):
@@ -93,17 +109,33 @@ class Register:
     def __init__(self, pfad: str = ":memory:", behoerden: dict | None = None):
         """behoerden: {id: {"art", "name", "auto_anerkennung_bis_cent"}}"""
         self.behoerden = behoerden or {}
-        self.db = sqlite3.connect(pfad, check_same_thread=False)
+        self.db = sqlite3.connect(pfad, check_same_thread=False, timeout=10)
         self.db.row_factory = sqlite3.Row
-        self.db.execute("PRAGMA foreign_keys = ON")
-        self.db.executescript(SCHEMA)
+        if pfad != ":memory:":
+            self.db.execute("PRAGMA journal_mode = WAL")  # Lesen blockiert Schreiben nicht, robust bei Absturz
+        self.db.execute("PRAGMA synchronous = NORMAL")
+        self._migrieren()
+
+    def _migrieren(self):
+        version = self.db.execute("PRAGMA user_version").fetchone()[0]
+        neu = not self.db.execute("SELECT 1 FROM sqlite_master WHERE name='faelle'").fetchone()
+        if version > SCHEMA_VERSION:
+            raise RuntimeError(f"Datenbank hat Version {version}, dieses Programm kennt nur {SCHEMA_VERSION}")
+        with self.db:
+            if neu:
+                self.db.executescript(SCHEMA)
+            else:
+                for nr in range(max(version, 1), SCHEMA_VERSION):
+                    self.db.executescript(MIGRATIONEN[nr - 1])
+            self.db.execute(f"PRAGMA user_version = {SCHEMA_VERSION}")
 
     def name(self, behoerde: str) -> str:
         return self.behoerden.get(behoerde, {}).get("name", behoerde)
 
-    def _log(self, behoerde, aktion, aktenzeichen=None, **details):
-        self.db.execute("INSERT INTO protokoll VALUES (?,?,?,?,?)",
-                        (_jetzt(), behoerde, aktion, aktenzeichen, json.dumps(details, ensure_ascii=False)))
+    def _log(self, behoerde, aktion, aktenzeichen=None, bearbeiter=None, **details):
+        self.db.execute("INSERT INTO protokoll (zeit,behoerde,aktion,aktenzeichen,details,bearbeiter) "
+                        "VALUES (?,?,?,?,?,?)", (_jetzt(), behoerde, aktion, aktenzeichen,
+                                                 json.dumps(details, ensure_ascii=False), bearbeiter))
 
     # --- Laden --------------------------------------------------------------------------------
 
@@ -156,7 +188,7 @@ class Register:
 
     # --- Fälle melden -------------------------------------------------------------------------
 
-    def melden(self, behoerde: str, art: str, daten: dict) -> dict:
+    def melden(self, behoerde: str, art: str, daten: dict, bearbeiter: str | None = None) -> dict:
         """Legt einen Fall an oder ersetzt ihn vollständig (gleiche Behörde + Aktenzeichen).
 
         Das Fachverfahren schickt bei jeder Änderung den aktuellen Stand, inklusive Monatsbeträgen.
@@ -208,7 +240,7 @@ class Register:
                 fall | {"haushalt": json.dumps(fall["haushalt"]), "monate": json.dumps(fall["monate"])})
             self.db.execute("DELETE FROM mitglieder WHERE behoerde=? AND aktenzeichen=?", (behoerde, az))
             self.db.executemany("INSERT INTO mitglieder VALUES (?,?,?)", [(behoerde, az, p) for p in fall["haushalt"]])
-            self._log(behoerde, "melden", az, status=status, monate=len(monate))
+            self._log(behoerde, "melden", az, bearbeiter, status=status, monate=len(monate))
             self._neu_berechnen(fall)
         return {"aktenzeichen": az, "einbehalten": self.einbehalten(behoerde, az),
                 "aufgaben": self.arbeitskorb(behoerde, az, protokollieren=False)}
@@ -296,7 +328,7 @@ class Register:
                  "erstattung": e["id"], "status": e["status"]}
                 for e in map(self._zu_erstattung, rows) for m, p in sorted(e["positionen"].items())]
 
-    def abfragen(self, behoerde: str, az: str, stichtag: str | None = None) -> dict:
+    def abfragen(self, behoerde: str, az: str, stichtag: str | None = None, bearbeiter: str | None = None) -> dict:
         """Was läuft bei der anderen Stelle zu den Personen dieses Falls?
 
         Zweckbindung: nur über ein eigenes, gemeldetes Aktenzeichen. Jede Abfrage wird protokolliert,
@@ -306,7 +338,7 @@ class Register:
             eigen = self._eigener_fall(behoerde, az)
         except Fehler:
             with self.db:
-                self._log(behoerde, "abfrage_abgelehnt", az)
+                self._log(behoerde, "abfrage_abgelehnt", az, bearbeiter)
             raise
         tag = dt.date.fromisoformat(_datum(stichtag, "stichtag") or dt.date.today().isoformat())
         monat, faelle, hinweise = tag.isoformat()[:7], [], []
@@ -326,11 +358,12 @@ class Register:
                                 "Bei Bewilligung entfällt das Wohngeld (§ 7 WoGG). Bereits gezahltes Wohngeld wird "
                                 "automatisch zur Erstattung angemeldet (§ 103 SGB X).")
         with self.db:
-            self._log(behoerde, "abfragen", az, treffer=len(faelle))
+            self._log(behoerde, "abfragen", az, bearbeiter, treffer=len(faelle))
         return {"stichtag": tag.isoformat(), "faelle": faelle, "hinweise": hinweise,
                 "aufgaben": self.arbeitskorb(behoerde, az, protokollieren=False)}
 
-    def arbeitskorb(self, behoerde: str, az: str | None = None, protokollieren: bool = True) -> list[dict]:
+    def arbeitskorb(self, behoerde: str, az: str | None = None, protokollieren: bool = True,
+                    bearbeiter: str | None = None) -> list[dict]:
         """Alle offenen Aufgaben der Behörde, dringende zuerst. Erledigt sich durch neue Meldungen von selbst."""
         sql, args = "SELECT * FROM faelle WHERE behoerde=?", [behoerde]
         if az is not None:
@@ -355,7 +388,7 @@ class Register:
             a["partner_name"] = self.name(a["partner"]) if a["partner"] else None
         if protokollieren:
             with self.db:
-                self._log(behoerde, "arbeitskorb", az, aufgaben=len(aufgaben))
+                self._log(behoerde, "arbeitskorb", az, bearbeiter, aufgaben=len(aufgaben))
         return sorted(aufgaben, key=lambda a: (a["prioritaet"], a["aktenzeichen"]))
 
     def erstattung(self, behoerde: str, nr: int) -> dict:
@@ -377,7 +410,7 @@ class Register:
 
     # --- Entscheiden --------------------------------------------------------------------------
 
-    def entscheiden(self, behoerde: str, nr: int, daten: dict) -> dict:
+    def entscheiden(self, behoerde: str, nr: int, daten: dict, bearbeiter: str | None = None) -> dict:
         e = self.erstattung(behoerde, nr)
         if e["verpflichtet"] != behoerde:
             raise Fehler("Nur die erstattungspflichtige Stelle entscheidet", 403)
@@ -400,13 +433,13 @@ class Register:
             raise Fehler("'entscheidung' muss anerkennen, teilweise oder ablehnen sein")
         with self.db:
             self.db.execute("UPDATE erstattungen SET status=?, positionen=?, anerkannt_cent=?, begruendung=?, "
-                            "geaendert=? WHERE id=?", (status, json.dumps(pos, sort_keys=True),
-                                                       0 if status == "abgelehnt" else er.summe(pos),
-                                                       begruendung or None, _jetzt(), nr))
-            self._log(behoerde, "erstattung_" + status, e["verpflichtet_az"], erstattung=nr)
+                            "gefordert_cent=?, geaendert=? WHERE id=?",
+                            (status, json.dumps(pos, sort_keys=True), 0 if status == "abgelehnt" else er.summe(pos),
+                             begruendung or None, er.summe(e["positionen"]), _jetzt(), nr))
+            self._log(behoerde, "erstattung_" + status, e["verpflichtet_az"], bearbeiter, erstattung=nr)
         return self.erstattung(behoerde, nr)
 
-    def als_erstattet(self, behoerde: str, nr: int) -> dict:
+    def als_erstattet(self, behoerde: str, nr: int, bearbeiter: str | None = None) -> dict:
         e = self.erstattung(behoerde, nr)
         if e["verpflichtet"] != behoerde:
             raise Fehler("Nur die erstattungspflichtige Stelle meldet die Zahlung", 403)
@@ -414,8 +447,60 @@ class Register:
             raise Fehler(f"Erstattung ist im Status '{e['status']}', erst anerkennen", 409)
         with self.db:
             self.db.execute("UPDATE erstattungen SET status='erstattet', geaendert=? WHERE id=?", (_jetzt(), nr))
-            self._log(behoerde, "erstattung_erstattet", e["verpflichtet_az"], erstattung=nr)
+            self._log(behoerde, "erstattung_erstattet", e["verpflichtet_az"], bearbeiter, erstattung=nr)
         return self.erstattung(behoerde, nr)
+
+    # --- Pilotbetrieb ---------------------------------------------------------------------------
+
+    def kennzahlen(self, behoerde: str) -> dict:
+        """Zahlen für die Auswertung des Pilotbetriebs, aus Sicht einer Behörde."""
+        def je_status(spalte):
+            rows = self.db.execute(f"SELECT status, count(*) n, coalesce(sum(anerkannt_cent),0) s FROM erstattungen "
+                                   f"WHERE {spalte}=? GROUP BY status", (behoerde,))
+            return {r["status"]: {"anzahl": r["n"], "anerkannt_cent": r["s"]} for r in rows}
+
+        def tage(spalte):
+            r = self.db.execute(
+                f"SELECT avg(julianday(geaendert) - julianday(angemeldet)) d, count(*) n FROM erstattungen "
+                f"WHERE {spalte}=? AND status='erstattet'", (behoerde,)).fetchone()
+            return round(r["d"], 1) if r["d"] is not None else None
+
+        auto = self.db.execute("SELECT count(*) FROM erstattungen WHERE verpflichtet=? AND automatisch=1",
+                               (behoerde,)).fetchone()[0]
+        entschieden = self.db.execute(
+            "SELECT count(*) FROM erstattungen WHERE verpflichtet=? AND status IN ('anerkannt','teilweise_anerkannt',"
+            "'erstattet','abgelehnt')", (behoerde,)).fetchone()[0]
+        aufgaben = {}
+        for a in self.arbeitskorb(behoerde, protokollieren=False):
+            aufgaben[a["typ"]] = aufgaben.get(a["typ"], 0) + 1
+        seit = (dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=30)).isoformat(timespec="seconds")
+        abfragen = self.db.execute("SELECT count(*) FROM protokoll WHERE behoerde=? AND aktion='abfragen' AND zeit>=?",
+                                   (behoerde, seit)).fetchone()[0]
+        return {
+            "faelle": self.db.execute("SELECT count(*) FROM faelle WHERE behoerde=?", (behoerde,)).fetchone()[0],
+            "forderungen_an_uns": je_status("verpflichtet"), "unsere_forderungen": je_status("berechtigt"),
+            "automatisch_anerkannt": auto, "entschieden": entschieden,
+            "tage_bis_erstattung": {"an_uns": tage("verpflichtet"), "unsere": tage("berechtigt")},
+            "offene_aufgaben": aufgaben, "abfragen_30_tage": abfragen,
+        }
+
+    def feedback(self, behoerde: str, text: str, seite: str | None = None, bearbeiter: str | None = None) -> dict:
+        text = str(text or "").strip()
+        if not 3 <= len(text) <= 2000:
+            raise Fehler("Feedback muss 3 bis 2000 Zeichen lang sein")
+        with self.db:
+            self.db.execute("INSERT INTO feedback VALUES (?,?,?,?,?)",
+                            (_jetzt(), behoerde, bearbeiter, str(seite or "")[:40] or None, text))
+        return {"danke": True}
+
+    def feedback_liste(self) -> list[dict]:
+        return [dict(r) for r in self.db.execute("SELECT * FROM feedback ORDER BY zeit DESC")]
+
+    def sicherung(self, ziel: str) -> None:
+        """Konsistente Kopie im laufenden Betrieb (sqlite-Backup-API)."""
+        with sqlite3.connect(ziel) as kopie:
+            self.db.backup(kopie)
+        kopie.close()
 
     # --- Datenschutz --------------------------------------------------------------------------
 
