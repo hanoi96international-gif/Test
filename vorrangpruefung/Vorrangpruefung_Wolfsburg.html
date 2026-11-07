@@ -283,6 +283,8 @@ footer{font-size:.8rem;color:var(--muted)}
               <label class="f"><span data-i18n="umgCnt"></span><input class="sel" type="number" inputmode="numeric" min="0" max="6" id="umgCnt"></label>
               <label class="f"><span data-i18n="umgAge"></span><input class="sel" type="number" inputmode="numeric" min="0" max="24" id="umgAge"></label>
             </div>
+            <label class="f"><span data-i18n="umgArt"></span>
+              <select class="sel" id="umgArt"><option value="temp" data-i18n="umgTemp"></option><option value="wechsel" data-i18n="umgWech"></option></select></label>
             <label class="f"><span data-i18n="umgNights"></span><input class="sel" type="number" inputmode="numeric" min="0" max="365" id="umgNights"></label>
             <label class="f"><span data-i18n="ext25"></span><input class="sel" type="number" inputmode="numeric" min="0" max="6" id="ext25"></label>
           </div>
@@ -334,7 +336,6 @@ footer{font-size:.8rem;color:var(--muted)}
           <p class="warnchip" id="mogWarn" data-i18n="mogWarn"></p>
           <div><button type="button" class="btn ghost" id="mogReset" data-i18n="mogReset"></button></div>
         </div>
-        <label class="toggle" id="unbornRow"><input type="checkbox" id="unborn"><span data-i18n="unborn"></span></label>
         <div class="person kz">
           <h4 data-i18n="kzTitle"></h4>
           <details class="more" open>
@@ -962,6 +963,39 @@ uk:{copyRes:"Копіювати результат",sumTitle:"Перевірка
 ru:{copyRes:"Копировать результат",sumTitle:"Проверка приоритета Вольфсбург – результат",sumDate:"На дату: {d}",wNet:"Лицо {n}: нетто больше брутто – проверьте.",wRente:"Лицо {n}: сумма выплаты больше пенсии брутто – проверьте.",wGj:"Лицо {n}: нет года рождения – пенсионный возраст и ответственность не определены.",wMiete:"Аренда не введена.",kzNoNew0:"Нового льготного периода нет: между прежним пособием и сейчас только {x} месяцев без выплат (нужно: 36). Прежний период использован."}
 };
 for(const l in OP) Object.assign(I[l], OP[l]);
+const UM = {
+de:{umgArt:"Art des Umgangs",umgTemp:"temporär (regelmäßiger Umgang, z. B. an Wochenenden)",umgWech:"echtes Wechselmodell (Kind lebt etwa zur Hälfte hier)",umgNights:"Übernachtungen hier pro Jahr (für den anteiligen Regelbedarf)",
+ssw:"Schwangerschaftswoche (leer = nicht schwanger)",sswHint:"Ab der 12. Woche zählt das Kind bei der Mietobergrenze, ab der 13. Woche gibt es den Mehrbedarf.",
+umgInfoT:"Umgang temporär: Mietobergrenze = Grenze für {a} Pers. ({e}) + halbe Differenz zur Grenze für {b} Pers. ({f}) = {c}. Regelbedarf anteilig für etwa {d} Tage im Monat.",
+umgInfoW:"Echtes Wechselmodell: volle Anerkennung – Mietobergrenze für {b} Personen ({c}). Regelbedarf anteilig für etwa {d} Tage im Monat.",
+unbornInfo:"Schwangerschaft ab der 12. Woche: Das ungeborene Kind zählt bei der Mietobergrenze mit."},
+en:{umgArt:"Type of contact",umgTemp:"temporary (regular contact, e.g. weekends)",umgWech:"genuine alternating residence (child lives here about half the time)",umgNights:"Nights here per year (for the pro-rata standard need)",
+ssw:"Week of pregnancy (empty = not pregnant)",sswHint:"From week 12 the child counts for the rent limit, from week 13 the additional need applies.",
+umgInfoT:"Temporary contact: rent limit = limit for {a} pers. ({e}) + half the difference to the limit for {b} pers. ({f}) = {c}. Standard need pro rata for about {d} days a month.",
+umgInfoW:"Genuine alternating residence: full recognition – rent limit for {b} persons ({c}). Standard need pro rata for about {d} days a month.",
+unbornInfo:"Pregnancy from week 12: the unborn child counts for the rent limit."},
+tr:{umgArt:"Görüşme türü",umgTemp:"geçici (düzenli görüşme, ör. hafta sonları)",umgWech:"gerçek dönüşümlü model (çocuk yaklaşık yarı yarıya burada yaşar)",umgNights:"Yılda burada geçirilen gece (orantılı standart ihtiyaç için)",
+ssw:"Hamilelik haftası (boş = hamile değil)",sswHint:"12. haftadan itibaren çocuk kira üst sınırında sayılır, 13. haftadan itibaren ek ihtiyaç verilir.",
+umgInfoT:"Geçici görüşme: kira üst sınırı = {a} kişilik sınır ({e}) + {b} kişilik sınıra ({f}) farkın yarısı = {c}. Standart ihtiyaç ayda yaklaşık {d} gün için orantılı.",
+umgInfoW:"Gerçek dönüşümlü model: tam kabul – {b} kişilik kira üst sınırı ({c}). Standart ihtiyaç ayda yaklaşık {d} gün için orantılı.",
+unbornInfo:"12. haftadan itibaren hamilelik: doğmamış çocuk kira üst sınırında sayılır."},
+ar:{umgArt:"نوع الزيارة",umgTemp:"مؤقتة (زيارة منتظمة، مثل عطلات نهاية الأسبوع)",umgWech:"نموذج تناوب حقيقي (يعيش الطفل هنا نحو نصف الوقت)",umgNights:"عدد الليالي هنا سنويًا (للحاجة الأساسية النسبية)",
+ssw:"أسبوع الحمل (فارغ = ليست حاملًا)",sswHint:"من الأسبوع 12 يُحتسب الطفل في الحد الأعلى للإيجار، ومن الأسبوع 13 تُمنح الحاجة الإضافية.",
+umgInfoT:"زيارة مؤقتة: الحد الأعلى للإيجار = حد {a} أفراد ({e}) + نصف الفرق إلى حد {b} أفراد ({f}) = {c}. الحاجة الأساسية نسبيًا لحوالي {d} يومًا شهريًا.",
+umgInfoW:"نموذج تناوب حقيقي: اعتراف كامل – الحد الأعلى للإيجار لـ {b} أفراد ({c}). الحاجة الأساسية نسبيًا لحوالي {d} يومًا شهريًا.",
+unbornInfo:"حمل من الأسبوع 12: يُحتسب الطفل الذي لم يولد بعد في الحد الأعلى للإيجار."},
+uk:{umgArt:"Вид спілкування",umgTemp:"тимчасово (регулярне спілкування, напр. вихідні)",umgWech:"справжня почергова модель (дитина живе тут приблизно половину часу)",umgNights:"Ночей тут на рік (для пропорційної базової потреби)",
+ssw:"Тиждень вагітності (порожньо = не вагітна)",sswHint:"З 12-го тижня дитина враховується для межі оренди, з 13-го тижня надається додаткова потреба.",
+umgInfoT:"Тимчасове спілкування: межа оренди = межа для {a} ос. ({e}) + половина різниці до межі для {b} ос. ({f}) = {c}. Базова потреба пропорційно приблизно за {d} днів на місяць.",
+umgInfoW:"Справжня почергова модель: повне визнання – межа оренди для {b} осіб ({c}). Базова потреба пропорційно приблизно за {d} днів на місяць.",
+unbornInfo:"Вагітність з 12-го тижня: ненароджена дитина враховується для межі оренди."},
+ru:{umgArt:"Вид общения",umgTemp:"временно (регулярное общение, напр. выходные)",umgWech:"настоящая попеременная модель (ребёнок живёт здесь примерно половину времени)",umgNights:"Ночей здесь в год (для пропорциональной базовой потребности)",
+ssw:"Неделя беременности (пусто = не беременна)",sswHint:"С 12-й недели ребёнок учитывается для предела аренды, с 13-й недели предоставляется доп. потребность.",
+umgInfoT:"Временное общение: предел аренды = предел для {a} чел. ({e}) + половина разницы до предела для {b} чел. ({f}) = {c}. Базовая потребность пропорционально примерно за {d} дней в месяц.",
+umgInfoW:"Настоящая попеременная модель: полное признание – предел аренды для {b} человек ({c}). Базовая потребность пропорционально примерно за {d} дней в месяц.",
+unbornInfo:"Беременность с 12-й недели: нерождённый ребёнок учитывается для предела аренды."}
+};
+for(const l in UM) Object.assign(I[l], UM[l]);
 let L = "de";
 try{ const s = localStorage.getItem("vp-wob-lang"); if(s && I[s]) L = s; }catch(e){}
 function t(k, v){
@@ -999,13 +1033,13 @@ const DEFAULTS = {
   grz:{base:100, q:0.3, capPct:50},
   xii:{erwQ:0.3, erwCapPct:50},
   wgx:{renteWk:102, rentePa:0.1, sb:1800},
-  kids:{umgMin:50, umgPlus:1, wgUmgMin:122, unbornPlus:1},
+  kids:{tempFactor:0.5, wgUmgMin:122, sswMog:12, sswMb:13},
   verm:{iiK:40000, iiKPlus:15000, ii:15000, xiiAd:10000, xiiKid:500, wg:60000, wgPlus:30000, kiz:40000, kizPlus:15000}
 };
 const clone = o => JSON.parse(JSON.stringify(o));
 function deepMerge(tg,s){ for(const k in s){ if(s[k] && typeof s[k]==="object" && !Array.isArray(s[k])) tg[k]=deepMerge(tg[k]||{},s[k]); else tg[k]=s[k]; } return tg; }
 let P = clone(DEFAULTS);
-try{ const s = localStorage.getItem("vp-wob-params2"); if(s) P = deepMerge(clone(DEFAULTS), JSON.parse(s)); }catch(e){}
+try{ const s = localStorage.getItem("vp-wob-params3"); if(s) P = deepMerge(clone(DEFAULTS), JSON.parse(s)); }catch(e){}
 const getP = (o,p)=>p.split(".").reduce((x,k)=>x==null?x:x[k],o);
 const setP = (o,p,v)=>{ const ks=p.split("."), last=ks.pop(); ks.reduce((x,k)=>x[k],o)[last]=v; };
 
@@ -1014,14 +1048,14 @@ const GROUPS = [
   {t:"Regelbedarfe 2026 (SGB II und SGB XII)", src:"Bundesregierung: Nullrunde zum 01.01.2026.", items:[
     ["rb.single","Alleinstehend / alleinerziehend (RBS 1)"],["rb.partner","Partner, je Person (RBS 2)"],["rb.u25","Kind 18–24 im Elternhaushalt (RBS 3)"],["rb.k14","Kind 14–17 (RBS 4)"],["rb.k6","Kind 6–13 (RBS 5)"],["rb.k0","Kind 0–5 (RBS 6)"]]},
   {t:"Mehrbedarfe", src:"§ 21 SGB II, §§ 23, 30 SGB XII", items:[
-    ["mb.schw","Schwangerschaft ab 13. Woche % RB"],["mb.g","Merkzeichen G (nicht erwerbsfähig) % RB"],["mb.ww.0","Warmwasser dezentral Erwachsene/18–24 % RB"],["mb.ww.1","Warmwasser 14–17 % RB"],["mb.ww.2","Warmwasser 6–13 % RB"],["mb.ww.3","Warmwasser 0–5 % RB"]]},
+    ["mb.schw","Mehrbedarf Schwangerschaft % RB"],["mb.g","Merkzeichen G (nicht erwerbsfähig) % RB"],["mb.ww.0","Warmwasser dezentral Erwachsene/18–24 % RB"],["mb.ww.1","Warmwasser 14–17 % RB"],["mb.ww.2","Warmwasser 6–13 % RB"],["mb.ww.3","Warmwasser 0–5 % RB"]]},
   {t:"Kindergeld", src:"§ 66 EStG, ab 01.01.2026.", items:[["kindergeld","Kindergeld je Kind"]]},
   {t:"Freibeträge Erwerbstätige (§ 11b SGB II)", src:"§ 11b Abs. 2 und 3 SGB II", items:[
     ["fb.grund","Grundfreibetrag €"],["fb.q1","Quote 100 € bis Stufe 1"],["fb.g1","Stufe 1 bis € brutto"],["fb.q2","Quote bis Stufe 2"],["fb.g2","Stufe 2 bis € brutto"],["fb.q3","Quote bis Obergrenze"],["fb.g3o","Obergrenze ohne Kind € brutto"],["fb.g3m","Obergrenze mit Kind € brutto"],["fb.pausch","Versicherungspauschale (ohne Erwerb) €"]]},
   {t:"SGB XII und Grundrente", src:"§ 82 Abs. 3 SGB XII; Grundrentenfreibetrag § 11b Abs. 2b SGB II, § 82a SGB XII, § 17a WoGG", warn:"Grundrentenfreibetrag vereinfacht auf die gesamte Rente angewandt.", items:[
     ["xii.erwQ","SGB XII: Absetzbetrag Erwerb (Anteil vom Brutto)"],["xii.erwCapPct","SGB XII: Höchstbetrag % RBS 1"],["grz.base","Grundrente: Sockelfreibetrag €"],["grz.q","Grundrente: Anteil darüber"],["grz.capPct","Grundrente: Höchstbetrag % RBS 1"]]},
-  {t:"Kinder bei den Unterkunftskosten", src:"BSG zum Umgangsrecht (zusätzlicher Wohnraum, temporäre Bedarfsgemeinschaft); § 5 WoGG (Haushaltsmitglieder); Kopfteilprinzip; Mischhaushalt im WoGG.", warn:"Annahmen – bitte mit der KdU-Richtlinie Wolfsburg abgleichen.", items:[
-    ["kids.umgMin","Umgang: zusätzlicher Wohnraum ab Übernachtungen/Jahr"],["kids.umgPlus","Umgang: zusätzliche Personen bei der Mietobergrenze"],["kids.wgUmgMin","Wohngeld: Umgangskind Haushaltsmitglied ab Übernachtungen/Jahr"],["kids.unbornPlus","Ungeborenes Kind: zusätzliche Personen"]]},
+  {t:"Kinder bei den Unterkunftskosten (Wolfsburg)", src:"Angaben aus der Praxis Jobcenter Wolfsburg: ungeborenes Kind ab 12. SSW; Wechselmodell volle Anerkennung; temporärer Umgang halbe Differenz. Zusätzlich BSG zum Umgangsrecht (zusätzlicher Wohnraum, temporäre Bedarfsgemeinschaft); § 5 WoGG (Haushaltsmitglieder); Kopfteilprinzip; Mischhaushalt im WoGG.", warn:"Annahmen – bitte mit der KdU-Richtlinie Wolfsburg abgleichen.", items:[
+    ["kids.tempFactor","Umgang temporär: Anteil der Differenz zur nächsten Haushaltsgröße"],["kids.wgUmgMin","Wohngeld: Umgangskind Haushaltsmitglied ab Übernachtungen/Jahr (sonst nur Wechselmodell)"],["kids.sswMog","Schwangerschaft: Kind zählt bei Mietobergrenze ab Woche"],["kids.sswMb","Schwangerschaft: Mehrbedarf ab Woche"]]},
   {t:"Vermögensgrenzen", src:"§ 12 SGB II; § 90 SGB XII i. V. m. VO; WoGVwV 21.37; § 6a Abs. 3 BKGG", warn:"Vereinfacht: Vermögen des ganzen Haushalts gegen die Summe der Freibeträge.", items:[
     ["verm.iiK","SGB II Karenzzeit: 1. Person €"],["verm.iiKPlus","SGB II Karenzzeit: je weitere Person €"],["verm.ii","SGB II nach Karenzzeit: je Person €"],["verm.xiiAd","SGB XII: je erwachsene Person €"],["verm.xiiKid","SGB XII: je Kind €"],["verm.wg","Wohngeld: 1. Person €"],["verm.wgPlus","Wohngeld: je weitere Person €"],["verm.kiz","Kinderzuschlag: 1. Person €"],["verm.kizPlus","Kinderzuschlag: je weitere Person €"]]},
   {t:"Mietobergrenzen Wolfsburg (Grundmiete inkl. Betriebskosten)", src:"Jobcenter Wolfsburg, jobcenter-wolfsburg.de, abgerufen am 07.11.2026. Wohnfläche: 50/60/75/85/95 m², danach +10 m² je Person.", warn:"4 Personen: Auf der Website steht „825,35,70 €“ (Tippfehler). Eingetragen ist 825,35 € – bitte beim Jobcenter bestätigen.",
@@ -1041,15 +1075,16 @@ const GROUPS = [
 ];
 
 /* ================= Haushalt ================= */
-const AD0 = {gj:1990, ef:"ja", schw:false, merkG:false, sb:false, kv:"auto", jb:0, jn:0, rb:0, rn:0, grz:false, so:0};
+const AD0 = {gj:1990, ef:"ja", ssw:0, merkG:false, sb:false, kv:"auto", jb:0, jn:0, rb:0, rn:0, grz:false, so:0};
 const SON0 = {azubi:false, eu:false, asyl:false, stat:false};
 const EX = {
-  fam:{mode:"fam", typ:"paar", verh:false, ad:[Object.assign({},AD0,{gj:1988,jb:1700,jn:1330}),Object.assign({},AD0,{gj:1990})], kids:[{age:4,uh:0},{age:9,uh:0}], son:clone(SON0), pa:"0.3", stabil:true, mi:780, hz:110, ww:false, kdz:"normal", hzG:null, kzStart:"", kzPrev:"", kzGap:0, kzUsed:null, umgCnt:0, umgAge:8, umgNights:0, ext25:0, unborn:false, mog:null, verm:2000, step:1},
-  wg:{mode:"wg", typ:"solo", verh:false, ad:[Object.assign({},AD0,{gj:1957,ef:"ar",rb:1250,rn:1096,grz:true}),Object.assign({},AD0)], kids:[], son:clone(SON0), pa:"0.3", stabil:true, mi:520, hz:70, ww:false, kdz:"normal", hzG:null, kzStart:"", kzPrev:"", kzGap:0, kzUsed:null, umgCnt:0, umgAge:8, umgNights:0, ext25:0, unborn:false, mog:null, verm:5000, step:1}
+  fam:{mode:"fam", typ:"paar", verh:false, ad:[Object.assign({},AD0,{gj:1988,jb:1700,jn:1330}),Object.assign({},AD0,{gj:1990})], kids:[{age:4,uh:0},{age:9,uh:0}], son:clone(SON0), pa:"0.3", stabil:true, mi:780, hz:110, ww:false, kdz:"normal", hzG:null, kzStart:"", kzPrev:"", kzGap:0, kzUsed:null, umgCnt:0, umgAge:8, umgNights:0, umgArt:"temp", ext25:0, mog:null, verm:2000, step:1},
+  wg:{mode:"wg", typ:"solo", verh:false, ad:[Object.assign({},AD0,{gj:1957,ef:"ar",rb:1250,rn:1096,grz:true}),Object.assign({},AD0)], kids:[], son:clone(SON0), pa:"0.3", stabil:true, mi:520, hz:70, ww:false, kdz:"normal", hzG:null, kzStart:"", kzPrev:"", kzGap:0, kzUsed:null, umgCnt:0, umgAge:8, umgNights:0, umgArt:"temp", ext25:0, mog:null, verm:5000, step:1}
 };
-const emptyFor = mode => ({mode, typ: mode==="fam"?"paar":"solo", verh:false, ad:[Object.assign({},AD0,{gj:0}),Object.assign({},AD0,{gj:0})], kids:[], son:clone(SON0), pa:"0.3", stabil:true, mi:0, hz:0, ww:false, kdz:"normal", hzG:null, kzStart:"", kzPrev:"", kzGap:0, kzUsed:null, umgCnt:0, umgAge:8, umgNights:0, ext25:0, unborn:false, mog:null, verm:0, step:1});
+const emptyFor = mode => ({mode, typ: mode==="fam"?"paar":"solo", verh:false, ad:[Object.assign({},AD0,{gj:0}),Object.assign({},AD0,{gj:0})], kids:[], son:clone(SON0), pa:"0.3", stabil:true, mi:0, hz:0, ww:false, kdz:"normal", hzG:null, kzStart:"", kzPrev:"", kzGap:0, kzUsed:null, umgCnt:0, umgAge:8, umgNights:0, umgArt:"temp", ext25:0, mog:null, verm:0, step:1});
 let S = clone(EX.fam);
 try{ const s = localStorage.getItem("vp-wob-input4"); if(s){ const o=JSON.parse(s); S = Object.assign(clone(EX[o.mode==="wg"?"wg":"fam"]), o); } }catch(e){}
+S.ad.forEach(a=>{ if(a.ssw==null) a.ssw = a.schw ? 13 : 0; });
 const save = ()=>{ try{ localStorage.setItem("vp-wob-input4", JSON.stringify(S)); }catch(e){} };
 
 const $ = id => document.getElementById(id);
@@ -1090,11 +1125,14 @@ function grund(H){
   /* Kinder bei den Unterkunftskosten: Umgangskinder, weitere Personen (Kopfteil), ungeborenes Kind */
   const ext = Math.max(0,Math.floor(H.ext25||0));
   const umgCnt = Math.max(0,Math.floor(H.umgCnt||0)), umgN = Math.max(0,H.umgNights||0);
-  const umgOn = umgCnt>0 && umgN>=P.kids.umgMin;
-  const umgDays = umgCnt>0 ? Math.min(30, umgN/12) : 0;
+  /* Wolfsburg: Wechselmodell = volle Anerkennung; temporärer Umgang = Grenze + halbe Differenz zur nächsten Größe.
+     Ungeborenes Kind zählt ab der 12. Schwangerschaftswoche. */
+  const wechsel = H.umgArt==="wechsel";
+  const umgOn = umgCnt>0;
+  const umgDays = umgCnt>0 ? Math.min(30, umgN>0 ? umgN/12 : (wechsel?15:0)) : 0;
   const umgNeed = umgCnt>0 ? r2(umgCnt*rbKind(H.umgAge||0)*umgDays/30) : 0;
-  const unbornOn = !!H.unborn && ads.some(a=>a.schw);
-  const nKdU = n + ext + (umgOn?P.kids.umgPlus:0) + (unbornOn?P.kids.unbornPlus:0);
+  const unbornCnt = ads.filter(a=>(a.ssw||0)>=P.kids.sswMog).length, unbornOn = unbornCnt>0;
+  const nBase = n + ext + unbornCnt, nKdU = nBase + umgCnt;
   const shareBG = n/(n+ext);
   /* Zuständigkeit: SGB II, wenn mindestens ein Erwachsener erwerbsfähig ist (§§ 7, 8 SGB II) */
   let regime;
@@ -1114,7 +1152,7 @@ function grund(H){
     mbPct = m.length ? Math.max((u7>=1||u16>=2)?36:0, Math.min(60,12*m.length)) : 0; }
   const mbAE = r2(P.rb.single*mbPct/100); if(mbAE>0) mbList.push([t("mbAE",{p:mbPct}), mbAE]);
   ads.forEach((a,i)=>{
-    if(a.schw) mbList.push([t("mbS",{n:i+1}), r2(rbA*P.mb.schw/100)]);
+    if((a.ssw||0)>=P.kids.sswMb) mbList.push([t("mbS",{n:i+1}), r2(rbA*P.mb.schw/100)]);
     if(a.merkG && !pers[i].isEF) mbList.push([t("mbG",{n:i+1}), r2(rbA*P.mb.g/100)]);
   });
   const wwAd = H.ww ? r2(rbA*P.mb.ww[0]/100)*nAd : 0;
@@ -1123,7 +1161,8 @@ function grund(H){
   if(wwSum>0) mbList.push([t("mbWW"), r2(wwSum)]);
   const mbAdults = mbList.reduce((s,x)=>s+x[1],0) - (wwSum - wwAd);
   const rbEltern = rbA*nAd;
-  const grenzeTab = byN(P.kdu.p,P.kdu.plus,nKdU), grenze = (H.mog!=null && H.mog>0) ? H.mog : grenzeTab;
+  const mogBase = byN(P.kdu.p,P.kdu.plus,nBase), mogFull = byN(P.kdu.p,P.kdu.plus,nKdU);
+  const grenzeTab = !umgOn ? mogBase : wechsel ? mogFull : r2(mogBase + (mogFull-mogBase)*P.kids.tempFactor), grenze = (H.mog!=null && H.mog>0) ? H.mog : grenzeTab;
   /* Unterkunft: Karenzzeit seit 01.07.2026 höchstens 150 % der Grenze (§ 22 Abs. 1 SGB II); SGB XII ohne Deckel.
      Heizkosten sind in der Karenzzeit nicht geschützt; während laufender Kostensenkung tatsächliche Kosten (max. 6 Monate). */
   const kar = H.kdz==="karenz", senk = H.kdz==="senk";
@@ -1141,7 +1180,7 @@ function grund(H){
   });
   const eII = inc.reduce((s,x)=>s+x.eII,0), eXII = inc.reduce((s,x)=>s+x.eXII,0);
   const need = rbEltern + mbAdults + umgNeed + kdu + kids.reduce((s,k,i)=>s+rbKind(k.age)+wwKids[i],0);
-  return {nAd, ads, pers, kids, n, regime, sys, mixed, kid15, rbA, mbList, mbPct, mbAdults, wwKids, rbEltern, grenze, grenzeTab, mieteCap, mieteAnerk, heatAnerk, kduTotal, kdu, kopf, ext, umgCnt, umgOn, umgDays, umgNeed, unbornOn, nKdU, shareBG, inc, eII, eXII, elternEink: sys==="XII"?eXII:eII, need, ae:aeEff};
+  return {nAd, ads, pers, kids, n, regime, sys, mixed, kid15, rbA, mbList, mbPct, mbAdults, wwKids, rbEltern, grenze, grenzeTab, mieteCap, mieteAnerk, heatAnerk, kduTotal, kdu, kopf, ext, umgCnt, umgOn, umgDays, umgNeed, unbornOn, nKdU, nBase, mogBase, mogFull, wechsel, shareBG, inc, eII, eXII, elternEink: sys==="XII"?eXII:eII, need, ae:aeEff};
 }
 function sgb(G, x){
   const wgShare = (x.wg||0)/G.n; let kgSurplus=0, childGap=0;
@@ -1159,7 +1198,7 @@ function vermLimits(G,H){
   return {sgb:sgbL, wg:v.wg+v.wgPlus*(n-1), kiz:v.kiz+v.kizPlus*(n-1)};
 }
 function wohngeld(G,H,VL){
-  const umgWg = (G.umgCnt>0 && (H.umgNights||0)>=P.kids.wgUmgMin) ? G.umgCnt : 0;
+  const umgWg = (G.umgCnt>0 && (G.wechsel || (H.umgNights||0)>=P.kids.wgUmgMin)) ? G.umgCnt : 0;
   const n=G.n+umgWg, nT=n+G.ext;   /* Höchstbetrag nach allen Haushaltsmitgliedern, Miete anteilig (Mischhaushalt) */
   const hb=byN(P.wg.hb,P.wg.hbPlus,nT), kl=byN(P.wg.klima,P.wg.klimaPlus,nT), hke=byN(P.wg.hke,P.wg.hkePlus,nT), hkk=byN(P.wg.hkk,P.wg.hkkPlus,nT);
   const cap=hb+kl, mRent=Math.min(H.mi,cap), share=n/nT, M=(mRent+hke+hkk)*share, pa=num(H.pa);
@@ -1360,12 +1399,15 @@ function renderPersons(){
       '<div class="pair"><label class="f"><span>'+esc(t("by"))+'</span><input class="sel" id="gj'+i+'" type="number" inputmode="numeric" min="1920" max="'+YEAR+'" value="'+(a.gj||"")+'"></label>'+
       '<label class="f"><span>'+esc(t("ef"))+'</span><select class="sel" id="ef'+i+'">'+["ja","dau","zeit","ar"].map(v=>'<option value="'+v+'"'+(a.ef===v?' selected':'')+'>'+esc(t({ja:"efJa",dau:"efDau",zeit:"efZeit",ar:"efAR"}[v]))+'</option>').join("")+'</select></label></div>'+
       '<p class="chipline" id="age'+i+'"></p>'+
-      '<div class="checks">'+ck("schw"+i,t("schw"),a.schw)+ck("merkG"+i,t("merkG"),a.merkG)+ck("sb"+i,t("sb100"),a.sb)+'</div>'+
+      '<label class="f"><span>'+esc(t("ssw"))+'</span><input class="sel" id="ssw'+i+'" type="number" inputmode="numeric" min="0" max="42" value="'+(a.ssw||"")+'"></label>'+
+      '<p class="chipline">'+esc(t("sswHint"))+'</p>'+
+      '<div class="checks">'+ck("merkG"+i,t("merkG"),a.merkG)+ck("sb"+i,t("sb100"),a.sb)+'</div>'+
       '<label class="f"><span>'+esc(t("kvLabel"))+'</span><select class="sel kvsel" id="kv'+i+'"><option value="auto"></option>'+["job","fam","rente","leist","frei"].map(v=>'<option value="'+v+'"'+(a.kv===v?' selected':'')+'>'+esc(t({job:"kvJob",fam:"kvFam",rente:"kvRente",leist:"kvLeist",frei:"kvFrei"}[v]))+'</option>').join("")+'</select></label>';
     box.appendChild(d);
     d.querySelector("#gj"+i).addEventListener("input",e=>{ a.gj=Math.floor(num(e.target.value)); update(); });
     d.querySelector("#ef"+i).addEventListener("change",e=>{ a.ef=e.target.value; update(); });
-    ["schw","merkG","sb"].forEach(f=>d.querySelector("#"+f+i).addEventListener("change",e=>{ a[f]=e.target.checked; update(); }));
+    d.querySelector("#ssw"+i).addEventListener("input",e=>{ a.ssw=clamp(Math.floor(num(e.target.value)),0,42); update(); });
+    ["merkG","sb"].forEach(f=>d.querySelector("#"+f+i).addEventListener("change",e=>{ a[f]=e.target.checked; update(); }));
     d.querySelector("#kv"+i).addEventListener("change",e=>{ a.kv=e.target.value; update(); });
   }
 }
@@ -1385,7 +1427,7 @@ function renderIncomes(){
 function fillForm(){
   ["mi","hz","verm"].forEach(id=>{ $(id).value = S[id]||""; });
   $("pa").value=S.pa; $("kdz").value=S.kdz||"normal"; $("hzG").value=S.hzG||"";
-  ["umgCnt","umgAge","umgNights","ext25"].forEach(id=>{ $(id).value = S[id]||""; }); $("unborn").checked=!!S.unborn;
+  ["umgCnt","umgAge","umgNights","ext25"].forEach(id=>{ $(id).value = S[id]||""; }); $("umgArt").value=S.umgArt||"temp";
   if(S.umgCnt>0 || S.ext25>0) $("mehr").open = true;
   $("kzStart").value=S.kzStart||""; $("kzPrev").value=S.kzPrev||""; $("kzGap").value=S.kzGap||""; $("kzUsed").value=S.kzUsed==null?"":S.kzUsed; $("verh").checked=!!S.verh; $("ww").checked=!!S.ww; $("stabil").checked=S.stabil!==false;
   Object.keys(SON0).forEach(k=>{ $("s_"+k).checked=!!S.son[k]; });
@@ -1397,7 +1439,7 @@ function bind(){
   $("pa").addEventListener("change",()=>{ S.pa=$("pa").value; update(); });
   $("kdz").addEventListener("change",()=>{ S.kdz=$("kdz").value; update(); });
   ["umgCnt","umgAge","umgNights","ext25"].forEach(id=>$(id).addEventListener("input",()=>{ S[id]=Math.max(0,Math.floor(num($(id).value))); update(); }));
-  $("unborn").addEventListener("change",()=>{ S.unborn=$("unborn").checked; update(); });
+  $("umgArt").addEventListener("change",()=>{ S.umgArt=$("umgArt").value; update(); });
   $("kzStart").addEventListener("input",()=>{ S.kzStart=$("kzStart").value; kzAutoSet(); update(); });
   $("kzPrev").addEventListener("input",()=>{ S.kzPrev=$("kzPrev").value; kzAutoSet(); update(); });
   $("kzGap").addEventListener("input",()=>{ S.kzGap=Math.max(0,Math.floor(num($("kzGap").value))); kzAutoSet(); update(); });
@@ -1435,7 +1477,6 @@ function update(){
   $("typSolo").hidden = S.mode==="fam";
   $("verhRow").hidden = S.typ!=="paar";
   const R=berechne(S), {G,W,K,KV,KW,VL,s0,s0kv,V,idx,top}=R;
-  $("unbornRow").hidden = !S.ad.slice(0,nAdOf()).some(a=>a.schw);
   /* Personen-Infos */
   G.pers.forEach((p,i)=>{
     const el=$("age"+i); if(el) el.innerHTML = p.age==null ? "" : '<b>'+esc(t("ageL",{a:p.age}))+'</b> · '+esc(p.rag?t("ragYes"):t("ragNo"));
@@ -1477,7 +1518,7 @@ function update(){
   const chips=[['sys',t("regimeL",{r:t("rg_"+G.regime)})]];
   if(G.mixed) chips.push(['w',t("warnMixed")]);
   if(G.kid15) chips.push(['w',t("warnKid15")]);
-  if(G.umgCnt>0) chips.push(['w', G.umgOn ? t("umgInfo",{n:G.nKdU,x:P.kids.umgMin,d:Math.round(G.umgDays)}) : t("umgShort",{x:P.kids.umgMin,d:Math.round(G.umgDays)})]);
+  if(G.umgCnt>0) chips.push(['w', G.wechsel ? t("umgInfoW",{b:G.nKdU,c:eur(G.grenzeTab),d:Math.round(G.umgDays)}) : t("umgInfoT",{a:G.nBase,e:eur(G.mogBase),b:G.nKdU,f:eur(G.mogFull),c:eur(G.grenzeTab),d:Math.round(G.umgDays)})]);
   if(W.umgWg>0) chips.push(['w',t("umgWg",{x:P.kids.wgUmgMin})]);
   if(G.ext>0) chips.push(['w',t("extInfo",{n:G.nKdU,p:pct(G.shareBG)})]);
   if(G.unbornOn) chips.push(['w',t("unbornInfo")]);
@@ -1598,11 +1639,11 @@ function renderParams(){
   box.querySelectorAll("input[data-p]").forEach(inp=>inp.addEventListener("change",()=>{
     const p=inp.dataset.p, v=num(inp.value); setP(P,p,v);
     inp.parentElement.classList.toggle("ch", v!==getP(DEFAULTS,p));
-    try{ localStorage.setItem("vp-wob-params2",JSON.stringify(P)); }catch(e){}
+    try{ localStorage.setItem("vp-wob-params3",JSON.stringify(P)); }catch(e){}
     update();
   }));
 }
-$("resetP").addEventListener("click",()=>{ P=clone(DEFAULTS); try{ localStorage.removeItem("vp-wob-params2"); }catch(e){} renderParams(); update(); });
+$("resetP").addEventListener("click",()=>{ P=clone(DEFAULTS); try{ localStorage.removeItem("vp-wob-params3"); }catch(e){} renderParams(); update(); });
 $("copyP").addEventListener("click",()=>{
   const txt=JSON.stringify(P,null,2);
   const fb=()=>{ const ta=$("copyBox"); ta.hidden=false; ta.value=txt; ta.select(); $("copyMsg").textContent=t("selectCopy"); };
