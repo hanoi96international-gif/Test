@@ -1,0 +1,115 @@
+{
+ "datum": "2026-11-14",
+ "bounties": [
+  {
+   "url": "https://github.com/tenstorrent/tt-metal/issues/65437",
+   "title": "[Bounty $2,000] Restore OpenVLA execution and action correctness",
+   "repo": "tenstorrent/tt-metal",
+   "amount": 2000,
+   "comments": 3,
+   "taken": true,
+   "created": "2026-11-12",
+   "age_days": 2,
+   "updated": "2026-11-13",
+   "labels": "bounty bounty_difficulty/medium",
+   "body": "# 📝 Background\n\nOpenVLA (openvla/openvla-7b) in models/experimental/openvla has reported runtime failures on a single Wormhole N150 and produces robot actions that do not align with the Hugging Face reference. The report attributes the output errors to three issues: missing SigLIP positional embeddings, missing Q/K weight permutation, and an off-by-one error when assembling the action-token sequence.\n\nThe submitted fixes were tested on N150. This bounty is for a working, tested OpenVLA path—not a performance optimization or a real-robot benchmark.\n\n# 🎯 What Success Looks Like\n\nSubmit one PR that satisfies all criteria below:\n- OpenVLA initializes and runs end-to-end inference on a single Wormhole N150 using the repository’s supported environment, without manual runtime patches.\n- SigLIP patch embeddings include the checkpoint’s positional embeddings, and a deterministic regression test compares the resulting features with the Hugging Face reference.\n- Q/K weights are mapped into the layout expected by the OpenVLA attention/RoPE path. A regression test compares intermediate language-model outputs with the Hugging Face reference.\n- predict_action returns the action tokens in the correct sequence, including the first action token produced during prefill; it does not shift action dimensions or use the EOS token as an action dimension.\n- Automated regression coverage checks SigLIP features, early-layer logits or hidden states, and decoded actions against a fixed reference checkpoint and fixed inputs. Document the reference environment and the numerical tolerances; agree those tolerances with the OpenVLA owner before final review. Include at least one stable case that checks token ordering explicitly.\n- The N150 end-to-end test and relevant existing OpenVLA tests pass. Provide the exact commands and test results in the PR.\n- No unrelated model behavior or test failures are introduced. Performance optimization, N300/T3K/Blackhole validation, and a LIBERO/Bridge or other robot benchmark are out of scope.\n\n# 💡 Problem to Solve\n\nThe report identifies three correctness defects:\n\n- The SigLIP path applies patch embeddings without adding the checkpoint’s pos_embed before the encoder.\n- OpenVLA’s Hugging Face-to-Meta key mapping renames weights but does not apply the Q/K permutation used by the TT-Transformers loader for the configured RoPE layout.\n- The action decoder keeps the prefill-produced first action token separately, then returns later decode tokens as the action sequence, shifting the action dimensions and allowing EOS to be interpreted as the gripper action.\n- It also reports seven N150 runtime blockers on the reported baseline (07fac6de536):\n- Transformers accesses language_model before initialization in _supports_sdpa.\n- post_init calls tie_weights with an unsupported argument.\n- generate passes a cache object that fails an assertion.\n- OpenVLA passes the string \"prefill\" where the TT-Transformers API expects Mode.PREFILL.\n- Prefill RoPE uses the row-major cosine matrix instead of the prefill-specific slice.\n- The timm version check rejects a version allowed by the declared dependency range.\n- The test requests FABRIC_1D on a one-chip mesh, which is rejected by current fabric initialization.\n- Before opening the bounty, confirm which reported runtime failures still reproduce on current main; remove any already-resolved items from the final scope. The reported pre-existing test_siglip_intermediate failure is not part of this bounty unless the owner confirms it is required to validate these fixes.\n\n\nOriginal model integration: [PR #34985](https://github.com/tenstorrent/tt-metal/pull/34985).\n\n\nThis bounty is subject to the [Tenstorrent Bounty Program Terms & Conditions](https://docs.tenstorrent.com/bounty_terms.html).",
+   "score": 444.4,
+   "stars": 126,
+   "repo_pushed_at": "2026-11-14T06:36:18Z",
+   "repo_language": "Python",
+   "recent_attempts": 0,
+   "open_prs_mentioning_issue": [],
+   "last_comments": [
+    {
+     "user": "jberkowitzTT",
+     "at": "2026-11-12T22:44:42Z",
+     "body": "## 📝 Background\n\nThis is a community-suggested bounty that we have reviewed & assigned to @singhharsh1708 \n\n\n## 💡 Problem to Solve\n\n>Restore OpenVLA execution and action correctness\n\n\nNote: This bounty is beholden to the [Tenstorrent Bounty Program Terms & Conditions](https://docs.tenstorrent.com/bounty_terms.html) & local tax requirements may apply"
+    },
+    {
+     "user": "singhharsh1708",
+     "at": "2026-11-12T23:01:41Z",
+     "body": "@jberkowitzTT Assign me!"
+    },
+    {
+     "user": "fortunewanyoike",
+     "at": "2026-11-13T22:55:44Z",
+     "body": "Claiming this bounty. Working on restoring OpenVLA execution and action correctness."
+    }
+   ]
+  },
+  {
+   "url": "https://github.com/tenstorrent/tt-metal/issues/64647",
+   "title": "[Bounty $750] Fix remaining sharded scale_mask_softmax mask handling issues",
+   "repo": "tenstorrent/tt-metal",
+   "amount": 750,
+   "comments": 10,
+   "taken": true,
+   "created": "2026-11-06",
+   "age_days": 8,
+   "updated": "2026-11-09",
+   "labels": "bounty bounty_difficulty/easy",
+   "body": "\n📝 Background\n\nttnn.scale_mask_softmax_in_place with SoftmaxShardedMultiCoreProgramConfig can hang or read incorrect mask values when the input shard layout and mask shape/specification do not align. These cases can break correctness in sharded attention workloads and may hang the device instead of returning a clear validation error.\n\nAn open change already addresses the causal-mask case where a shard is shorter than or not divisible by the mask height, and the causal mask/input batch-size mismatch. This bounty is for the remaining issues below; coordinate with that change and do not duplicate its scope: [PR #63692](https://github.com/tenstorrent/tt-metal/pull/63692).\n\n🎯 What Success Looks Like\n\nA row-major mask combined with is_causal_mask=True is either handled correctly or rejected during validation with a clear error before device execution; it must not hang.\n\nCausal interleaved mask readers wrap rows using the mask’s height, not the input width. Non-square causal masks produce correct results without out-of-bounds reads.\n\nMask addressing remains correct when a shard crosses a batch boundary; the batch cursor must not advance early or read beyond the mask tensor.\n\nA sharded mask with an incompatible shard specification (including shard orientation) is rejected clearly or handled correctly; it must not silently read a different core’s shard.\n\nAdd regression tests for each addressed case, covering valid configurations and invalid configurations as appropriate. Compare supported outputs against a PyTorch reference.\n\nExisting relevant sharded and causal softmax tests continue to pass, and existing supported configurations retain their behavior.\n\n💡 Problem to Solve\n\nThe sharded softmax factory, mask readers, and validation do not consistently enforce or honor the assumptions used to walk masks:\n\nA row-major mask with is_causal_mask=True can select a reader that does not follow the causal compute’s per-row mask consumption, causing a hang.\n\nCausal interleaved readers can wrap mask rows using the input width rather than the mask height, leading to incorrect/out-of-bounds reads for non-square masks.\n\nWhen a shard spans a batch boundary, integer division in the per-batch core calculation can make mask addressing advance to the next batch too early.\n\nValidation checks mask layout and padded shape but does not ensure that a sharded mask’s shard specification matches the input’s expected distribution.\n\n\nThis bounty is subject to the [Tenstorrent Bounty Program Terms & Conditions](https://docs.tenstorrent.com/bounty_terms.html).",
+   "score": 46.9,
+   "stars": 126,
+   "repo_pushed_at": "2026-11-14T06:36:18Z",
+   "repo_language": "Python",
+   "recent_attempts": 0,
+   "open_prs_mentioning_issue": [
+    "https://github.com/tenstorrent/tt-metal/issues/64840",
+    "https://github.com/tenstorrent/tt-metal/issues/64933"
+   ],
+   "last_comments": [
+    {
+     "user": "reinaldyalt",
+     "at": "2026-11-06T15:00:46Z",
+     "body": "I'd like to take this one on, please assign it to me if it's still available.\n\nI'll open a PR against the repo with tests covering the case in the issue, and\nI'll keep the change scoped to what's described in the confirmed scope.\n\nHappy to share my approach before starting if that's helpful."
+    },
+    {
+     "user": "t3ratech",
+     "at": "2026-11-06T15:01:59Z",
+     "body": "I'd like to take this bounty. I work on systems-level correctness fixes and can start immediately — I'll post a root-cause analysis and patch plan within the day, then a PR with tests.\n\n— t3ratech"
+    },
+    {
+     "user": "jberkowitzTT",
+     "at": "2026-11-06T15:04:40Z",
+     "body": "## 📝 Background\n\nThis is a community-suggested bounty that we have reviewed & we're awaiting the comment of the developer who submitted it to assign them to it\n\n\n\nNote: This bounty is beholden to the [Tenstorrent Bounty Program Terms & Conditions](https://docs.tenstorrent.com/bounty_terms.html) & local tax requirements may apply"
+    },
+    {
+     "user": "prodbykwiz-hub",
+     "at": "2026-11-06T15:08:34Z",
+     "body": "looked into this, these are four distinct gaps in the sharded scale_mask_softmax path that need coordinated fixes without overlapping PR #63692's causal shard-height scope:\n\n- validation: add a check in the mask layout/shape validation so row-major mask + `is_causal_mask=True` is rejected with a clear error before dispatch, since the causal compute kernel assumes a specific per-row mask consumption that row-major doesn't satisfy (unless it can legitimately be supported, in which case I'll wire it through correctly instead of rejecting it)\n- causal interleaved readers: fix the row-wrap arithmet"
+    },
+    {
+     "user": "aliraza556",
+     "at": "2026-11-06T15:17:01Z",
+     "body": "@jberkowitzTT Please assign me?"
+    },
+    {
+     "user": "xevrion",
+     "at": "2026-11-06T15:19:09Z",
+     "body": "Hi @jberkowitzTT, this is my proposal, happy to take it.\n\nQuick update after rechecking main: the interleaved causal wrap was already fixed by #59042, and #64407 (for #63910) adds errors for the row-major causal mask, the mismatched shard spec and multi-batch shards. I'll build on both and not duplicate them or #63692.\n\nWhat I'll do here: make shards that cross a batch read the right mask instead of being rejected, fix a one-batch mask stepping past the end on the sharded path, and fix a sharded mask with `is_causal_mask=False` broadcasting head 0's first row. Tests against torch for each case"
+    },
+    {
+     "user": "Bloders-hub",
+     "at": "2026-11-06T15:27:09Z",
+     "body": "I have investigated the four mask handling failure modes and submitted a complete implementation with regression unit tests in #64653.\n\n### Summary of Changes\n1. **Row-Major Causal Mask Validation**: Added explicit pre-dispatch validation in `softmax_device_operation.cpp` rejecting row-major masks when `is_causal_mask=True`, preventing device hangs.\n2. **Causal Interleaved Reader Row Wrapping**: Wired `mask_Ht` and `mask_Wt` into `reader_unary_interleaved_sm.cpp` and `reader_unary_interleaved_sm_large_tensor.cpp`, wrapping rows and stepping tile IDs according to actual mask geometry rather tha"
+    },
+    {
+     "user": "jberkowitzTT",
+     "at": "2026-11-06T15:28:45Z",
+     "body": "## 📝 Background\n\nThis is a community-suggested bounty that we have reviewed & assigned to @xevrion \n\n\n## 💡 Problem to Solve\n\n>Fix remaining sharded scale_mask_softmax mask handling issues\n\n\nNote: This bounty is beholden to the [Tenstorrent Bounty Program Terms & Conditions](https://docs.tenstorrent.com/bounty_terms.html) & local tax requirements may apply"
+    },
+    {
+     "user": "dankezo",
+     "at": "2026-11-06T15:39:57Z",
+     "body": "Hi @jberkowitzTT — one additional mask case on the sharded path that I don't think is covered by this issue's list, #63692, or #64407. Happy to open a small PR for it if it's in scope here, or file it separately if you'd prefer.\n\n**Case: a non-causal mask with fewer batches than the input is accepted on the `SoftmaxShardedMultiCoreProgramConfig` path, and the reader walks off the end of the mask.**\n\nWith `ttnn.scale_mask_softmax_in_place` + a sharded program config, the input/mask batch-equality check in `SoftmaxDeviceOperation::validate_on_program_cache_miss` (`softmax_device_operation.cpp`) "
+    },
+    {
+     "user": "CrowAleksito",
+     "at": "2026-11-07T01:43:01Z",
+     "body": "Submitted https://github.com/tenstorrent/tt-metal/pull/64731 covering the 4 mask-handling gaps (ROW_MAJOR + is_causal_mask pre-dispatch rejection, sharded mask shard_spec/memory_layout check, mask_id = mask_id_offset reset on ht == Ht in interleaved causal readers, and cumulative `accumulated_batch_volume stepping with mask_batch_stride = 0 for single-batch broadcast masks on SoftmaxShardedMultiCoreProgramConfig)."
+    }
+   ]
+  }
+ ]
+}
